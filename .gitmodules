@@ -2,10 +2,6 @@
     path = Glitter/Vendor/assimp
     url = https://github.com/assimp/assimp.git
     branch = master
-[submodule "Glitter/Vendor/glad"]
-    path = Glitter/Vendor/glad
-    url = https://github.com/Dav1dde/glad.git
-    branch = c
 [submodule "Glitter/Vendor/glfw"]
     path = Glitter/Vendor/glfw
     url = https://github.com/glfw/glfw.git
