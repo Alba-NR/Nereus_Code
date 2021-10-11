@@ -1,3 +1,5 @@
+# ------ C++ project template file ------
+
 # Prerequisites
 *.d
 
@@ -30,3 +32,15 @@
 *.exe
 *.out
 *.app
+
+
+# ------ Project-specific ------
+
+# Build folder
+[Bb]uild/
+
+# Debug folder
+[Dd]ebug/
+
+# Visual Studio folder
+.vs/
