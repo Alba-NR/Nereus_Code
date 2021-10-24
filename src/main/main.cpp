@@ -8,26 +8,25 @@
 
 int main() 
 {
-    int wasInitOk = init();         // load glfw & create window
+    int wasInitOk = Nereus::init(); // load glfw & create window
     if (wasInitOk != EXIT_SUCCESS)  // check if error when init
     {
         return wasInitOk;
     }
 
-    renderLoop();   // render geom to window
-
-    glfwTerminate();
+    Nereus::renderLoop();   // render geom to window
+    Nereus::terminate(); 
     
     return EXIT_SUCCESS;
 }
 
-int init() 
+int Nereus::init() 
 {
     glfwInit(); // TODO: check if correctly init glfw?
     return WindowManager::createWindow();
 }
 
-void renderLoop()
+void Nereus::renderLoop()
 {
     // Rendering Loop
     while (!WindowManager::windowShouldClose())
@@ -42,4 +41,9 @@ void renderLoop()
 
         glfwPollEvents();
     }   
+}
+
+void Nereus::terminate()
+{
+    glfwTerminate();
 }

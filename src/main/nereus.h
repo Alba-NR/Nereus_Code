@@ -2,7 +2,10 @@
 #define NEREUS_MAIN
 #pragma once
 
-int init();
-void renderLoop();
-
+namespace Nereus
+{
+	int init();
+	void renderLoop();
+	void terminate();
+}
 #endif
