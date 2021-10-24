@@ -1,15 +1,15 @@
 cmake_minimum_required(VERSION 3.0)
-project(Glitter)
+project(Nereus)
 
 option(GLFW_BUILD_DOCS OFF)
 option(GLFW_BUILD_EXAMPLES OFF)
 option(GLFW_BUILD_TESTS OFF)
-add_subdirectory(Glitter/Vendor/glfw)
+add_subdirectory(libs/vendor/glfw)
 
 option(ASSIMP_BUILD_ASSIMP_TOOLS OFF)
 option(ASSIMP_BUILD_SAMPLES OFF)
 option(ASSIMP_BUILD_TESTS OFF)
-add_subdirectory(Glitter/Vendor/assimp)
+add_subdirectory(libs/vendor/assimp)
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
@@ -20,23 +20,22 @@ else()
     endif()
 endif()
 
-include_directories(include/
-        Glitter/Vendor/assimp/include/
-        Glitter/Vendor/glad/include/
-        Glitter/Vendor/glfw/include/
-        Glitter/Vendor/glm/
-        Glitter/Vendor/stb/
-        Glitter/Vendor/imgui)
+include_directories(libs/vendor/assimp/include/
+        libs/vendor/glad/include/
+        libs/vendor/glfw/include/
+        libs/vendor/glm/
+        libs/vendor/stb/
+        libs/vendor/imgui)
 
-file(GLOB VENDORS_SOURCES Glitter/Vendor/glad/src/glad.c
-                        Glitter/Vendor/imgui/*.c
-                        Glitter/Vendor/imgui/*.h)
-file(GLOB PROJECT_HEADERS include/*.hpp)
-file(GLOB PROJECT_SOURCES Sources/*.cpp)
-file(GLOB PROJECT_SHADERS Resources/Shaders/*.comp
-        Resources/Shaders/*.frag
-        Resources/Shaders/*.geom
-        Resources/Shaders/*.vert)
+file(GLOB VENDORS_SOURCES libs/vendor/glad/src/glad.c
+                        libs/vendor/imgui/*.c
+                        libs/vendor/imgui/*.h)
+file(GLOB PROJECT_HEADERS src/*.h)
+file(GLOB PROJECT_SOURCES src/*.cpp)
+file(GLOB PROJECT_SHADERS resources/shaders/*.comp
+        resources/shaders/*.frag
+        resources/shaders/*.geom
+        resources/shaders/*.vert)
 file(GLOB PROJECT_CONFIGS CMakeLists.txt
                          .gitattributes
                          .gitignore
@@ -59,5 +58,5 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 
 add_custom_command(
         TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/Resources/Shaders" "$<TARGET_FILE_DIR:${PROJECT_NAME}>"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/resources/shaders" "$<TARGET_FILE_DIR:${PROJECT_NAME}>"
         DEPENDS ${PROJECT_SHADERS})

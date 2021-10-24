@@ -1,0 +1,24 @@
+[submodule "libs/vendor/assimp"]
+    path = libs/vendor/assimp
+    url = https://github.com/assimp/assimp.git
+    branch = master
+[submodule "libs/vendor/glfw"]
+    path = libs/vendor/glfw
+    url = https://github.com/glfw/glfw.git
+    branch = master
+[submodule "libs/vendor/glad"]
+    path = libs/vendor/glad
+    url = https://github.com/Dav1dde/glad.git
+    branch = c
+[submodule "libs/vendor/glm"]
+    path = libs/vendor/glm
+    url = https://github.com/g-truc/glm.git
+    branch = master
+[submodule "libs/vendor/stb"]
+    path = libs/vendor/stb
+    url = https://github.com/nothings/stb.git
+    branch = master
+[submodule "libs/vendor/imgui"]
+    path = libs/vendor/imgui
+    url = https://github.com/ocornut/imgui.git
+    branch = master
