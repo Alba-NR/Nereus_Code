@@ -1,6 +1,6 @@
 // Local Headers
 #include "nereus.h"
-#include "window_manager.h"
+#include "../graphics/core/window_manager.h"
 
 // System Headers
 #include <imgui.h>
