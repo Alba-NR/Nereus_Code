@@ -34,7 +34,7 @@ public:
 	void bind() const;
 	void unbind() const;
 	template<typename T>
-	void setData(const T &data)
+	void setData(const T (&data)[])
 	{
 		bind();
 		glBufferData(buffer_type, sizeof(data), data, GL_STATIC_DRAW);

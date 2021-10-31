@@ -41,7 +41,7 @@ Buffer::Buffer(GLenum buffer_type) : buffer_type(buffer_type)
 
 Buffer::~Buffer()
 {
-	glDeleteBuffers(0, &id);
+	glDeleteBuffers(1, &id);
 }
 
 void Buffer::bind() const
