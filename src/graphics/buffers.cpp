@@ -3,17 +3,17 @@
 // --- Vertex Array Object abstraction class ---
 VAO::VAO()
 {
-	glGenVertexArrays(1, &id);
+	glGenVertexArrays(1, &this->id);
 }
 
 VAO::~VAO()
 {
-	glDeleteVertexArrays(1, &id);
+	glDeleteVertexArrays(1, &this->id);
 }
 
 void VAO::bind() const 
 {
-	glBindVertexArray(id);
+	glBindVertexArray(this->id);
 }
 
 void VAO::unbind() const
@@ -23,7 +23,7 @@ void VAO::unbind() const
 
 GLuint VAO::getHandle() const
 {
-	return id;
+	return this->id;
 }
 
 
@@ -31,27 +31,27 @@ GLuint VAO::getHandle() const
 
 Buffer::Buffer() : buffer_type(GL_ARRAY_BUFFER)
 {
-	glGenBuffers(1, &id);
+	glGenBuffers(1, &this->id);
 }
 
 Buffer::Buffer(GLenum buffer_type) : buffer_type(buffer_type)
 {
-	glGenBuffers(1, &id);
+	glGenBuffers(1, &this->id);
 }
 
 Buffer::~Buffer()
 {
-	glDeleteBuffers(1, &id);
+	glDeleteBuffers(1, &this->id);
 }
 
 void Buffer::bind() const
 {
-	glBindBuffer(buffer_type, id);
+	glBindBuffer(this->buffer_type, this->id);
 }
 
 void Buffer::unbind() const
 {
-	glBindBuffer(buffer_type, 0);
+	glBindBuffer(this->buffer_type, 0);
 }
 
 GLuint Buffer::getHandle() const
