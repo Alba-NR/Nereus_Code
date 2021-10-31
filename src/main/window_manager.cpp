@@ -12,6 +12,12 @@ namespace WindowManager
     // Create a glfw window & set-up the appropriate context
     int createWindow()
     {
+        // do not attempt to re-init glfw if a window has already been created
+        if (window != nullptr)
+        {
+            return EXIT_SUCCESS;
+        }
+
         // --- glfw window context ---
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
