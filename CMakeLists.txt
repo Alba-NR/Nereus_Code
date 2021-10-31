@@ -30,14 +30,8 @@ include_directories(libs/vendor/assimp/include/
 file(GLOB VENDORS_SOURCES libs/vendor/glad/src/glad.c
                         libs/vendor/imgui/*.c
                         libs/vendor/imgui/*.h)
-file(GLOB PROJECT_HEADERS src/*.h
-                        src/main/*.h
-                        src/graphics/*.h
-                        src/graphics/core/*.h)
-file(GLOB PROJECT_SOURCES src/*.cpp
-                        src/main/*.cpp
-                        src/graphics/*.cpp
-                        src/graphics/core/*.cpp)
+file(GLOB_RECURSE PROJECT_HEADERS src/*.h)
+file(GLOB_RECURSE PROJECT_SOURCES src/*.cpp)
 file(GLOB PROJECT_SHADERS resources/shaders/*.comp
         resources/shaders/*.frag
         resources/shaders/*.geom
