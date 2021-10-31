@@ -3,6 +3,7 @@
 #pragma once
 
 #include <glad/glad.h>
+#include <vector>
 
 // --- Vertex Array Object ---
 class VAO
@@ -34,10 +35,11 @@ public:
 	void bind() const;
 	void unbind() const;
 	template<typename T>
-	void setData(const T (&data)[])
+	void setData(const std::vector<T> &data)
 	{
 		bind();
-		glBufferData(buffer_type, sizeof(data), data, GL_STATIC_DRAW);
+		const T *arr = &data[0];
+		glBufferData(buffer_type, sizeof(arr), arr, GL_STATIC_DRAW);
 	}
 	GLuint getHandle() const;
 };

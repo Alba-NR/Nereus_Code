@@ -1,12 +1,19 @@
-# include "meshes.h"
+#include "meshes.h"
+#include <vector>
 
-// Create the appropriate buffer objects and load the mesh data to GPU buffers
+// Create the appropriate buffer objects for the mesh attributes
+Mesh::Mesh() : vao(), positionsVBO(), normalsVBO(), texCoordsVBO(), ebo()
+{
+	Mesh::initialise();
+}
+
+// Create and load the mesh data to GPU buffers
 void Mesh::initialise()
 {
-	float[] positions;
-	float[] normals;
-	float[] texCoords;
-	int[] indices;
+	std::vector<float> positions;
+	std::vector<float> normals;
+	std::vector<float> texCoords;
+	std::vector<int> indices;
 
 	Mesh::initPositions(positions);
 	Mesh::initNormals(normals);
@@ -18,26 +25,24 @@ void Mesh::initialise()
 }
 
 // Load array data onto GPU buffer objects
-void Mesh::loadDataToGPU(const (&float[]) positions, const (&float[]) normals, const (&float[]) texCoords, const (&int[]) indices)
+void Mesh::loadDataToGPU(const std::vector<float> &positions,
+						const std::vector<float> &normals, 
+						const std::vector<float> &texCoords, 
+						const std::vector<int> &indices)
 {
-	// --- VAO creation & bind ---
-	VAO Mesh::vao();
+	// --- bind VAO ---
 	Mesh::vao.bind();
 
 	// --- load vertex positions ---
-	VBO Mesh::positionsVBO();
 	Mesh::positionsVBO.setData<float>(positions);
 
 	// --- load vertex normals ---
-	VBO Mesh::normalsVBO();
 	Mesh::normalsVBO.setData<float>(normals);
 
 	// --- load texture coordinates ---
-	VBO Mesh::texCoordsVBO();
 	Mesh::texCoordsVBO.setData<float>(texCoords);
 
 	// --- load vertex indices ---
-	EBO Mesh::ebo();
 	Mesh::texCoordsVBO.setData<int>(indices);
 }
 

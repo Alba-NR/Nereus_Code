@@ -3,6 +3,7 @@
 #pragma once
 
 #include <glad/glad.h>
+#include "../buffers.h"
 
 class Mesh
 {
@@ -14,17 +15,21 @@ private:
 	EBO ebo;
 	int vertexCount;
 
-	void loadDataToGPU(const (&float[]) positions, const (&float[]) normals, const (&float[]) texCoords, const (&int[]) indices);
+	void Mesh::loadDataToGPU(const std::vector<float> &positions, 
+							const std::vector<float> &normals, 
+							const std::vector<float> &texCoords, 
+							const std::vector<int> &indices);
 	
 	// Initialise the data arrays for positions, normals, texture coordinates & vertex indices
-	void initPositions((&float[]) pos) = 0;
-	void initNormals((&float[]) normals) = 0;
-	void initTexCoords((&float[]) texCoords) = 0;
-	void initIndices((&int[]) indices) = 0;
+	virtual void initPositions(std::vector<float> &pos) = 0 {};
+	virtual void initNormals(std::vector<float> &normals) = 0 {};
+	virtual void initTexCoords(std::vector<float> &texCoords) = 0 {};
+	virtual void initIndices(std::vector<int> &indices) = 0 {};
 
 	void initialise();
 
 public:
+	Mesh();
 	void render();
 };
 
