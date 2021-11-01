@@ -109,3 +109,54 @@ GLuint ShaderProgram::getHandle()
 {
 	return this->id;
 }
+
+// Tell shader it can find the data for the vertex attribute (with dimensionality 'attribute_size') 
+// at 'location' by using the values in 'buffer'. 
+void ShaderProgram::bindData(GLuint location, const Buffer &buffer, GLuint attribute_size) const
+{
+	// bind the given buffer
+	glBindBuffer(GL_ARRAY_BUFFER, buffer.getHandle());
+	// specify how openGL should interpret the data
+	glVertexAttribPointer(location, attribute_size, GL_FLOAT, GL_FALSE, 0, 0);
+	// enable attrib
+	glEnableVertexAttribArray(location);
+}
+
+
+// --- methods for setting uniforms in shader program
+// set uniform named 'target' to the given value 'v'
+
+void ShaderProgram::setInt(const string &target, int v) const
+{
+	glUniform1i(glGetUniformLocation(this->id, target.c_str()), v);
+}
+
+void ShaderProgram::setFloat(const string &target, float v) const
+{
+	glUniform1f(glGetUniformLocation(this->id, target.c_str()), v);
+}
+
+void ShaderProgram::setVec2(const string &target, const glm::vec2 &v) const
+{
+	glUniform2fv(glGetUniformLocation(this->id, target.c_str()), 1, &v[0]);
+}
+
+void ShaderProgram::setVec3(const string &target, const glm::vec3 &v) const
+{
+	glUniform3fv(glGetUniformLocation(this->id, target.c_str()), 1, &v[0]);
+}
+
+void ShaderProgram::setVec4(const string &target, const glm::vec4 &v) const
+{
+	glUniform4fv(glGetUniformLocation(this->id, target.c_str()), 1, &v[0]);
+}
+
+void ShaderProgram::setMat3(const string &target, const glm::mat3 &v) const
+{
+	glUniformMatrix3fv(glGetUniformLocation(this->id, target.c_str()), 1, GL_FALSE, &v[0][0]);
+}
+
+void ShaderProgram::setMat4(const string &target, const glm::mat4 &v) const
+{
+	glUniformMatrix4fv(glGetUniformLocation(this->id, target.c_str()), 1, GL_FALSE, &v[0][0]);
+}
