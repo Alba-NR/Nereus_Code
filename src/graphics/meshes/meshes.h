@@ -21,16 +21,24 @@ private:
 							const std::vector<int> &indices);
 	
 	// Initialise the data arrays for positions, normals, texture coordinates & vertex indices
-	virtual void initPositions(std::vector<float> &pos) = 0 {};
-	virtual void initNormals(std::vector<float> &normals) = 0 {};
-	virtual void initTexCoords(std::vector<float> &texCoords) = 0 {};
-	virtual void initIndices(std::vector<int> &indices) = 0 {};
+	virtual void initPositions(std::vector<float> &pos) = 0;
+	virtual void initNormals(std::vector<float> &normals) = 0;
+	virtual void initTexCoords(std::vector<float> &texCoords) = 0;
+	virtual void initIndices(std::vector<int> &indices) = 0;
+
+protected:
+	Mesh();
+
+public:
+	virtual ~Mesh();
+	void render();
 
 	void initialise();
 
-public:
-	Mesh();
-	void render();
+	VAO &getVAO();
+	VBO &getPositionsVBO();
+	VBO &getNormalsVBO();
+	VBO &getTexCoordsVBO();
 };
 
 #endif
