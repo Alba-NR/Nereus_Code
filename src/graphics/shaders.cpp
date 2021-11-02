@@ -1,9 +1,10 @@
 #include "shaders.h"
 #include <exception> // TODO remove
+#include <iostream>
 
 using std::string;
 
-string SHADERS_FOLDER_PATH = "../../resources/shaders";
+string SHADERS_FOLDER_PATH = PROJECT_SOURCE_DIR "/resources/shaders/";
 
 // ------------------------------------------
 // --- Shader Class ---
@@ -31,12 +32,12 @@ void Shader::loadAndCompile()
 
 	try {
 		// Attempt to read shader file
-		string filepath = SHADERS_FOLDER_PATH + filename;
-		std::ifstream in_file_stream(filepath);
+		std::ifstream in_file_stream(SHADERS_FOLDER_PATH + this->filename);
 		std::stringstream in_string_stream;
 		in_string_stream << in_file_stream.rdbuf();
+		in_file_stream.close();
 		string shader_source_str = in_string_stream.str();
-		const char *shader_source_c_str = shader_source_str.c_str();;
+		const char *shader_source_c_str = shader_source_str.c_str();
 
 		// Create OpenGL shader object
 		this->id = glCreateShader(this->type);
@@ -48,6 +49,14 @@ void Shader::loadAndCompile()
 		glCompileShader(this->id);
 
 		// TODO check for compilat errors
+		int success;
+		char infoLog[512];
+		glGetShaderiv(this->id, GL_COMPILE_STATUS, &success);
+		if (!success)
+		{
+			glGetShaderInfoLog(this->id, 512, NULL, infoLog);
+			std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
+		}
 
 	} // TODO catch exception if can't open file
 	catch (std::runtime_error e) // TODO appropriate except
@@ -61,7 +70,7 @@ Shader::~Shader()
 	glDeleteShader(this->id);
 }
 
-GLuint Shader::getHandle()
+GLuint Shader::getHandle() const
 {
 	return this->id;
 }
@@ -70,9 +79,9 @@ GLuint Shader::getHandle()
 // ------------------------------------------
 // --- ShaderProgram Class ---
 
-ShaderProgram::ShaderProgram(std::vector<Shader> shaders) : shaders(shaders)
+ShaderProgram::ShaderProgram(const std::vector<Shader> &shaders) : shaders(shaders)
 {
-	createProgram();
+	ShaderProgram::createProgram();
 }
 
 // Create a new shader program object and link the shaders together
@@ -82,7 +91,7 @@ void ShaderProgram::createProgram()
 	this->id = glCreateProgram();
 
 	// Attach shaders
-	for (Shader shader : this->shaders)
+	for (const Shader &shader : this->shaders)
 	{
 		glAttachShader(this->id, shader.getHandle());
 	}
@@ -91,6 +100,13 @@ void ShaderProgram::createProgram()
 	glLinkProgram(this->id);
 
 	// TODO check for link errors
+	int success;
+	char infoLog[512];
+	glGetProgramiv(this->id, GL_LINK_STATUS, &success);
+	if (!success) {
+		glGetProgramInfoLog(this->id, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+	}
 }
 
 ShaderProgram::~ShaderProgram()
@@ -105,7 +121,7 @@ void ShaderProgram::use()
 }
 
 // Return the GLuint program handle/id
-GLuint ShaderProgram::getHandle()
+GLuint ShaderProgram::getHandle() const
 {
 	return this->id;
 }

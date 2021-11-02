@@ -27,7 +27,7 @@ private:
 public:
 	Shader(string filename);
 	~Shader();
-	GLuint getHandle();
+	GLuint getHandle() const;
 };
 
 class ShaderProgram
@@ -39,10 +39,10 @@ private:
 	void createProgram();
 
 public:
-	ShaderProgram(std::vector<Shader> shaders);
+	ShaderProgram(const std::vector<Shader> &shaders);
 	~ShaderProgram();
 	void use();
-	GLuint getHandle();
+	GLuint getHandle() const;
 
 	void bindData(GLuint location, const Buffer &buffer, GLuint attribute_size) const;
 
