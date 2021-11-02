@@ -46,6 +46,8 @@ void Nereus::renderLoop()
         if (WindowManager::getKeyState(GLFW_KEY_ESCAPE) == GLFW_PRESS)
             WindowManager::setWindowShouldClose();
 
+        WindowManager::clearWindow();
+
         prog.use();       
         mesh.render();
 
