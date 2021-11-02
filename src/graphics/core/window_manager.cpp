@@ -6,7 +6,7 @@ namespace WindowManager
     // Contained within the namespace
     const unsigned int SCREEN_WIDTH = 1200;
     const unsigned int SCREEN_HEIGHT = 800;
-    const glm::vec3 bgColour(0.2f, 0.2f, 0.2f);
+    const glm::vec3 bgColour(0.2f, 0.2f, 0.25f);
     GLFWwindow* window = nullptr;
 
     // Create a glfw window & set-up the appropriate context
@@ -21,7 +21,7 @@ namespace WindowManager
         // --- glfw window context ---
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
