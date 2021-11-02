@@ -39,7 +39,7 @@ public:
 	{
 		bind();
 		const T *arr = &data[0];
-		glBufferData(buffer_type, sizeof(arr), arr, GL_STATIC_DRAW);
+		glBufferData(buffer_type, sizeof(T)*data.size(), arr, GL_STATIC_DRAW);
 	}
 	GLuint getHandle() const;
 };
