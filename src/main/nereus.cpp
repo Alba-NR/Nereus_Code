@@ -1,64 +1,66 @@
 // Local Headers
 #include "nereus.h"
-#include "../graphics/core/window_manager.h"
+
 #include "../graphics/shaders.h"
 #include "../graphics/meshes/test_mesh.h"
 
 // System Headers
+#include <glm/glm.hpp>
 #include <imgui.h>
 #include <vector>
 
 int main()
 {
-    int wasInitOk = Nereus::init(); // load glfw & create window
-    if (wasInitOk != EXIT_SUCCESS)  // check if error when init
-    {
-        return wasInitOk;
-    }
-
-    Nereus::renderLoop();   // render geom to window
-    Nereus::terminate();
+    Nereus::NereusApp::initGLFW();
+    Nereus::NereusApp nereus; // load glfw & create window
+    nereus.renderLoop();   // render geom to window
 
     return EXIT_SUCCESS;
 }
 
-int Nereus::init()
+namespace Nereus
 {
-    return WindowManager::createWindow();
-}
-
-void Nereus::renderLoop()
-{
-    // Test Code
-    std::vector<Shader> shaders;
-    shaders.emplace_back("test.vert");
-    shaders.emplace_back("test.frag");
-    ShaderProgram prog(shaders);
-
-    TestMesh mesh;
-    mesh.initialise();
-    mesh.getVAO().bind();
-    prog.bindData(0, mesh.getPositionsVBO(), 3);
-
-    // Rendering Loop
-    while (!WindowManager::windowShouldClose())
+    NereusApp::NereusApp() : window(Window::getInstance()), render_camera()
     {
-        if (WindowManager::getKeyState(GLFW_KEY_ESCAPE) == GLFW_PRESS)
-            WindowManager::setWindowShouldClose();
-
-        WindowManager::clearWindow();
-
-        prog.use();       
-        mesh.render();
-
-        // flip front & back buffers; and draw
-        WindowManager::updateWindow();
-
-        glfwPollEvents();
+        glfwInit();
+        this->window.setCallbacks();
     }
-}
 
-void Nereus::terminate()
-{
-    glfwTerminate();
+    NereusApp::~NereusApp()
+    {
+        glfwTerminate();
+    }
+
+    void NereusApp::initGLFW()
+    {
+        glfwInit();
+    }
+
+    void NereusApp::renderLoop()
+    {
+        // Test Code
+        std::vector<Shader> shaders;
+        shaders.emplace_back("test.vert");
+        shaders.emplace_back("test.frag");
+        ShaderProgram prog(shaders);
+
+        TestMesh mesh;
+        mesh.initialise();
+        mesh.getVAO().bind();
+        prog.bindData(0, mesh.getPositionsVBO(), 3);
+
+        // Rendering Loop
+        while (!this->window.shouldClose())
+        {
+            this->window.clear();
+
+            prog.use();
+            mesh.render();
+
+            // flip front & back buffers; and draw
+            this->window.update();
+
+            glfwPollEvents();
+        }
+    }
 }

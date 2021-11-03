@@ -2,10 +2,23 @@
 #define NEREUS_MAIN
 #pragma once
 
+#include "../graphics/core/window.h"
+#include "../graphics/camera.h"
+
+
 namespace Nereus
 {
-	int init();
-	void renderLoop();
-	void terminate();
+	class NereusApp
+	{
+	public:
+		Window window;
+		Camera render_camera;
+
+		NereusApp();	// init
+		~NereusApp();	// terminate
+
+		static void initGLFW();
+		void renderLoop();
+	};
 }
 #endif
