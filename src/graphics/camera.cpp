@@ -69,7 +69,7 @@ float Camera::getPolarAngle()
 	return this->polar_angle;
 }
 
-glm::vec3 Camera::getFOV()
+float Camera::getFOV()
 {
 	return this->fov;
 }
@@ -94,12 +94,12 @@ void Camera::getViewMatrix(glm::mat4 &dest)
 glm::mat4 Camera::getProjMatrix()
 {
 	glm::mat4 proj_matrix;
-	this->getProjhMatrix(proj_matrix);
+	this->getProjMatrix(proj_matrix);
 
 	return proj_matrix;
 }
 
 void Camera::getProjMatrix(glm::mat4 &dest)
 {
-	dest = glm::perspective(glm::radians(this->fov), this->ASPECT_RATIO, 0.1f, 100.0f);
+	dest = glm::perspective(glm::radians(this->fov), this->aspect_ratio, 0.1f, 100.0f);
 }

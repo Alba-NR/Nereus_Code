@@ -3,8 +3,10 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "../main/constants.h"
+
 
 class Camera
 {
@@ -33,7 +35,7 @@ public:
 	glm::vec3 getPosition();
 	float getAzimuthalAngle();
 	float getPolarAngle();
-	glm::vec3 getFOV();
+	float getFOV();
 
 	glm::mat4 getViewMatrix();
 	void getViewMatrix(glm::mat4 &dest);
