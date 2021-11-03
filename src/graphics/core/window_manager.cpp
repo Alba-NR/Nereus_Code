@@ -3,12 +3,6 @@
 
 namespace WindowManager
 {
-    // Contained within the namespace
-    const unsigned int SCREEN_WIDTH = 1200;
-    const unsigned int SCREEN_HEIGHT = 800;
-    const glm::vec3 bgColour(0.2f, 0.2f, 0.25f);
-    GLFWwindow* window = nullptr;
-
     // Create a glfw window & set-up the appropriate context
     int createWindow()
     {
@@ -79,6 +73,26 @@ namespace WindowManager
     void setWindowShouldClose()
     {
         return glfwSetWindowShouldClose(window, true);
+    }
+
+    // Set callback functions (not involving any camera state, mouse state nor any other state in nereus.h
+    void setCallbacks()
+    {
+        // Keyboard key press, repeat or release
+        glfwSetKeyCallback(
+            window, 
+            [](GLFWwindow *window, int key, int scancode, int action, int mods) 
+            {
+                // ESC released --> close window 
+                if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
+                    glfwSetWindowShouldClose(window, true);
+                // W pressed --> view in wireframe mode
+                if (key == GLFW_KEY_W) {
+                    if (action == GLFW_PRESS) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+                    else if (action == GLFW_RELEASE) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+                }
+            }
+        );
     }
 
     // Return the state of the given glfw keyboard key
