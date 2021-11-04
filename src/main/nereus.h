@@ -12,8 +12,8 @@ namespace Nereus
 	class NereusApp
 	{
 	public:
-		Window window;
-		Camera render_camera;
+		Window m_window;
+		Camera m_render_camera;
 
 		NereusApp();	// init
 		~NereusApp();	// terminate

@@ -11,14 +11,14 @@
 class Camera
 {
 private:
-	glm::vec3 position;
-	float azimuthal_angle;
-	float polar_angle;
+	glm::vec3 m_position;
+	float m_azimuthal_angle;
+	float m_polar_angle;
 	
-	float fov = 45.0f;
-	float aspect_ratio = NereusConstants::DEFAULT_WINDOW_WIDTH / NereusConstants::DEFAULT_WINDOW_HEIGHT;
-	const float SPEED = 4.0f;
-	const float SENSITIVITY = 0.05f;
+	float m_fov = 45.0f;
+	float m_aspect_ratio = NereusConstants::DEFAULT_WINDOW_WIDTH / NereusConstants::DEFAULT_WINDOW_HEIGHT;
+	const float m_SPEED = 4.0f;
+	const float m_SENSITIVITY = 0.05f;
 
 public:
 	Camera();

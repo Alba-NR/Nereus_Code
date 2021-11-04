@@ -2,7 +2,7 @@
 #include <vector>
 
 // Create the appropriate buffer objects for the mesh attributes
-Mesh::Mesh() : vao(), positionsVBO(), normalsVBO(), texCoordsVBO(), ebo(), vertexCount(0)
+Mesh::Mesh() : m_vao(), m_positionsVBO(), m_normalsVBO(), m_texCoordsVBO(), m_ebo(), m_vertexCount(0)
 {
 }
 
@@ -18,7 +18,7 @@ void Mesh::initialise()
 	this->initNormals(normals);
 	this->initTexCoords(texCoords);
 	this->initIndices(indices);
-	this->vertexCount = indices.size();
+	m_vertexCount = indices.size();
 
 	this->loadDataToGPU(positions, normals, texCoords, indices);
 }
@@ -30,19 +30,19 @@ void Mesh::loadDataToGPU(const std::vector<float> &positions,
 						const std::vector<int> &indices)
 {
 	// --- bind VAO ---
-	this->vao.bind();
+	m_vao.bind();
 
 	// --- load vertex positions ---
-	this->positionsVBO.setData<float>(positions);
+	m_positionsVBO.setData<float>(positions);
 
 	// --- load vertex normals ---
-	this->normalsVBO.setData<float>(normals);
+	m_normalsVBO.setData<float>(normals);
 
 	// --- load texture coordinates ---
-	this->texCoordsVBO.setData<float>(texCoords);
+	m_texCoordsVBO.setData<float>(texCoords);
 
 	// --- load vertex indices ---
-	this->ebo.setData<int>(indices);
+	m_ebo.setData<int>(indices);
 }
 
 // Destructor (will automatically call destructor of member vars?) TODO check
@@ -54,9 +54,9 @@ Mesh::~Mesh()
 // Bind VAO & do a draw call (using the currently active shader program)
 void Mesh::render()
 {
-	this->vao.bind();
-	glDrawElements(GL_TRIANGLES, this->vertexCount, GL_UNSIGNED_INT, 0);
-	this->vao.unbind();
+	m_vao.bind();
+	glDrawElements(GL_TRIANGLES, m_vertexCount, GL_UNSIGNED_INT, 0);
+	m_vao.unbind();
 }
 
 
@@ -64,20 +64,20 @@ void Mesh::render()
 
 VAO &Mesh::getVAO()
 {
-	return this->vao;
+	return m_vao;
 }
 
 VBO &Mesh::getPositionsVBO()
 {
-	return this->positionsVBO;
+	return m_positionsVBO;
 }
 
 VBO &Mesh::getNormalsVBO()
 {
-	return this->normalsVBO;
+	return m_normalsVBO;
 }
 
 VBO &Mesh::getTexCoordsVBO()
 {
-	return this->texCoordsVBO;
+	return m_texCoordsVBO;
 }

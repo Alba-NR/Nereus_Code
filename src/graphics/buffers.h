@@ -9,7 +9,7 @@
 class VAO
 {
 private:
-	GLuint id;
+	GLuint m_id;
 
 public:
 	VAO();
@@ -23,8 +23,8 @@ public:
 class Buffer
 {
 private:
-	GLuint id;
-	GLenum buffer_type;
+	GLuint m_id;
+	GLenum m_buffer_type;
 
 protected:
 	Buffer();
@@ -39,7 +39,7 @@ public:
 	{
 		bind();
 		const T *arr = &data[0];
-		glBufferData(buffer_type, sizeof(T)*data.size(), arr, GL_STATIC_DRAW);
+		glBufferData(m_buffer_type, sizeof(T)*data.size(), arr, GL_STATIC_DRAW);
 	}
 	GLuint getHandle() const;
 };

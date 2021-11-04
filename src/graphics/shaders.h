@@ -18,9 +18,9 @@ using std::string;
 class Shader
 {
 private:
-	string filename;
-	GLenum type;
-	GLuint id;
+	string m_filename;
+	GLenum m_type;
+	GLuint m_id;
 
 	void loadAndCompile();
 
@@ -33,8 +33,8 @@ public:
 class ShaderProgram
 {
 private:
-	std::vector<Shader> shaders;
-	GLuint id;
+	std::vector<Shader> m_shaders;
+	GLuint m_id;
 
 	void createProgram();
 

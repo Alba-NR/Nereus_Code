@@ -16,12 +16,12 @@
 class Window
 {
 private:
-	static Window *instance;
+	static Window *s_instance;
 
 	const unsigned int SCREEN_WIDTH = NereusConstants::DEFAULT_WINDOW_WIDTH;
 	const unsigned int SCREEN_HEIGHT = NereusConstants::DEFAULT_WINDOW_HEIGHT;
-	glm::vec3 bgColour = glm::vec3(0.2f, 0.2f, 0.25f);
-	GLFWwindow *window = nullptr;
+	glm::vec3 m_bgColour = glm::vec3(0.2f, 0.2f, 0.25f);
+	GLFWwindow *m_window = nullptr;
 
 	Window();
 	void createWindow();

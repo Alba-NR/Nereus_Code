@@ -8,12 +8,12 @@
 class Mesh
 {
 private:
-	VAO vao;
-	VBO positionsVBO;
-	VBO normalsVBO;
-	VBO texCoordsVBO;
-	EBO ebo;
-	int vertexCount;
+	VAO m_vao;
+	VBO m_positionsVBO;
+	VBO m_normalsVBO;
+	VBO m_texCoordsVBO;
+	EBO m_ebo;
+	int m_vertexCount;
 
 	void Mesh::loadDataToGPU(const std::vector<float> &positions, 
 							const std::vector<float> &normals, 

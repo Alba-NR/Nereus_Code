@@ -19,10 +19,10 @@ int main()
 
 namespace Nereus
 {
-    NereusApp::NereusApp() : window(Window::getInstance()), render_camera()
+    NereusApp::NereusApp() : m_window(Window::getInstance()), m_render_camera()
     {
         // set up callbacks
-        this->window.setCallbacks();
+        m_window.setCallbacks();
 
         // init GUI
         UI::init();
@@ -59,10 +59,10 @@ namespace Nereus
         prog.bindData(0, mesh.getPositionsVBO(), 3);
 
         // Rendering Loop
-        while (!this->window.shouldClose())
+        while (!m_window.shouldClose())
         {
             // clear window
-            this->window.clear();
+            m_window.clear();
 
             // render mesh
             prog.use();
@@ -72,7 +72,7 @@ namespace Nereus
             UI::render();
 
             // flip front & back buffers; and draw
-            this->window.update();
+            m_window.update();
 
             glfwPollEvents();
         }

@@ -1,16 +1,16 @@
 
 #include "window.h"
 
-Window *Window::instance = nullptr;
+Window *Window::s_instance = nullptr;
 
 Window &Window::getInstance()
 {
-    if (Window::instance == nullptr)
+    if (Window::s_instance == nullptr)
     {
-        Window::instance = new Window();
+        Window::s_instance = new Window();
     }
 
-    return *Window::instance;
+    return *Window::s_instance;
 }
 
 Window::Window()
@@ -22,7 +22,7 @@ Window::Window()
 void Window::createWindow()
 {
     // do not attempt to re-init glfw if a window has already been created
-    if (window != nullptr) return;
+    if (m_window != nullptr) return;
 
     // --- glfw window context ---
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, NereusConstants::OPENGL_VERSION_MAJOR);
@@ -33,10 +33,10 @@ void Window::createWindow()
     glfwWindowHint(GLFW_SAMPLES, 4);
 
     // --- glfw window creation ---
-    window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Nereus", nullptr, nullptr);
+    m_window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Nereus", nullptr, nullptr);
 
     // check for correct context creation
-    if(window == nullptr)
+    if(m_window == nullptr)
     {
         glfwTerminate();
         fprintf(stderr, "Failed to Create GLFW Window");
@@ -44,7 +44,7 @@ void Window::createWindow()
     }
 
     // make the OpenGL context current & load OpenGL functions
-    glfwMakeContextCurrent(this->window);
+    glfwMakeContextCurrent(m_window);
     gladLoadGL();
     fprintf(stderr, "OpenGL %s\n", glGetString(GL_VERSION));
 
@@ -56,44 +56,44 @@ void Window::createWindow()
 Window::~Window()
 {
     this->close();
-    Window::instance = nullptr;
+    Window::s_instance = nullptr;
 }
 
 
 // Initialises the ImGui GLFW backend (since must have access to GLFWwindow * to do so)
 void Window::initImGuiGLFW()
 {
-    ImGui_ImplGlfw_InitForOpenGL(this->window, true);
+    ImGui_ImplGlfw_InitForOpenGL(m_window, true);
 }
 
 
 // Swaps back & front buffers
 void Window::update()
 {
-    glfwSwapBuffers(this->window);    
+    glfwSwapBuffers(m_window);
 }
 
 void Window::close()
 {
-    glfwDestroyWindow(this->window);
+    glfwDestroyWindow(m_window);
 }
 
 // Clear the window to the background colour; also clear depth buffer
 void Window::clear() {
-    glClearColor(this->bgColour.x, this->bgColour.y, this->bgColour.z, 1.0f); // specify colour to clear to
+    glClearColor(m_bgColour.x, m_bgColour.y, m_bgColour.z, 1.0f); // specify colour to clear to
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);     // clear screen's color buffer & depth buffer
 }
 
 // Returns true if the glfw window should close
 bool Window::shouldClose()
 {
-    return glfwWindowShouldClose(this->window);
+    return glfwWindowShouldClose(m_window);
 }
 
 // Set the glfw window should close flag to true
 void Window::setShouldClose()
 {
-    return glfwSetWindowShouldClose(this->window, true);
+    return glfwSetWindowShouldClose(m_window, true);
 }
 
 // Set callback functions (not involving any camera state, mouse state nor any other state in nereus.h
@@ -101,7 +101,7 @@ void Window::setCallbacks()
 {
     // Keyboard key press, repeat or release
     glfwSetKeyCallback(
-        this->window,
+        m_window,
         [](GLFWwindow *window, int key, int scancode, int action, int mods) 
         {
             // ESC released --> close window 
@@ -119,7 +119,7 @@ void Window::setCallbacks()
 // Return the state of the given glfw keyboard key
 unsigned int Window::getKeyState(unsigned int key)
 {
-    return glfwGetKey(this->window, key);
+    return glfwGetKey(m_window, key);
 }
 
 // Get the SCREEN_WIDTH value
