@@ -27,10 +27,10 @@ namespace UI
 		ImGui::NewFrame();
 
 		// --- set up window  & location to top-left corner---
-		ImGui::Begin("Nereus");
+		ImGui::SetNextWindowPos(ImVec2(0, 0));
 
-		const ImGuiViewport *main_viewport = ImGui::GetMainViewport();
-		ImGui::SetNextWindowPos(ImVec2(main_viewport->WorkPos.x, main_viewport->WorkPos.y));
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoMove;
+		ImGui::Begin("Nereus", nullptr, window_flags);
 
 		// --- set up widgets ---
 		
