@@ -25,26 +25,50 @@ include_directories(libs/vendor/assimp/include/
         libs/vendor/glfw/include/
         libs/vendor/glm/
         libs/vendor/stb/
-        libs/vendor/imgui)
+        libs/vendor/imgui/  # bc imgui backend files must refer to "imgui.h"
+        libs/vendor/)       # for imgui files being imgui/... rather than just the header file
 
-file(GLOB VENDORS_SOURCES libs/vendor/glad/src/glad.c
-                        libs/vendor/imgui/*.c
-                        libs/vendor/imgui/*.h)
-file(GLOB_RECURSE PROJECT_HEADERS src/*.h)
-file(GLOB_RECURSE PROJECT_SOURCES src/*.cpp)
-file(GLOB PROJECT_SHADERS resources/shaders/*.comp
-        resources/shaders/*.frag
-        resources/shaders/*.geom
-        resources/shaders/*.vert)
-file(GLOB PROJECT_CONFIGS CMakeLists.txt
-                         .gitattributes
-                         .gitignore
-                         .gitmodules)
+set(VENDORS_SOURCES libs/vendor/glad/src/glad.c
+                    libs/vendor/imgui/imgui.cpp
+                    libs/vendor/imgui/imgui.h
+                    libs/vendor/imgui/imgui_internal.h
+                    libs/vendor/imgui/imgui_draw.cpp
+                    libs/vendor/imgui/imgui_widgets.cpp
+                    libs/vendor/imgui/imgui_tables.cpp
+                    libs/vendor/imgui/backends/imgui_impl_glfw.h
+                    libs/vendor/imgui/backends/imgui_impl_glfw.cpp
+                    libs/vendor/imgui/backends/imgui_impl_opengl3.h
+                    libs/vendor/imgui/backends/imgui_impl_opengl3.cpp)
+
+set(PROJECT_HEADERS src/main/nereus.h
+                    src/main/constants.h
+                    src/graphics/buffers.h
+                    src/graphics/shaders.h
+                    src/graphics/camera.h
+                    src/graphics/core/window.h
+                    src/graphics/meshes/meshes.h
+                    src/graphics/meshes/test_mesh.h)
+
+set(PROJECT_HEADERS src/main/nereus.cpp
+                    src/graphics/buffers.cpp
+                    src/graphics/shaders.cpp
+                    src/graphics/camera.cpp
+                    src/graphics/core/window.cpp
+                    src/graphics/meshes/meshes.cpp
+                    src/graphics/meshes/test_mesh.cpp)
+
+set(PROJECT_SHADERS resources/shaders/test.frag
+                    resources/shaders/test.vert)
+
+set(PROJECT_CONFIGS CMakeLists.txt
+                    .gitattributes
+                    .gitignore
+                    .gitmodules)
 
 source_group("Headers" FILES ${PROJECT_HEADERS})
-source_group("Shaders" FILES ${PROJECT_SHADERS})
 source_group("Sources" FILES ${PROJECT_SOURCES})
 source_group("Vendors" FILES ${VENDORS_SOURCES})
+source_group("Shaders" FILES ${PROJECT_SHADERS})
 
 add_definitions(-DGLFW_INCLUDE_NONE
                 -DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
