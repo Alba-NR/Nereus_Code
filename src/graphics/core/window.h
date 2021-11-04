@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <imgui/imgui.h>
+#include <imgui/backends/imgui_impl_glfw.h>
 
 #include <cstdio>
 #include <cstdlib>
@@ -27,6 +29,8 @@ private:
 public:
 	static Window &getInstance();
 	~Window();
+
+	void initImGuiGLFW();
 
 	void update();
 	void clear();

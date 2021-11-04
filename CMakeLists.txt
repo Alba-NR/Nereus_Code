@@ -42,6 +42,7 @@ set(VENDORS_SOURCES libs/vendor/glad/src/glad.c
 
 set(PROJECT_HEADERS src/main/nereus.h
                     src/main/constants.h
+                    src/ui/ui.h
                     src/graphics/buffers.h
                     src/graphics/shaders.h
                     src/graphics/camera.h
@@ -50,6 +51,7 @@ set(PROJECT_HEADERS src/main/nereus.h
                     src/graphics/meshes/test_mesh.h)
 
 set(PROJECT_HEADERS src/main/nereus.cpp
+                    src/ui/ui.cpp
                     src/graphics/buffers.cpp
                     src/graphics/shaders.cpp
                     src/graphics/camera.cpp

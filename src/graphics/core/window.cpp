@@ -60,6 +60,13 @@ Window::~Window()
 }
 
 
+// Initialises the ImGui GLFW backend (since must have access to GLFWwindow * to do so)
+void Window::initImGuiGLFW()
+{
+    ImGui_ImplGlfw_InitForOpenGL(this->window, true);
+}
+
+
 // Swaps back & front buffers
 void Window::update()
 {

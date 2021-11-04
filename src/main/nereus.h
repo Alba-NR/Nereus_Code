@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../graphics/core/window.h"
+#include "../ui/ui.h"
 #include "../graphics/camera.h"
 
 

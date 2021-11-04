@@ -1,12 +1,11 @@
 // Local Headers
 #include "nereus.h"
-
 #include "../graphics/shaders.h"
 #include "../graphics/meshes/test_mesh.h"
 
+
 // System Headers
 #include <glm/glm.hpp>
-#include <imgui.h>
 #include <vector>
 
 int main()
@@ -22,15 +21,25 @@ namespace Nereus
 {
     NereusApp::NereusApp() : window(Window::getInstance()), render_camera()
     {
-        glfwInit();
+        // set up callbacks
         this->window.setCallbacks();
+
+        // init GUI
+        UI::init();
     }
 
     NereusApp::~NereusApp()
     {
-        glfwTerminate();
+        // note: will call Window destructor & correctly destroy the window
+
+        // cleanup UI resources
+        UI::destroy();
+        
+        // terminate GLFW
+        glfwTerminate();       
     }
 
+    // Init GLFW. MUST be called BEFORE creating a NereusApp instance.
     void NereusApp::initGLFW()
     {
         glfwInit();
@@ -52,10 +61,15 @@ namespace Nereus
         // Rendering Loop
         while (!this->window.shouldClose())
         {
+            // clear window
             this->window.clear();
 
+            // render mesh
             prog.use();
             mesh.render();
+
+            // render UI
+            UI::render();
 
             // flip front & back buffers; and draw
             this->window.update();
