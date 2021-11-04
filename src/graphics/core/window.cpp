@@ -107,11 +107,6 @@ void Window::setCallbacks()
             // ESC released --> close window 
             if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
                 glfwSetWindowShouldClose(window, true);
-            // W pressed --> view in wireframe mode
-            if (key == GLFW_KEY_W) {
-                if (action == GLFW_PRESS) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                else if (action == GLFW_RELEASE) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            }
         }
     );
 }
