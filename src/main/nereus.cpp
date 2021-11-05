@@ -7,6 +7,9 @@
 // System Headers
 #include <glm/glm.hpp>
 #include <vector>
+#include <iostream>
+#include <glm/gtx/string_cast.hpp> // TODO remove
+#include <glm/gtc/type_ptr.hpp>
 
 int main()
 {
@@ -58,14 +61,21 @@ namespace Nereus
         mesh.getVAO().bind();
         prog.bindData(0, mesh.getPositionsVBO(), 3);
 
+
         // Rendering Loop
         while (!m_window.shouldClose())
         {
             // clear window
             m_window.clear();
 
-            // render mesh
+            glm::mat4 model_matrix = glm::mat4(1.0f);
+            model_matrix = glm::translate(model_matrix, glm::vec3(0.5f, -0.5f, 0.0f));
+            model_matrix = glm::rotate(model_matrix, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+            
             prog.use();
+            prog.setMat4("model_m", model_matrix);
+
+            // render mesh
             mesh.render();
 
             // render UI

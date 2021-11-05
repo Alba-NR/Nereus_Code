@@ -67,7 +67,7 @@ void Shader::loadAndCompile()
 
 Shader::~Shader()
 {
-	glDeleteShader(m_id);
+	//glDeleteShader(m_id); -- REMOVED s.t. can use vector<Shader> in ShaderProgram class
 }
 
 GLuint Shader::getHandle() const
@@ -111,6 +111,11 @@ void ShaderProgram::createProgram()
 
 ShaderProgram::~ShaderProgram()
 {
+	for (const Shader &shader : m_shaders)
+	{
+		glDeleteShader(shader.getHandle());
+	}
+
 	glDeleteProgram(m_id);
 }
 
