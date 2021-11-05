@@ -1,5 +1,6 @@
 // Local Headers
 #include "nereus.h"
+#include "constants.h"
 #include "../graphics/shaders.h"
 #include "../graphics/meshes/test_mesh.h"
 
@@ -8,8 +9,6 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include <iostream>
-#include <glm/gtx/string_cast.hpp> // TODO remove
-#include <glm/gtc/type_ptr.hpp>
 
 int main()
 {
@@ -22,7 +21,7 @@ int main()
 
 namespace Nereus
 {
-    NereusApp::NereusApp() : m_window(Window::getInstance()), m_render_camera()
+    NereusApp::NereusApp() : m_window(Window::getInstance()), m_render_camera(NereusConstants::CAMERA_POSITION)
     {
         // set up callbacks
         m_window.setCallbacks();
@@ -69,11 +68,14 @@ namespace Nereus
             m_window.clear();
 
             glm::mat4 model_matrix = glm::mat4(1.0f);
-            model_matrix = glm::translate(model_matrix, glm::vec3(0.5f, -0.5f, 0.0f));
-            model_matrix = glm::rotate(model_matrix, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+            model_matrix = glm::scale(model_matrix, glm::vec3(10.0f, 1.0f, 10.0f));
+            model_matrix = glm::rotate(model_matrix, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
             
+            glm::mat4 mvp_matrix = m_render_camera.getProjMatrix() * m_render_camera.getViewMatrix() * model_matrix;
+
             prog.use();
-            prog.setMat4("model_m", model_matrix);
+            prog.setMat4("mvp_matrix", mvp_matrix);
+
 
             // render mesh
             mesh.render();
