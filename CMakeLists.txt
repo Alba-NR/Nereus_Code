@@ -44,6 +44,7 @@ set(VENDORS_SOURCES libs/vendor/glad/src/glad.c
 
 set(PROJECT_HEADERS src/main/nereus.h
                     src/main/constants.h
+                    src/main/app_context.h
                     src/utils/image_io.h
                     src/ui/ui.h
                     src/graphics/buffers.h
@@ -55,6 +56,7 @@ set(PROJECT_HEADERS src/main/nereus.h
                     src/graphics/textures.h)
 
 set(PROJECT_SOURCES src/main/nereus.cpp
+                    src/main/app_context.cpp
                     src/utils/image_io.cpp
                     src/ui/ui.cpp
                     src/graphics/buffers.cpp

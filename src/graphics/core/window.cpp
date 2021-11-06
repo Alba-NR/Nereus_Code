@@ -1,5 +1,6 @@
 
 #include "window.h"
+#include "../../main/app_context.h"
 
 Window *Window::s_instance = nullptr;
 
@@ -109,7 +110,44 @@ void Window::setCallbacks()
                 glfwSetWindowShouldClose(window, true);
         }
     );
+
+    // Cursor position
+    glfwSetCursorPosCallback(m_window,
+        [](GLFWwindow *window, double xpos, double ypos)
+        {
+            Nereus::AppContext *context = reinterpret_cast<Nereus::AppContext *>(glfwGetWindowUserPointer(window));
+            
+            // click & drag --> move camera view
+            bool dragging = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
+            if (dragging) {
+                float xoffset = (xpos - context->m_last_mouse_x);
+                float yoffset = (context->m_last_mouse_y - ypos);
+                context->m_render_camera.processMouseMovement(xoffset, yoffset);
+            }
+
+            context->m_last_mouse_x = xpos;
+            context->m_last_mouse_y = ypos;
+        }
+    );
+
+    // Cursor scroll
+    glfwSetScrollCallback(m_window,
+        [](GLFWwindow *window, double xoffset, double yoffset)
+        {
+            Nereus::AppContext *context = reinterpret_cast<Nereus::AppContext *>(glfwGetWindowUserPointer(window));
+
+            // scroll --> zoom in/out
+            context->m_render_camera.processMouseScroll(yoffset);
+        }
+    );
 }
+
+// TODO doc
+void Window::setWindowUserPointer(void *ptr)
+{
+    glfwSetWindowUserPointer(m_window, ptr);
+}
+
 
 // Return the state of the given glfw keyboard key
 unsigned int Window::getKeyState(unsigned int key)

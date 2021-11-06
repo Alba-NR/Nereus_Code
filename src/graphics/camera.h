@@ -17,8 +17,8 @@ private:
 	
 	float m_fov = 45.0f;
 	float m_aspect_ratio = NereusConstants::DEFAULT_WINDOW_WIDTH / NereusConstants::DEFAULT_WINDOW_HEIGHT;
-	const float m_SPEED = 4.0f;
-	const float m_SENSITIVITY = 0.05f;
+	const float m_SPEED = NereusConstants::DEFAULT_CAMERA_SPEED;
+	const float m_SENSITIVITY = NereusConstants::DEFAULT_CAMERA_SENSITIVITY;
 
 public:
 	Camera();

@@ -1,12 +1,12 @@
 #include "camera.h"
 
 
-Camera::Camera() : m_position(0.0f, 0.0f, 0.0f), m_azimuthal_angle(-90.0f), m_polar_angle(0.0f)
+Camera::Camera() : m_position(0.0f, 0.0f, 0.0f), m_azimuthal_angle(-120.0f), m_polar_angle(-15.0f)
 {
 
 }
 
-Camera::Camera(glm::vec3 position) : m_position(position), m_azimuthal_angle(-90.0f), m_polar_angle(0.0f)
+Camera::Camera(glm::vec3 position) : m_position(position), m_azimuthal_angle(-120.0f), m_polar_angle(-15.0f)
 {
 
 }
@@ -26,16 +26,16 @@ void Camera::processMouseMovement(float x_offset, float y_offset)
 	m_azimuthal_angle += x_offset;
 	m_polar_angle += y_offset;
 
-	if (m_polar_angle >= 90.0f) m_polar_angle = 90.0f;
-	else if (m_polar_angle <= -90.0f) m_polar_angle = -90.0f;
+	// limit movement
+	m_azimuthal_angle = glm::clamp(m_azimuthal_angle, -140.0f, -90.0f);
+	m_polar_angle = glm::clamp(m_polar_angle, -30.0f, 0.0f);
 }
 
 // Process mouse scroll. Update FOV for zoom effect
 void Camera::processMouseScroll(float scroll_amt)
 {
 	m_fov -= scroll_amt;
-	if (m_fov < 1.0f) m_fov = 1.0f;
-	else if (m_fov > 45.0f) m_fov = 45.0f;
+	m_fov = glm::clamp(m_fov, 1.0f, 45.0f);
 }
 
 // Setters
@@ -86,7 +86,12 @@ glm::mat4 Camera::getViewMatrix()
 void Camera::getViewMatrix(glm::mat4 &dest)
 {
 	glm::vec3 up(0.0f, 1.0f, 0.0f);
-	glm::vec3 target(0.0f, 0.0f, 0.0f);
+	glm::vec3 target = glm::vec3(
+		glm::cos(glm::radians(m_azimuthal_angle)) * glm::cos(glm::radians(m_polar_angle)),
+		glm::sin(glm::radians(m_polar_angle)),
+		glm::sin(glm::radians(m_azimuthal_angle)) * glm::cos(glm::radians(m_polar_angle))
+	);
+	target = m_position + glm::normalize(target);
 	dest = glm::lookAt(m_position, target, up);
 }
 

@@ -39,6 +39,8 @@ public:
 	void setShouldClose();
 
 	void setCallbacks();
+	void setWindowUserPointer(void *ptr);
+
 	unsigned int getKeyState(unsigned int key);
 
 	unsigned int getScreenWidth();

@@ -21,8 +21,11 @@ int main()
 
 namespace Nereus
 {
-    NereusApp::NereusApp() : m_window(Window::getInstance()), m_render_camera(NereusConstants::CAMERA_POSITION)
+    NereusApp::NereusApp() : m_window(Window::getInstance()), m_context()
     {
+        // set window user pointer to the app context
+        m_window.setWindowUserPointer(&m_context);
+
         // set up callbacks
         m_window.setCallbacks();
 
@@ -71,7 +74,7 @@ namespace Nereus
             model_matrix = glm::scale(model_matrix, glm::vec3(10.0f, 1.0f, 10.0f));
             model_matrix = glm::rotate(model_matrix, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
             
-            glm::mat4 mvp_matrix = m_render_camera.getProjMatrix() * m_render_camera.getViewMatrix() * model_matrix;
+            glm::mat4 mvp_matrix = m_context.m_render_camera.getProjMatrix() * m_context.m_render_camera.getViewMatrix() * model_matrix;
 
             prog.use();
             prog.setMat4("mvp_matrix", mvp_matrix);

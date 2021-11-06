@@ -19,6 +19,8 @@ namespace NereusConstants
 		CAMERA_DISTANCE_FROM_ORIGIN * glm::cos(glm::radians(60.0f)) * glm::sin(glm::radians(30.0f)), // z
 		CAMERA_DISTANCE_FROM_ORIGIN * glm::sin(glm::radians(60.0f)) // y
 	);
+	const float DEFAULT_CAMERA_SPEED = 3.0f;
+	const float DEFAULT_CAMERA_SENSITIVITY = 0.1f;
 	
 }
 

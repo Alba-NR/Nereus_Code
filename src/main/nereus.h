@@ -3,17 +3,19 @@
 #pragma once
 
 #include "../graphics/core/window.h"
+#include "app_context.h"
 #include "../ui/ui.h"
-#include "../graphics/camera.h"
 
 
 namespace Nereus
 {
 	class NereusApp
 	{
-	public:
+	private:
 		Window m_window;
-		Camera m_render_camera;
+		AppContext m_context;
+
+	public:
 
 		NereusApp();	// init
 		~NereusApp();	// terminate
