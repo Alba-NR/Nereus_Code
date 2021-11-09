@@ -136,7 +136,7 @@ GLuint ShaderProgram::getHandle() const
 void ShaderProgram::bindData(GLuint location, const Buffer &buffer, GLuint attribute_size) const
 {
 	// bind the given buffer
-	glBindBuffer(GL_ARRAY_BUFFER, buffer.getHandle());
+	buffer.bind();
 	// specify how openGL should interpret the data
 	glVertexAttribPointer(location, attribute_size, GL_FLOAT, GL_FALSE, 0, 0);
 	// enable attrib
