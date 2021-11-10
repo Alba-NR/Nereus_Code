@@ -2,8 +2,8 @@
 #include "ocean_mesh.h"
 #include <iostream>
 
-OceanMesh::OceanMesh(unsigned int grid_width, unsigned int grid_height)
-	: m_grid_width(grid_width), m_grid_height(grid_height)
+OceanMesh::OceanMesh(int grid_width, int grid_height)
+	: m_grid_width(max(grid_width,1)), m_grid_height(max(grid_height,1))
 {
 }
 
@@ -64,4 +64,23 @@ void OceanMesh::initIndices(std::vector<int> &indices)
 			indices.push_back(stride_h * (j + 1) + i + 1);
 		}
 	}
+}
+
+// Updates the OpenGL buffer data to that for a grid with the new dimensions/resolution
+void OceanMesh::updateMeshGrid(int new_grid_width, int new_grid_height)
+{
+	m_grid_width = new_grid_width;
+	m_grid_height = new_grid_height;
+
+	this->initialise();
+}
+
+int OceanMesh::getGridWidth() const
+{
+	return m_grid_width;
+}
+
+int OceanMesh::getGridHeight() const
+{
+	return m_grid_height;
 }

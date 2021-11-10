@@ -33,7 +33,7 @@ namespace Nereus
         m_window.setCallbacks();
 
         // init GUI
-        UI::init();
+        UI::init(&m_context);
     }
 
     NereusApp::~NereusApp()
@@ -63,10 +63,12 @@ namespace Nereus
         shaders.emplace_back("test.frag");
         ShaderProgram prog(shaders);
 
-        OceanMesh mesh(100, 50);
-        mesh.initialise();
-        mesh.getVAO().bind();
-        prog.bindData(0, mesh.getPositionsVBO(), 3);
+        int last_ocean_mesh_grid_width = m_context.m_ocean_grid_width;
+        int last_ocean_mesh_grid_height = m_context.m_ocean_grid_height;
+        OceanMesh ocean_mesh(last_ocean_mesh_grid_width, last_ocean_mesh_grid_height);
+        ocean_mesh.initialise();
+        ocean_mesh.getVAO().bind();
+        prog.bindData(0, ocean_mesh.getPositionsVBO(), 3);
         
 
         // ------------------------------
@@ -98,20 +100,32 @@ namespace Nereus
             // clear window
             m_window.clear();
 
-            // --- render test mesh ---
+            // --- render ocean mesh ---
+
+            // update mesh data if the grid resolution has been changed
+            if (last_ocean_mesh_grid_width != m_context.m_ocean_grid_width
+                || last_ocean_mesh_grid_height != m_context.m_ocean_grid_height)
+            {
+                ocean_mesh.updateMeshGrid(m_context.m_ocean_grid_width, m_context.m_ocean_grid_height);
+                last_ocean_mesh_grid_width = m_context.m_ocean_grid_width;
+                last_ocean_mesh_grid_height = m_context.m_ocean_grid_height;
+            }
 
             // transformation matrices
             glm::mat4 model_matrix = glm::mat4(1.0f);
-            model_matrix = glm::translate(model_matrix, glm::vec3(-75.0f, 0.0f, -25.0f));
-            //model_matrix = glm::scale(model_matrix, glm::vec3(10.0f, 1.0f, 10.0f));
-            //model_matrix = glm::rotate(model_matrix, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+            model_matrix = glm::translate(model_matrix, glm::vec3(-m_context.m_ocean_width / 2, 0.0f, -m_context.m_ocean_height / 2));
+            model_matrix = glm::scale(model_matrix, glm::vec3(
+                m_context.m_ocean_width / (float) m_context.m_ocean_grid_width,
+                1.0f,
+                m_context.m_ocean_height / (float) m_context.m_ocean_grid_height
+            ));
             
             glm::mat4 mvp_matrix = m_context.m_render_camera.getProjMatrix() * m_context.m_render_camera.getViewMatrix() * model_matrix;
 
             // render mesh
             prog.use();
             prog.setMat4("mvp_matrix", mvp_matrix);
-            mesh.render();
+            ocean_mesh.render();
 
             // --- render skybox ---
             skybox_renderer.render(m_context.m_render_camera);

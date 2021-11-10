@@ -7,11 +7,15 @@
 
 namespace Nereus
 {
-	class AppContext
+	struct AppContext
 	{
-	public:
 		float m_last_mouse_x;
 		float m_last_mouse_y;
+
+		int m_ocean_width = 100;
+		int m_ocean_height = 50;
+		int m_ocean_grid_width = 1;
+		int m_ocean_grid_height = 1;
 
 		Camera m_render_camera;
 

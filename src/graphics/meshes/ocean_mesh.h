@@ -7,8 +7,8 @@
 class OceanMesh : public Mesh
 {
 private:
-	unsigned int m_grid_width;
-	unsigned int m_grid_height;
+	int m_grid_width;
+	int m_grid_height;
 
 	void initPositions(std::vector<float> &pos);
 	void initNormals(std::vector<float> &normals);
@@ -16,7 +16,12 @@ private:
 	void initIndices(std::vector<int> &indices);
 
 public:
-	OceanMesh(unsigned int grid_width, unsigned int grid_height);
+	OceanMesh(int grid_width, int grid_height);
+
+	void updateMeshGrid(int new_grid_width, int new_grid_height);
+
+	int getGridWidth() const;
+	int getGridHeight() const;
 };
 
 #endif
