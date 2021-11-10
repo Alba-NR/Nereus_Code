@@ -52,6 +52,9 @@ void Window::createWindow()
     // --- set OpenGL viewport --- 
     // (OpenGL will render in this viewport)
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+    // --- enable depth test ---
+    glEnable(GL_DEPTH_TEST);
 }
 
 Window::~Window()
