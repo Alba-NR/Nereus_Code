@@ -2,6 +2,7 @@
 #include "nereus.h"
 #include "constants.h"
 #include "../graphics/shaders.h"
+#include "../graphics/meshes/ocean_mesh.h"
 #include "../graphics/meshes/test_mesh.h"
 #include "../graphics/renderers/renderers.h"
 #include "../graphics/textures.h"
@@ -62,7 +63,7 @@ namespace Nereus
         shaders.emplace_back("test.frag");
         ShaderProgram prog(shaders);
 
-        TestMesh mesh;
+        OceanMesh mesh(100, 50);
         mesh.initialise();
         mesh.getVAO().bind();
         prog.bindData(0, mesh.getPositionsVBO(), 3);
@@ -84,7 +85,7 @@ namespace Nereus
             "sky_skybox/top.jpg",
             "sky_skybox/bottom.jpg",
             "sky_skybox/front.jpg",
-            "sky_skybox/back.jpg"            
+            "sky_skybox/back.jpg"       
         };
         SkyBoxRenderer skybox_renderer(skybox_shader_prog, skybox_images);
         skybox_renderer.prepare();
@@ -101,9 +102,9 @@ namespace Nereus
 
             // transformation matrices
             glm::mat4 model_matrix = glm::mat4(1.0f);
-            //model_matrix = glm::translate(model_matrix, glm::vec3(-2.5f, 0.0f, -2.5f));
-            model_matrix = glm::scale(model_matrix, glm::vec3(10.0f, 1.0f, 10.0f));
-            model_matrix = glm::rotate(model_matrix, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+            model_matrix = glm::translate(model_matrix, glm::vec3(-75.0f, 0.0f, -25.0f));
+            //model_matrix = glm::scale(model_matrix, glm::vec3(10.0f, 1.0f, 10.0f));
+            //model_matrix = glm::rotate(model_matrix, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
             
             glm::mat4 mvp_matrix = m_context.m_render_camera.getProjMatrix() * m_context.m_render_camera.getViewMatrix() * model_matrix;
 

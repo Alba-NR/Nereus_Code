@@ -27,8 +27,8 @@ void Camera::processMouseMovement(float x_offset, float y_offset)
 	m_polar_angle += y_offset;
 
 	// limit movement
-	m_azimuthal_angle = glm::clamp(m_azimuthal_angle, -140.0f, -90.0f);
-	m_polar_angle = glm::clamp(m_polar_angle, -30.0f, 0.0f);
+	m_azimuthal_angle = glm::clamp(m_azimuthal_angle, -180.0f, -60.0f); // -140.0f, -90.0f
+	m_polar_angle = glm::clamp(m_polar_angle, -45.0f, 15.0f);  // -30.0f, 0.0f)
 }
 
 // Process mouse scroll. Update FOV for zoom effect

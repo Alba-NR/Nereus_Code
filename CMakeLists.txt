@@ -54,6 +54,7 @@ set(PROJECT_HEADERS src/main/nereus.h
                     src/graphics/core/window.h
                     src/graphics/meshes/meshes.h
                     src/graphics/meshes/test_mesh.h
+                    src/graphics/meshes/ocean_mesh.h
                     src/graphics/renderers/renderers.h)
 
 set(PROJECT_SOURCES src/main/nereus.cpp
@@ -67,6 +68,7 @@ set(PROJECT_SOURCES src/main/nereus.cpp
                     src/graphics/core/window.cpp
                     src/graphics/meshes/meshes.cpp
                     src/graphics/meshes/test_mesh.cpp
+                    src/graphics/meshes/ocean_mesh.cpp
                     src/graphics/renderers/renderers.cpp)
 
 set(PROJECT_SHADERS resources/shaders/test.frag
