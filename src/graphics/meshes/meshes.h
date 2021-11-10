@@ -5,6 +5,7 @@
 #include <glad/glad.h>
 #include "../buffers.h"
 
+// --- Mesh abstract class ---
 class Mesh
 {
 private:
@@ -41,4 +42,22 @@ public:
 	VBO &getTexCoordsVBO();
 };
 
+
+// --- Cubemap mesh ---
+class CubeMapMesh : public Mesh
+{
+private:
+	static CubeMapMesh *s_instance;
+
+	CubeMapMesh();
+
+	void initPositions(std::vector<float> &pos);
+	void initNormals(std::vector<float> &normals);
+	void initTexCoords(std::vector<float> &texCoords);
+	void initIndices(std::vector<int> &indices);
+
+public:
+	static CubeMapMesh &getInstance();
+	~CubeMapMesh();
+};
 #endif
