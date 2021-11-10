@@ -32,16 +32,16 @@ public:
 	void setFOV(float new_fov);
 	void setAspectRatio(float new_ar);
 
-	glm::vec3 getPosition();
-	float getAzimuthalAngle();
-	float getPolarAngle();
-	float getFOV();
+	glm::vec3 getPosition() const;
+	float getAzimuthalAngle() const;
+	float getPolarAngle() const;
+	float getFOV() const;
 
-	glm::mat4 getViewMatrix();
-	void getViewMatrix(glm::mat4 &dest);
+	glm::mat4 getViewMatrix() const;
+	void getViewMatrix(glm::mat4 &dest) const;
 
-	glm::mat4 getProjMatrix();
-	void getProjMatrix(glm::mat4 &dest);
+	glm::mat4 getProjMatrix() const;
+	void getProjMatrix(glm::mat4 &dest) const;
 };
 
 #endif

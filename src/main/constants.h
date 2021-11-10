@@ -21,6 +21,8 @@ namespace NereusConstants
 	);
 	const float DEFAULT_CAMERA_SPEED = 3.0f;
 	const float DEFAULT_CAMERA_SENSITIVITY = 0.1f;
+	const float CAMERA_NEAR_PLANE = 0.1f;
+	const float CAMERA_FAR_PLANE = 100.0f;
 	
 }
 

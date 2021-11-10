@@ -1,5 +1,5 @@
 #include "camera.h"
-
+#include "../main/constants.h"
 
 Camera::Camera() : m_position(0.0f, 0.0f, 0.0f), m_azimuthal_angle(-120.0f), m_polar_angle(-15.0f)
 {
@@ -54,28 +54,28 @@ void Camera::setAspectRatio(float new_ar)
 }
 
 // Getters
-glm::vec3 Camera::getPosition()
+glm::vec3 Camera::getPosition() const
 {
 	return m_position;
 }
 
-float Camera::getAzimuthalAngle()
+float Camera::getAzimuthalAngle() const
 {
 	return m_azimuthal_angle;
 }
 
-float Camera::getPolarAngle()
+float Camera::getPolarAngle() const
 {
 	return m_polar_angle;
 }
 
-float Camera::getFOV()
+float Camera::getFOV() const
 {
 	return m_fov;
 }
 
 // Calc View matrix using LookAt
-glm::mat4 Camera::getViewMatrix()
+glm::mat4 Camera::getViewMatrix() const
 {
 	glm::mat4 view_matrix;
 	this->getViewMatrix(view_matrix);
@@ -83,7 +83,7 @@ glm::mat4 Camera::getViewMatrix()
 	return view_matrix;
 }
 
-void Camera::getViewMatrix(glm::mat4 &dest)
+void Camera::getViewMatrix(glm::mat4 &dest) const
 {
 	glm::vec3 up(0.0f, 1.0f, 0.0f);
 	glm::vec3 target = glm::vec3(
@@ -96,7 +96,7 @@ void Camera::getViewMatrix(glm::mat4 &dest)
 }
 
 // Calc Projection matrix
-glm::mat4 Camera::getProjMatrix()
+glm::mat4 Camera::getProjMatrix() const
 {
 	glm::mat4 proj_matrix;
 	this->getProjMatrix(proj_matrix);
@@ -104,7 +104,7 @@ glm::mat4 Camera::getProjMatrix()
 	return proj_matrix;
 }
 
-void Camera::getProjMatrix(glm::mat4 &dest)
+void Camera::getProjMatrix(glm::mat4 &dest) const
 {
-	dest = glm::perspective(glm::radians(m_fov), m_aspect_ratio, 0.1f, 100.0f);
+	dest = glm::perspective(glm::radians(m_fov), m_aspect_ratio, NereusConstants::CAMERA_NEAR_PLANE, NereusConstants::CAMERA_FAR_PLANE);
 }
