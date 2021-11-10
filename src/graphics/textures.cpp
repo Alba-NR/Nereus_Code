@@ -40,6 +40,12 @@ Texture2D::~Texture2D()
     glDeleteTextures(1, &m_id);
 }
 
+void Texture2D::bind() const
+{
+    //glActiveTexture(GL_TEXTURE0); // TODO activate appropriate tex unit
+    glBindTexture(GL_TEXTURE_2D, m_id);
+}
+
 GLuint Texture2D::getHandle() const
 {
     return m_id;
@@ -65,10 +71,9 @@ CubeMapTexture::CubeMapTexture(const string filenames[6])
         unsigned char *data = ImageIO::loadImage(filenames[i], width, height, num_channels);
 
         // bind data to appropriate cubemap texture object's face
-        bool isRGBA = (num_channels == 4);
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-            0, (isRGBA ? GL_SRGB_ALPHA : GL_SRGB), width, height, 
-            0, (isRGBA ? GL_RGBA : GL_RGB), GL_UNSIGNED_BYTE, data);
+              0, GL_RGB, width, height,
+              0, GL_RGB, GL_UNSIGNED_BYTE, data);
 
         // delete img data
         stbi_image_free(data);
@@ -89,6 +94,13 @@ CubeMapTexture::~CubeMapTexture()
 {
     glDeleteTextures(1, &m_id);
 }
+
+void CubeMapTexture::bind() const
+{
+    //glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, m_id);
+}
+
 
 GLuint CubeMapTexture::getHandle() const
 {
