@@ -50,10 +50,11 @@ set(PROJECT_HEADERS src/main/nereus.h
                     src/graphics/buffers.h
                     src/graphics/shaders.h
                     src/graphics/camera.h
+                    src/graphics/textures.h
                     src/graphics/core/window.h
                     src/graphics/meshes/meshes.h
                     src/graphics/meshes/test_mesh.h
-                    src/graphics/textures.h)
+                    src/graphics/renderers/renderers.h)
 
 set(PROJECT_SOURCES src/main/nereus.cpp
                     src/main/app_context.cpp
@@ -62,10 +63,11 @@ set(PROJECT_SOURCES src/main/nereus.cpp
                     src/graphics/buffers.cpp
                     src/graphics/shaders.cpp
                     src/graphics/camera.cpp
+                    src/graphics/textures.cpp
                     src/graphics/core/window.cpp
                     src/graphics/meshes/meshes.cpp
                     src/graphics/meshes/test_mesh.cpp
-                    src/graphics/textures.cpp)
+                    src/graphics/renderers/renderers.cpp)
 
 set(PROJECT_SHADERS resources/shaders/test.frag
                     resources/shaders/test.vert)
