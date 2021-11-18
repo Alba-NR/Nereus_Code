@@ -1,6 +1,7 @@
 
+#define NOMINMAX // to disable 'max' macro from minwindef.h #included indirectly
 #include "ocean_mesh.h"
-#include <iostream>
+
 
 OceanMesh::OceanMesh(int grid_width, int grid_height)
 	: m_grid_width(std::max(grid_width,1)), m_grid_length(std::max(grid_height,1))
