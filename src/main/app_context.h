@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../graphics/camera.h"
+#include "constants.h"
 
 
 namespace Nereus
@@ -12,10 +13,10 @@ namespace Nereus
 		float m_last_mouse_x;
 		float m_last_mouse_y;
 
-		int m_ocean_width = 100;
-		int m_ocean_height = 50;
-		int m_ocean_grid_width = 1;
-		int m_ocean_grid_height = 1;
+		int m_ocean_width = NereusConstants::DEFAULT_OCEAN_WIDTH;
+		int m_ocean_length = NereusConstants::DEFAULT_OCEAN_LENGTH;
+		int m_ocean_grid_width = NereusConstants::DEFAULT_OCEAN_GRID_WIDTH;
+		int m_ocean_grid_length = NereusConstants::DEFAULT_OCEAN_GRID_LENGTH;
 
 		Camera m_render_camera;
 

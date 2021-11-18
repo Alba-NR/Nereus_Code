@@ -56,13 +56,13 @@ void UI::render()
 	ImGui::Text("Ocean Mesh:");
 	ImGui::PushItemWidth(50);
 	ImGui::InputInt("Ocean Width", &(m_app_context->m_ocean_width), 0);
-	ImGui::InputInt("Ocean Height", &(m_app_context->m_ocean_height), 0);
+	ImGui::InputInt("Ocean Length", &(m_app_context->m_ocean_length), 0);
 	ImGui::InputInt("Ocean Grid Width", &(m_app_context->m_ocean_grid_width), 0);
-	ImGui::InputInt("Ocean Grid Height", &(m_app_context->m_ocean_grid_height), 0);
+	ImGui::InputInt("Ocean Grid Length", &(m_app_context->m_ocean_grid_length), 0);
 	m_app_context->m_ocean_width = max(m_app_context->m_ocean_width, 1);
-	m_app_context->m_ocean_height = max(m_app_context->m_ocean_height, 1);
+	m_app_context->m_ocean_length = max(m_app_context->m_ocean_length, 1);
 	m_app_context->m_ocean_grid_width = max(m_app_context->m_ocean_grid_width, 1);
-	m_app_context->m_ocean_grid_height = max(m_app_context->m_ocean_grid_height, 1);
+	m_app_context->m_ocean_grid_length = max(m_app_context->m_ocean_grid_length, 1);
 	ImGui::PopItemWidth();
 		
 		

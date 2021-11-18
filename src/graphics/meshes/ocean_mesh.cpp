@@ -3,13 +3,13 @@
 #include <iostream>
 
 OceanMesh::OceanMesh(int grid_width, int grid_height)
-	: m_grid_width(max(grid_width,1)), m_grid_height(max(grid_height,1))
+	: m_grid_width(std::max(grid_width,1)), m_grid_length(std::max(grid_height,1))
 {
 }
 
 void OceanMesh::initPositions(std::vector<float> &pos)
 {
-	for (int j = 0; j < m_grid_height + 1; j++)
+	for (int j = 0; j < m_grid_length + 1; j++)
 	{
 		for (int i = 0; i < m_grid_width + 1; i++)
 		{
@@ -22,7 +22,7 @@ void OceanMesh::initPositions(std::vector<float> &pos)
 
 void OceanMesh::initNormals(std::vector<float> &normals)
 {
-	for (int j = 0; j < m_grid_height + 1; j++)
+	for (int j = 0; j < m_grid_length + 1; j++)
 	{
 		for (int i = 0; i < m_grid_width + 1; i++)
 		{
@@ -35,12 +35,12 @@ void OceanMesh::initNormals(std::vector<float> &normals)
 
 void OceanMesh::initTexCoords(std::vector<float> &texCoords)
 {
-	for (int j = 0; j < m_grid_height + 1; j++)
+	for (int j = 0; j < m_grid_length + 1; j++)
 	{
 		for (int i = 0; i < m_grid_width + 1; i++)
 		{
 			texCoords.push_back(i / m_grid_width);  // u
-			texCoords.push_back(j / m_grid_height); // v
+			texCoords.push_back(j / m_grid_length); // v
 		}
 	}
 }
@@ -49,7 +49,7 @@ void OceanMesh::initIndices(std::vector<int> &indices)
 {
 	int stride_h = (m_grid_width + 1);
 
-	for (int j = 0; j < m_grid_height; j++)
+	for (int j = 0; j < m_grid_length; j++)
 	{
 		for (int i = 0; i < m_grid_width; i++)
 		{
@@ -67,10 +67,10 @@ void OceanMesh::initIndices(std::vector<int> &indices)
 }
 
 // Updates the OpenGL buffer data to that for a grid with the new dimensions/resolution
-void OceanMesh::updateMeshGrid(int new_grid_width, int new_grid_height)
+void OceanMesh::updateMeshGrid(int new_grid_width, int new_grid_length)
 {
 	m_grid_width = new_grid_width;
-	m_grid_height = new_grid_height;
+	m_grid_length = new_grid_length;
 
 	this->initialise();
 }
@@ -80,7 +80,7 @@ int OceanMesh::getGridWidth() const
 	return m_grid_width;
 }
 
-int OceanMesh::getGridHeight() const
+int OceanMesh::getGridLength() const
 {
-	return m_grid_height;
+	return m_grid_length;
 }

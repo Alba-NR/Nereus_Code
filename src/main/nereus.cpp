@@ -64,8 +64,8 @@ namespace Nereus
         ShaderProgram prog(shaders);
 
         int last_ocean_mesh_grid_width = m_context.m_ocean_grid_width;
-        int last_ocean_mesh_grid_height = m_context.m_ocean_grid_height;
-        OceanMesh ocean_mesh(last_ocean_mesh_grid_width, last_ocean_mesh_grid_height);
+        int last_ocean_mesh_grid_length = m_context.m_ocean_grid_length;
+        OceanMesh ocean_mesh(last_ocean_mesh_grid_width, last_ocean_mesh_grid_length);
         ocean_mesh.initialise();
         ocean_mesh.getVAO().bind();
         prog.bindData(0, ocean_mesh.getPositionsVBO(), 3);
@@ -102,22 +102,22 @@ namespace Nereus
 
             // --- render ocean mesh ---
 
-            // update mesh data if the grid resolution has been changed
+            // update mesh data if the grid resolution has been changed in the UI
             if (last_ocean_mesh_grid_width != m_context.m_ocean_grid_width
-                || last_ocean_mesh_grid_height != m_context.m_ocean_grid_height)
+                || last_ocean_mesh_grid_length != m_context.m_ocean_grid_length)
             {
-                ocean_mesh.updateMeshGrid(m_context.m_ocean_grid_width, m_context.m_ocean_grid_height);
+                ocean_mesh.updateMeshGrid(m_context.m_ocean_grid_width, m_context.m_ocean_grid_length);
                 last_ocean_mesh_grid_width = m_context.m_ocean_grid_width;
-                last_ocean_mesh_grid_height = m_context.m_ocean_grid_height;
+                last_ocean_mesh_grid_length = m_context.m_ocean_grid_length;
             }
 
             // transformation matrices
             glm::mat4 model_matrix = glm::mat4(1.0f);
-            model_matrix = glm::translate(model_matrix, glm::vec3(-m_context.m_ocean_width / 2, 0.0f, -m_context.m_ocean_height / 2));
+            model_matrix = glm::translate(model_matrix, glm::vec3(-m_context.m_ocean_width / 2, 0.0f, -m_context.m_ocean_length / 2));
             model_matrix = glm::scale(model_matrix, glm::vec3(
-                m_context.m_ocean_width / (float) m_context.m_ocean_grid_width,
+                m_context.m_ocean_width / (float)m_context.m_ocean_grid_width,
                 1.0f,
-                m_context.m_ocean_height / (float) m_context.m_ocean_grid_height
+                m_context.m_ocean_length / (float)m_context.m_ocean_grid_length
             ));
             
             glm::mat4 mvp_matrix = m_context.m_render_camera.getProjMatrix() * m_context.m_render_camera.getViewMatrix() * model_matrix;
