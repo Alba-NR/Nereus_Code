@@ -1,7 +1,24 @@
 
 #define NOMINMAX // to disable 'max' macro from minwindef.h #included indirectly
 #include "ocean_mesh.h"
+#include "../../main/constants.h"
 
+
+OceanMesh *OceanMesh::s_instance = nullptr;
+
+OceanMesh &OceanMesh::getInstance()
+{
+	if (OceanMesh::s_instance == nullptr)
+	{
+		OceanMesh::s_instance = new OceanMesh(
+			NereusConstants::DEFAULT_OCEAN_WIDTH,
+			NereusConstants::DEFAULT_OCEAN_LENGTH
+		);
+		OceanMesh::s_instance->initialise();
+	}
+
+	return *OceanMesh::s_instance;
+}
 
 OceanMesh::OceanMesh(int grid_width, int grid_height)
 	: m_grid_width(std::max(grid_width,1)), m_grid_length(std::max(grid_height,1))

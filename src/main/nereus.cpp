@@ -3,7 +3,6 @@
 #include "constants.h"
 #include "../graphics/shaders.h"
 #include "../graphics/meshes/ocean_mesh.h"
-#include "../graphics/meshes/test_mesh.h"
 #include "../graphics/renderers/renderers.h"
 #include "../graphics/textures.h"
 
@@ -42,9 +41,9 @@ namespace Nereus
 
         // cleanup UI resources
         UI::destroy();
-        
+
         // terminate GLFW
-        glfwTerminate();       
+        glfwTerminate();
     }
 
     // Init GLFW. MUST be called BEFORE creating a NereusApp instance.
@@ -56,20 +55,23 @@ namespace Nereus
     void NereusApp::renderLoop()
     {
         // ------------------------------
-        // Test Mesh
-        
+        // Ocean
+
+        // Create ocean surface shaders
         std::vector<Shader> shaders;
         shaders.emplace_back("test.vert");
         shaders.emplace_back("test.frag");
-        ShaderProgram prog(shaders);
+        ShaderProgram ocean_shader_prog(shaders);
 
-        int last_ocean_mesh_grid_width = m_context.m_ocean_grid_width;
-        int last_ocean_mesh_grid_length = m_context.m_ocean_grid_length;
-        OceanMesh ocean_mesh(last_ocean_mesh_grid_width, last_ocean_mesh_grid_length);
-        ocean_mesh.initialise();
-        ocean_mesh.getVAO().bind();
-        prog.bindData(0, ocean_mesh.getPositionsVBO(), 3);
-        
+        // Create ocean renderer
+        OceanRenderer ocean_renderer(ocean_shader_prog);
+
+        // Track last ocean size values
+        int last_ocean_width = NereusConstants::DEFAULT_OCEAN_WIDTH;
+        int last_ocean_length = NereusConstants::DEFAULT_OCEAN_LENGTH;
+        int last_ocean_mesh_grid_width = NereusConstants::DEFAULT_OCEAN_GRID_WIDTH;
+        int last_ocean_mesh_grid_length = NereusConstants::DEFAULT_OCEAN_GRID_LENGTH;
+
 
         // ------------------------------
         // Skybox
@@ -87,10 +89,11 @@ namespace Nereus
             "sky_skybox/top.jpg",
             "sky_skybox/bottom.jpg",
             "sky_skybox/front.jpg",
-            "sky_skybox/back.jpg"       
+            "sky_skybox/back.jpg"
         };
+
+        // Create Skybox renderer
         SkyBoxRenderer skybox_renderer(skybox_shader_prog, skybox_images);
-        skybox_renderer.prepare();
 
 
         // ------------------------------
@@ -106,30 +109,29 @@ namespace Nereus
             if (last_ocean_mesh_grid_width != m_context.m_ocean_grid_width
                 || last_ocean_mesh_grid_length != m_context.m_ocean_grid_length)
             {
-                ocean_mesh.updateMeshGrid(m_context.m_ocean_grid_width, m_context.m_ocean_grid_length);
+                ocean_renderer.updateOceanMeshGrid(m_context.m_ocean_grid_width, m_context.m_ocean_grid_length);
                 last_ocean_mesh_grid_width = m_context.m_ocean_grid_width;
                 last_ocean_mesh_grid_length = m_context.m_ocean_grid_length;
             }
 
-            // transformation matrices
-            glm::mat4 model_matrix = glm::mat4(1.0f);
-            model_matrix = glm::translate(model_matrix, glm::vec3(-m_context.m_ocean_width / 2, 0.0f, -m_context.m_ocean_length / 2));
-            model_matrix = glm::scale(model_matrix, glm::vec3(
-                m_context.m_ocean_width / (float)m_context.m_ocean_grid_width,
-                1.0f,
-                m_context.m_ocean_length / (float)m_context.m_ocean_grid_length
-            ));
-            
-            glm::mat4 mvp_matrix = m_context.m_render_camera.getProjMatrix() * m_context.m_render_camera.getViewMatrix() * model_matrix;
+            // update ocean size info if the size has been changed in the UI
+            if (last_ocean_width != m_context.m_ocean_width)
+            {
+                ocean_renderer.setOceanWidth(m_context.m_ocean_width);
+                last_ocean_width = m_context.m_ocean_width;
+            }
+            if (last_ocean_length != m_context.m_ocean_length)
+            {
+                ocean_renderer.setOceanWidth(m_context.m_ocean_length);
+                last_ocean_length = m_context.m_ocean_length;
+            }
 
-            // render mesh
-            prog.use();
-            prog.setMat4("mvp_matrix", mvp_matrix);
-            ocean_mesh.render();
+            // render ocean
+            ocean_renderer.render(m_context.m_render_camera);
 
             // --- render skybox ---
             skybox_renderer.render(m_context.m_render_camera);
-            
+
             // --- render UI ---
             UI::render();
 
