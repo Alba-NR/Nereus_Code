@@ -122,7 +122,7 @@ namespace Nereus
             }
             if (last_ocean_length != m_context.m_ocean_length)
             {
-                ocean_renderer.setOceanWidth(m_context.m_ocean_length);
+                ocean_renderer.setOceanLength(m_context.m_ocean_length);
                 last_ocean_length = m_context.m_ocean_length;
             }
 
