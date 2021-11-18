@@ -93,7 +93,7 @@ void OceanRenderer::prepare()
     m_ocean_mesh.initialise();
     m_ocean_mesh.getVAO().bind();
     m_shader_prog.bindData(0, m_ocean_mesh.getPositionsVBO(), 3);
-    m_shader_prog.bindData(1, m_ocean_mesh.getNormalsVBO(), 3);
+    m_shader_prog.bindData(1, m_ocean_mesh.getTexCoordsVBO(), 2);
 }
 
 void OceanRenderer::render(const Camera &render_cam)
@@ -109,11 +109,19 @@ void OceanRenderer::render(const Camera &render_cam)
 
     glm::mat4 vp_matrix = render_cam.getProjMatrix() * render_cam.getViewMatrix();
 
+    // calc matrix to transform normals from object to world coords
+    glm::mat4 normals_matrix = glm::mat4(1.0f);
+    normals_matrix = glm::transpose(glm::inverse(model_matrix));
+
     // set matrices (uniforms) in shader
     m_shader_prog.use();
     m_shader_prog.setMat4("m_matrix", model_matrix);
     m_shader_prog.setMat4("vp_matrix", vp_matrix);
+    m_shader_prog.setMat4("normals_matrix", normals_matrix);
+
+    // set other uniforms
     m_shader_prog.setFloat("time", glfwGetTime());
+    m_shader_prog.setVec3("wc_camera_pos", render_cam.getPosition());
 
     // render mesh
     m_ocean_mesh.render();
