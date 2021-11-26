@@ -100,7 +100,7 @@ void Window::setShouldClose()
     return glfwSetWindowShouldClose(m_window, true);
 }
 
-// Set callback functions (not involving any camera state, mouse state nor any other state in nereus.h
+// Set callback functions
 void Window::setCallbacks()
 {
     // Keyboard key press, repeat or release

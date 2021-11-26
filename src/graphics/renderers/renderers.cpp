@@ -64,7 +64,7 @@ void SkyBoxRenderer::render(const Camera &render_cam)
     //glActiveTexture(GL_TEXTURE0);
     m_cubemap_texture.bind();
 
-    // bind vertex data to shader
+    // set shader as active one
     m_shader_prog.use();
 
     // calc VP matrix & upload it to shader
@@ -90,7 +90,6 @@ OceanRenderer::OceanRenderer(ShaderProgram &shader_prog)
 
 void OceanRenderer::prepare()
 {
-    m_ocean_mesh.initialise();
     m_ocean_mesh.getVAO().bind();
     m_shader_prog.bindData(0, m_ocean_mesh.getPositionsVBO(), 3);
     m_shader_prog.bindData(1, m_ocean_mesh.getTexCoordsVBO(), 2);
