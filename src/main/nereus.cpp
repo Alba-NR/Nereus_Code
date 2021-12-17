@@ -59,7 +59,7 @@ namespace Nereus
 
         // Create ocean surface shaders
         std::vector<Shader> shaders;
-        shaders.emplace_back("ocean_phong.vert");
+        shaders.emplace_back("ocean_wavesim.vert");
         shaders.emplace_back("ocean_phong.frag");
         ShaderProgram ocean_shader_prog(shaders);
 
