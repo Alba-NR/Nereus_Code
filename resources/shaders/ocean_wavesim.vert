@@ -16,13 +16,11 @@ uniform mat4 vp_matrix;
 uniform float time;
 
 // wave simulation parameters
-// for testing out 1 wave:
-const float wavelength = 2;
-const vec2 wavevector = vec2(1);
-const vec2 wavevector_norm = normalize(wavevector);
-const float freq = 3;
-const float amplitude = 0.5;
-const float phase = 1;
+const int NUM_WAVES = 4;
+uniform vec2 sim_wavevecs[NUM_WAVES];
+uniform float sim_freqs[NUM_WAVES];
+uniform float sim_amplitudes[NUM_WAVES];
+uniform float sim_phases[NUM_WAVES];
 
 // heightmap functions
 float heightmap(vec2 p);		// gives the value of the heightmap at point (x,z)
@@ -63,30 +61,61 @@ void main()
 
 float heightmap(vec2 p)
 {
-	return amplitude * cos(dot(wavevector, p) - freq * time + phase);
+	float res = 0;
+	for (int i = 0; i < NUM_WAVES; i++)
+	{
+		res += sim_amplitudes[i] * cos(dot(sim_wavevecs[i], p) - sim_freqs[i] * time + sim_phases[i]);
+	}
+
+	return res; 
 }
 
 float heightmap_dx(vec2 p)
 {
-	return amplitude * wavevector.x * -sin(dot(wavevector, p) - freq * time + phase);
+	float res = 0;
+	for (int i = 0; i < NUM_WAVES; i++)
+	{
+		res += sim_amplitudes[i] * sim_wavevecs[i].x * -sin(dot(sim_wavevecs[i], p) - sim_freqs[i] * time + sim_phases[i]);
+	}
+	return res;
 }
 
 float heightmap_dz(vec2 p)
 {
-	return amplitude * wavevector.y * -sin(dot(wavevector, p) - freq * time + phase);
+	float res = 0;
+	for (int i = 0; i < NUM_WAVES; i++)
+	{
+		res += sim_amplitudes[i] * sim_wavevecs[i].y * -sin(dot(sim_wavevecs[i], p) - sim_freqs[i] * time + sim_phases[i]);
+	}
+	return res;
 }
 
 vec2 horiz_displ(vec2 p)
 {
-	return wavevector_norm * amplitude * sin(dot(wavevector, p) - freq * time + phase);
+	vec2 res = vec2(0);
+	for (int i = 0; i < NUM_WAVES; i++)
+	{
+		res += normalize(sim_wavevecs[i]) * sim_amplitudes[i] * sin(dot(sim_wavevecs[i], p) - sim_freqs[i] * time + sim_phases[i]);
+	}
+	return res;
 }
 
 vec2 horiz_displ_dx(vec2 p)
 {
-	return wavevector_norm * amplitude * wavevector.x * cos(dot(wavevector, p) - freq * time + phase);
+	vec2 res = vec2(0);
+	for (int i = 0; i < NUM_WAVES; i++)
+	{
+		res += normalize(sim_wavevecs[i]) * sim_amplitudes[i] * sim_wavevecs[i].x * sin(dot(sim_wavevecs[i], p) - sim_freqs[i] * time + sim_phases[i]);
+	}
+	return res;
 }
 
 vec2 horiz_displ_dz(vec2 p)
 {
-	return wavevector_norm * amplitude * wavevector.y * cos(dot(wavevector, p) - freq * time + phase);
+	vec2 res = vec2(0);
+	for (int i = 0; i < NUM_WAVES; i++)
+	{
+		res += normalize(sim_wavevecs[i]) * sim_amplitudes[i] * sim_wavevecs[i].y * sin(dot(sim_wavevecs[i], p) - sim_freqs[i] * time + sim_phases[i]);
+	}
+	return res;
 }

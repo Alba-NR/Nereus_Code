@@ -3,6 +3,8 @@
 
 #include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
+#include <random>
+#include <iostream> // TODO remove
 
 
 // ------------------------------------
@@ -90,9 +92,71 @@ OceanRenderer::OceanRenderer(ShaderProgram &shader_prog)
 
 void OceanRenderer::prepare()
 {
+    // --- bind input mesh data
     m_ocean_mesh.getVAO().bind();
     m_shader_prog.bindData(0, m_ocean_mesh.getPositionsVBO(), 3);
     m_shader_prog.bindData(1, m_ocean_mesh.getTexCoordsVBO(), 2);
+
+    // --- generate wave simulation parameters
+    int const NUM_WAVES = 4; // !!! -- MUST be the SAME as in the VERTEX SHADER -- !!!
+    float wavelengths[NUM_WAVES], freqs[NUM_WAVES], amplitudes[NUM_WAVES], phases[NUM_WAVES];
+    glm::vec2 wavevecs[NUM_WAVES];
+
+    const float WAVELENGTH_RANGE = (2 * m_median_wavelength) - (m_median_wavelength / 2);
+    const float AMPLITUDE_TO_WAVELENGTH_RATIO = m_median_amplitude / m_median_wavelength;
+    const int DISTRIB_MAX = 1000;
+
+    std::default_random_engine random_generator;
+    std::uniform_int_distribution<int> uniform_distrib(0, DISTRIB_MAX);
+
+    for (int i = 0; i < NUM_WAVES; i++)
+    {
+        std::cout << "--------------- " << std::endl;
+        // gen random wavelength in range [m_median_wavelength/2, 2*m_median_wavelength]
+        int random_int = uniform_distrib(random_generator);
+        wavelengths[i] = (m_median_wavelength / 2) + (random_int / (float) DISTRIB_MAX) * WAVELENGTH_RANGE;
+        std::cout << "wavelen " << wavelengths[i] << std::endl;
+
+
+        // gen amplitude based on wavelength
+        amplitudes[i] = AMPLITUDE_TO_WAVELENGTH_RATIO * wavelengths[i];
+        std::cout << "amplit " << amplitudes[i] << std::endl;
+
+
+        // gen random phase in range [0, 2*pi]
+        random_int = uniform_distrib(random_generator);
+        phases[i] = (random_int / (float) DISTRIB_MAX) * 2 * glm::pi<float>();
+        std::cout << "phase " << phases[i] << std::endl;
+
+
+        // gen random wave vector at some angle from wind vector
+        float wavenum = (2 * glm::pi<float>()) / wavelengths[i];
+        std::cout << "wavenum " << wavenum << std::endl;
+        std::cout << " --- wavenum * amplit =  " << wavenum * amplitudes[i] << std::endl;
+
+
+        random_int = uniform_distrib(random_generator);
+        float angle = -m_max_angle_deviation + (random_int / (float) DISTRIB_MAX) * 2 * m_max_angle_deviation;
+        glm::mat2 rotation_matrix = glm::mat2(1.0f);
+        rotation_matrix[0] = glm::vec2(glm::cos(angle), glm::sin(angle));   // 1st column
+        rotation_matrix[1] = glm::vec2(-glm::sin(angle), glm::cos(angle));  // 2nd
+        glm::vec2 direction = glm::normalize(rotation_matrix * m_wind_dir);
+        std::cout << "dir (" << direction[0] << ", " << direction[1] << std::endl;
+        
+        wavevecs[i] = wavenum * direction;
+        std::cout << "wavevec (" << wavevecs[i][0] << ", " << wavevecs[i][1] << std::endl;
+
+        // gen freq based on dispersion relation
+        freqs[i] = glm::sqrt(wavenum * 9.807);
+        std::cout << "freq " << freqs[i] << std::endl;
+    }
+
+    // --- set parameters arrays in shader
+    m_shader_prog.use();
+    m_shader_prog.setVec2Array("sim_wavevecs", wavevecs, NUM_WAVES);
+    m_shader_prog.setFloatArray("sim_freqs", freqs, NUM_WAVES);
+    m_shader_prog.setFloatArray("sim_amplitudes", amplitudes, NUM_WAVES);
+    m_shader_prog.setFloatArray("sim_phases", phases, NUM_WAVES);
 }
 
 void OceanRenderer::render(const Camera &render_cam)
