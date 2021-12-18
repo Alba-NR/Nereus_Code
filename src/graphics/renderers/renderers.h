@@ -55,10 +55,9 @@ private:
 	int m_ocean_width = NereusConstants::DEFAULT_OCEAN_WIDTH;
 	int m_ocean_length = NereusConstants::DEFAULT_OCEAN_LENGTH;
 
-	const float m_median_wavelength = 10.0f;
-	const float m_median_amplitude = 0.5f;
-	const glm::vec2 m_wind_dir = glm::normalize(glm::vec2(1.0f, 3.0f));
-	const float m_max_angle_deviation = glm::radians(90.0f);
+	const float m_median_wavelength = 20.0f;
+	const glm::vec2 m_wind_dir = glm::normalize(glm::vec2(2.0f, 3.0f));
+	const float m_max_angle_deviation = glm::radians(30.0f);
 
 	void prepare();
 

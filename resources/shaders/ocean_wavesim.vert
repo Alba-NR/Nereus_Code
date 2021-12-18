@@ -16,7 +16,7 @@ uniform mat4 vp_matrix;
 uniform float time;
 
 // wave simulation parameters
-const int NUM_WAVES = 4;
+const int NUM_WAVES = 16;
 uniform vec2 sim_wavevecs[NUM_WAVES];
 uniform float sim_freqs[NUM_WAVES];
 uniform float sim_amplitudes[NUM_WAVES];
