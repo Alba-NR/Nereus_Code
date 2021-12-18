@@ -53,8 +53,9 @@ public:
 	void setVec4(const string &target, const glm::vec4 &v) const;
 	void setMat3(const string &target, const glm::mat3 &v) const;
 	void setMat4(const string &target, const glm::mat4 &v) const;
-	void setIntArray(const string &target, int v[]) const;
-	void setFloatArray(const string &target, float v[]) const;
+	void setIntArray(const string &target, int v[], int length) const;
+	void setFloatArray(const string &target, float v[], int length) const;
+	void setVec2Array(const string &target, glm::vec2 v[], int length) const;
 };
 
 #endif

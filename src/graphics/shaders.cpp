@@ -182,12 +182,17 @@ void ShaderProgram::setMat4(const string &target, const glm::mat4 &v) const
 	glUniformMatrix4fv(glGetUniformLocation(m_id, target.c_str()), 1, GL_FALSE, &v[0][0]);
 }
 
-void ShaderProgram::setIntArray(const string &target, int v[]) const
+void ShaderProgram::setIntArray(const string &target, int v[], int length) const
 {
-	glUniform1iv(glGetUniformLocation(m_id, target.c_str()), 1, v);
+	glUniform1iv(glGetUniformLocation(m_id, target.c_str()), length, v);
 }
 
-void ShaderProgram::setFloatArray(const string &target, float v[]) const
+void ShaderProgram::setFloatArray(const string &target, float v[], int length) const
 {
-	glUniform1fv(glGetUniformLocation(m_id, target.c_str()), 1, v);
+	glUniform1fv(glGetUniformLocation(m_id, target.c_str()), length, v);
+}
+
+void ShaderProgram::setVec2Array(const string &target, glm::vec2 v[], int length) const
+{
+	glUniform2fv(glGetUniformLocation(m_id, target.c_str()), length, (const GLfloat *) &v[0]);
 }
