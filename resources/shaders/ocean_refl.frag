@@ -51,7 +51,7 @@ void main()
     vec3 V = normalize(wc_camera_pos - fs_in.wc_pos);
     vec3 L = normalize(-light.direction);
     vec3 R_L = reflect(-L, N);
-    vec3 R_V = reflect(V, N);
+    vec3 R_V = reflect(-V, N);
 
 	// reflected skybox colour
 	vec4 I_refl = texture(env_map, R_V);
