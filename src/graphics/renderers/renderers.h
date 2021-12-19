@@ -42,6 +42,8 @@ public:
 	void setCubeMapTexture(const string new_cubemap_faces_filenames[6]);
 
 	void render(const Camera &render_cam);
+
+	CubeMapTexture &getCubeMapTexture();
 };
 
 
@@ -59,10 +61,14 @@ private:
 	const glm::vec2 m_wind_dir = glm::normalize(glm::vec2(2.0f, 3.0f));
 	const float m_max_angle_deviation = glm::radians(30.0f);
 
+	CubeMapTexture m_cubemap_texture;
+
 	void prepare();
 
 public:
 	OceanRenderer(ShaderProgram &shader_prog);
+	OceanRenderer(ShaderProgram &shader_prog, CubeMapTexture &skybox);
+
 
 	void render(const Camera &render_cam);
 
@@ -70,5 +76,6 @@ public:
 	void setOceanWidth(int new_ocean_width);
 	void setOceanLength(int new_ocean_length);
 
+	void setSkyboxTexture(CubeMapTexture &skybox);
 };
 #endif

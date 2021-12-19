@@ -55,25 +55,6 @@ namespace Nereus
     void NereusApp::renderLoop()
     {
         // ------------------------------
-        // Ocean
-
-        // Create ocean surface shaders
-        std::vector<Shader> shaders;
-        shaders.emplace_back("ocean_wavesim.vert");
-        shaders.emplace_back("ocean_phong.frag");
-        ShaderProgram ocean_shader_prog(shaders);
-
-        // Create ocean renderer
-        OceanRenderer ocean_renderer(ocean_shader_prog);
-
-        // Track last ocean size values
-        int last_ocean_width = NereusConstants::DEFAULT_OCEAN_WIDTH;
-        int last_ocean_length = NereusConstants::DEFAULT_OCEAN_LENGTH;
-        int last_ocean_mesh_grid_width = NereusConstants::DEFAULT_OCEAN_GRID_WIDTH;
-        int last_ocean_mesh_grid_length = NereusConstants::DEFAULT_OCEAN_GRID_LENGTH;
-
-
-        // ------------------------------
         // Skybox
 
         // Create skybox shaders
@@ -96,6 +77,25 @@ namespace Nereus
         SkyBoxRenderer skybox_renderer(skybox_shader_prog, skybox_images);
 
 
+        // ------------------------------
+        // Ocean
+
+        // Create ocean surface shaders
+        std::vector<Shader> shaders;
+        shaders.emplace_back("ocean_wavesim.vert");
+        shaders.emplace_back("ocean_refl.frag");
+        ShaderProgram ocean_shader_prog(shaders);
+
+        // Create ocean renderer
+        OceanRenderer ocean_renderer(ocean_shader_prog, skybox_renderer.getCubeMapTexture());
+
+        // Track last ocean size values
+        int last_ocean_width = NereusConstants::DEFAULT_OCEAN_WIDTH;
+        int last_ocean_length = NereusConstants::DEFAULT_OCEAN_LENGTH;
+        int last_ocean_mesh_grid_width = NereusConstants::DEFAULT_OCEAN_GRID_WIDTH;
+        int last_ocean_mesh_grid_length = NereusConstants::DEFAULT_OCEAN_GRID_LENGTH;
+
+        
         // ------------------------------
         // Rendering Loop
         while (!m_window.shouldClose())

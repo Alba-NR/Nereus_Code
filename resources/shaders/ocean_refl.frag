@@ -1,0 +1,70 @@
+#version 430 core
+
+in VS_OUT
+{
+	vec3 wc_pos;
+	vec3 wc_normal;
+	vec2 tex_coords;
+} fs_in;
+
+out vec4 frag_colour;
+
+uniform vec3 wc_camera_pos;
+uniform samplerCube env_map;
+
+
+// Main (directional) light in the scene
+struct DirectionalLight 
+{ 
+    vec3 colour;
+    vec3 direction;
+    float strength;
+};
+
+const DirectionalLight light = DirectionalLight(
+	vec3(1.0, 1.0, 1.0),												// colour
+	vec3(wc_camera_pos.x+10, -wc_camera_pos.y*1.5, wc_camera_pos.z),	// direction
+	3.0																	// strength
+);
+
+// Some material constants
+
+// skybox blue: vec4(0.45, 0.63, 0.86, 1.0);
+// dark blue: vec4(0.18, 0.28, 0.38, 1.0);
+// mid blue: vec4(0.21, 0.47, 0.76, 1.0);
+// red: vec4(1.0, 0.25, 0.25, 1.0);
+
+const vec3 diffuse_colour = vec3(0.45, 0.63, 0.86);		// diffuse intensity/colour
+const float K_diff = 0.6;								// diffuse reflection coefficient
+const vec3 specular_colour = vec3(0.21, 0.47, 0.76);	// specular highlights intensity/colour
+const float K_spec = 0.4;								// specular reflection coeff
+const float shininess = 16;								// specular shininess coeff
+const vec3 I_a = vec3(0.45, 0.63, 0.86);				// ambient light intensity/colour
+const float K_a = 0.75;									// ambient light reflection coeff
+
+void main()
+{
+	vec3 I_result;
+
+	// calculate normal and view vectors
+	vec3 N = normalize(fs_in.wc_normal);
+    vec3 V = normalize(wc_camera_pos - fs_in.wc_pos);
+    vec3 L = normalize(-light.direction);
+    vec3 R_L = reflect(-L, N);
+    vec3 R_V = reflect(V, N);
+
+	// reflected skybox colour
+	vec4 I_refl = texture(env_map, R_V);
+
+    // diffuse & specular shading
+    //vec3 I_diffuse = light.colour * diffuse_colour * K_diff * max(dot(N, L), 0.0);
+    //vec3 I_specular = light.colour * specular_colour * K_spec * pow(max(dot(V, R_L), 0.0), shininess);
+
+	//I_result = (I_diffuse + I_specular) * light.strength;
+
+	// ambient light
+    //I_result += I_a * diffuse_colour * K_a;
+
+	// set output/final colour
+	frag_colour = I_refl; //vec4(I_result, 1.0);
+}
