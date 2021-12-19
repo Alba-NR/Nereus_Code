@@ -24,10 +24,10 @@ namespace NereusConstants
 	const float CAMERA_NEAR_PLANE = 0.1f;
 	const float CAMERA_FAR_PLANE = 250.0f;
 	
-	const int DEFAULT_OCEAN_WIDTH = 100;
-	const int DEFAULT_OCEAN_LENGTH = 50;
-	const int DEFAULT_OCEAN_GRID_WIDTH = 50;
-	const int DEFAULT_OCEAN_GRID_LENGTH = 50;
+	const int DEFAULT_OCEAN_WIDTH = 250;
+	const int DEFAULT_OCEAN_LENGTH = 250;
+	const int DEFAULT_OCEAN_GRID_WIDTH = 250;
+	const int DEFAULT_OCEAN_GRID_LENGTH = 250;
 }
 
 #endif
