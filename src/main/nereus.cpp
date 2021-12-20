@@ -171,10 +171,16 @@ namespace Nereus
             }
 
             // --- render seabed ---
-            seabed_renderer.render(m_context.m_render_camera);
+            if (m_context.m_do_render_seabed)
+            {
+                seabed_renderer.render(m_context.m_render_camera);
+            }
 
             // --- render ocean ---
-            ocean_renderer.render(m_context.m_render_camera);
+            if (m_context.m_do_render_ocean)
+            {
+                ocean_renderer.render(m_context.m_render_camera);
+            }
 
             // --- render skybox ---
             skybox_renderer.render(m_context.m_render_camera);

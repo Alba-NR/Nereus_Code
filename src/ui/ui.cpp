@@ -52,6 +52,12 @@ void UI::render()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
+	// render seabed mesh toggle (on/off)
+	ImGui::Checkbox("Render Seabed", &(m_app_context->m_do_render_seabed));
+
+	// render ocean mesh toggle (on/off)
+	ImGui::Checkbox("Render Ocean", &(m_app_context->m_do_render_ocean));
+
 	// ocean mesh
 	ImGui::Text("Ocean Mesh:");
 	ImGui::PushItemWidth(50);
