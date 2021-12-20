@@ -157,30 +157,14 @@ void CubeMapMesh::initIndices(std::vector<int> &indices)
 
 
 // ------------------------------------
-// OceanMesh
+// GridMesh
 
-OceanMesh *OceanMesh::s_instance = nullptr;
-
-OceanMesh &OceanMesh::getInstance()
-{
-	if (OceanMesh::s_instance == nullptr)
-	{
-		OceanMesh::s_instance = new OceanMesh(
-			NereusConstants::DEFAULT_OCEAN_WIDTH,
-			NereusConstants::DEFAULT_OCEAN_LENGTH
-		);
-		OceanMesh::s_instance->initialise();
-	}
-
-	return *OceanMesh::s_instance;
-}
-
-OceanMesh::OceanMesh(int grid_width, int grid_height)
+GridMesh::GridMesh(int grid_width, int grid_height)
 	: m_grid_width(std::max(grid_width, 1)), m_grid_length(std::max(grid_height, 1))
 {
 }
 
-void OceanMesh::initPositions(std::vector<float> &pos)
+void GridMesh::initPositions(std::vector<float> &pos)
 {
 	for (int j = 0; j < m_grid_length + 1; j++)
 	{
@@ -193,7 +177,7 @@ void OceanMesh::initPositions(std::vector<float> &pos)
 	}
 }
 
-void OceanMesh::initNormals(std::vector<float> &normals)
+void GridMesh::initNormals(std::vector<float> &normals)
 {
 	for (int j = 0; j < m_grid_length + 1; j++)
 	{
@@ -206,7 +190,7 @@ void OceanMesh::initNormals(std::vector<float> &normals)
 	}
 }
 
-void OceanMesh::initTexCoords(std::vector<float> &texCoords)
+void GridMesh::initTexCoords(std::vector<float> &texCoords)
 {
 	for (int j = 0; j < m_grid_length + 1; j++)
 	{
@@ -218,7 +202,7 @@ void OceanMesh::initTexCoords(std::vector<float> &texCoords)
 	}
 }
 
-void OceanMesh::initIndices(std::vector<int> &indices)
+void GridMesh::initIndices(std::vector<int> &indices)
 {
 	int stride_h = (m_grid_width + 1);
 
@@ -240,7 +224,7 @@ void OceanMesh::initIndices(std::vector<int> &indices)
 }
 
 // Updates the OpenGL buffer data to that for a grid with the new dimensions/resolution
-void OceanMesh::updateMeshGrid(int new_grid_width, int new_grid_length)
+void GridMesh::updateMeshGrid(int new_grid_width, int new_grid_length)
 {
 	m_grid_width = new_grid_width;
 	m_grid_length = new_grid_length;
@@ -248,12 +232,12 @@ void OceanMesh::updateMeshGrid(int new_grid_width, int new_grid_length)
 	this->initialise();
 }
 
-int OceanMesh::getGridWidth() const
+int GridMesh::getGridWidth() const
 {
 	return m_grid_width;
 }
 
-int OceanMesh::getGridLength() const
+int GridMesh::getGridLength() const
 {
 	return m_grid_length;
 }

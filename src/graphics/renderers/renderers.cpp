@@ -90,14 +90,18 @@ CubeMapTexture &SkyBoxRenderer::getCubeMapTexture()
 // --- Ocean renderer ---
 
 OceanRenderer::OceanRenderer(ShaderProgram &shader_prog)
-    : Renderer(shader_prog), m_cubemap_texture(nullptr)
+    : Renderer(shader_prog), m_cubemap_texture(nullptr), 
+    m_ocean_mesh(NereusConstants::DEFAULT_OCEAN_WIDTH, NereusConstants::DEFAULT_OCEAN_LENGTH)
 {
+    m_ocean_mesh.initialise();
     this->prepare();
 }
 
 OceanRenderer::OceanRenderer(ShaderProgram &shader_prog, CubeMapTexture &skybox)
-    : Renderer(shader_prog), m_cubemap_texture(skybox)
+    : Renderer(shader_prog), m_cubemap_texture(skybox),
+    m_ocean_mesh(NereusConstants::DEFAULT_OCEAN_WIDTH, NereusConstants::DEFAULT_OCEAN_LENGTH)
 {
+    m_ocean_mesh.initialise();
     this->prepare();
 }
 
@@ -179,7 +183,7 @@ void OceanRenderer::render(const Camera &render_cam)
 {
     // transformation matrices
     glm::mat4 model_matrix = glm::mat4(1.0f);
-    model_matrix = glm::translate(model_matrix, glm::vec3(-m_ocean_width / 2, -10.0f, -m_ocean_length / 2));
+    model_matrix = glm::translate(model_matrix, glm::vec3(-m_ocean_width * 2.0f/4.0f, -10.0f, -m_ocean_length * 2.0f/4.0f));
     model_matrix = glm::scale(model_matrix, glm::vec3(
         m_ocean_width / (float)m_ocean_mesh.getGridWidth(),
         1.0f,

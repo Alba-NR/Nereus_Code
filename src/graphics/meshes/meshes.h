@@ -61,12 +61,10 @@ public:
 	~CubeMapMesh();
 };
 
-// --- Ocean mesh ---
-class OceanMesh : public Mesh
+// --- Grid mesh (for Ocean & Terrain) ---
+class GridMesh : public Mesh
 {
 private:
-	static OceanMesh *s_instance;
-
 	int m_grid_width;
 	int m_grid_length;
 
@@ -75,10 +73,8 @@ private:
 	void initTexCoords(std::vector<float> &texCoords);
 	void initIndices(std::vector<int> &indices);
 
-	OceanMesh(int grid_width, int grid_length);
-
 public:
-	static OceanMesh &getInstance();
+	GridMesh(int grid_width, int grid_length);
 
 	void updateMeshGrid(int new_grid_width, int new_grid_length);
 
