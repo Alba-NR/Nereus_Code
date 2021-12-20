@@ -22,7 +22,7 @@ namespace NereusConstants
 	const float DEFAULT_CAMERA_SPEED = 3.0f;
 	const float DEFAULT_CAMERA_SENSITIVITY = 0.1f;
 	const float CAMERA_NEAR_PLANE = 0.1f;
-	const float CAMERA_FAR_PLANE = 250.0f;
+	const float CAMERA_FAR_PLANE = 500.0f;
 	
 	const int DEFAULT_OCEAN_WIDTH = 250;
 	const int DEFAULT_OCEAN_LENGTH = 250;
@@ -30,7 +30,7 @@ namespace NereusConstants
 	const int DEFAULT_OCEAN_GRID_LENGTH = 250;
 
 	const int SEABED_EXTENSION_FROM_OCEAN = 5;
-	const float SEABED_DEPTH_BELOW_OCEAN = 50.0f;
+	const float SEABED_DEPTH_BELOW_OCEAN = 40.0f;
 }
 
 #endif

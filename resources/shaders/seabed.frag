@@ -20,9 +20,9 @@ struct DirectionalLight
 };
 
 const DirectionalLight light = DirectionalLight(
-	vec3(1.0, 1.0, 1.0),												// colour
-	vec3(wc_camera_pos.x+10, -wc_camera_pos.y*1.5, wc_camera_pos.z),	// direction
-	1.0																	// strength
+	vec3(1.0, 1.0, 1.0),		// colour
+	vec3(15.0, -5.0, 15.0),		// direction
+	1.0							// strength
 );
 
 // Some material constants
