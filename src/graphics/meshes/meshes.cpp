@@ -196,8 +196,8 @@ void GridMesh::initTexCoords(std::vector<float> &texCoords)
 	{
 		for (int i = 0; i < m_grid_width + 1; i++)
 		{
-			texCoords.push_back(i / m_grid_width);  // u
-			texCoords.push_back(j / m_grid_length); // v
+			texCoords.push_back(i / (float) m_grid_width);  // u
+			texCoords.push_back(j / (float) m_grid_length); // v
 		}
 	}
 }
