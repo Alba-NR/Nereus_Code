@@ -2,7 +2,6 @@
 #include "nereus.h"
 #include "constants.h"
 #include "../graphics/shaders.h"
-#include "../graphics/meshes/ocean_mesh.h"
 #include "../graphics/renderers/renderers.h"
 #include "../graphics/textures.h"
 

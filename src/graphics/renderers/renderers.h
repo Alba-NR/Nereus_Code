@@ -4,7 +4,6 @@
 
 #include "../shaders.h"
 #include "../meshes/meshes.h"
-#include "../meshes/ocean_mesh.h"
 #include "../textures.h"
 #include "../camera.h"
 #include "../../main/constants.h"
