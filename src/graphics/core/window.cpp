@@ -111,6 +111,9 @@ void Window::setCallbacks()
             // ESC released --> close window 
             if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
                 glfwSetWindowShouldClose(window, true);
+
+            // AWSD, left shift & left ctrl pressed --> move camera position
+            // in main render loop (as has to be done when press & held)
         }
     );
 

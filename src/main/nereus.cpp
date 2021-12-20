@@ -9,7 +9,6 @@
 // System Headers
 #include <glm/glm.hpp>
 #include <vector>
-#include <iostream>
 
 int main()
 {
@@ -117,6 +116,33 @@ namespace Nereus
         {
             // clear window
             m_window.clear();
+
+            // --- process keyboard input to change camera pos ---
+            if (m_window.getKeyState(GLFW_KEY_W) == GLFW_PRESS) // forwards
+            {
+                m_context.m_render_camera.move(CameraMovement::FORWARDS, ImGui::GetIO().DeltaTime); 
+            }
+            if (m_window.getKeyState(GLFW_KEY_S) == GLFW_PRESS) // backwards
+            {
+                m_context.m_render_camera.move(CameraMovement::BACKWARDS, ImGui::GetIO().DeltaTime);
+            }
+            if (m_window.getKeyState(GLFW_KEY_A) == GLFW_PRESS) // left
+            {
+                m_context.m_render_camera.move(CameraMovement::RIGHT, ImGui::GetIO().DeltaTime);
+            }
+            if (m_window.getKeyState(GLFW_KEY_D) == GLFW_PRESS) // right
+            {
+                m_context.m_render_camera.move(CameraMovement::LEFT, ImGui::GetIO().DeltaTime);
+            }
+            if (m_window.getKeyState(GLFW_KEY_SPACE) == GLFW_PRESS) // upwards
+            {
+                m_context.m_render_camera.move(CameraMovement::UPWARDS, ImGui::GetIO().DeltaTime);
+            }
+            if (m_window.getKeyState(GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) // downwards
+            {
+                m_context.m_render_camera.move(CameraMovement::DOWNWARDS, ImGui::GetIO().DeltaTime);
+            }
+       
 
             // --- update mesh data if changed in UI ---
 

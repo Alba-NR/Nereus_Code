@@ -1,6 +1,7 @@
 #include "camera.h"
 #include "../main/constants.h"
 
+
 Camera::Camera() : m_position(0.0f, 0.0f, 0.0f), m_azimuthal_angle(-120.0f), m_polar_angle(-15.0f)
 {
 
@@ -15,6 +16,43 @@ Camera::Camera(glm::vec3 position, float azimuthal_angle, float polar_angle)
 	: m_position(position), m_azimuthal_angle(azimuthal_angle), m_polar_angle(polar_angle)
 {
 
+}
+
+// Move camera's position in given direction, based on time taken & cam's velocity.
+void Camera::move(CameraMovement direction, float delta_time)
+{
+	float distance = m_SPEED * delta_time * 10.0f;
+	glm::vec3 front = getFrontVector();
+
+	switch (direction)
+	{
+	case CameraMovement::FORWARDS:
+		// move along 'front' direction, but horizontally in x-z plane only
+		m_position += glm::normalize(glm::vec3(front.x, 0.0f, front.z)) * distance;
+		break;
+	case CameraMovement::BACKWARDS:
+		// move along '-front' direction, but horizontally in x-z plane only
+		m_position -= glm::normalize(glm::vec3(front.x, 0.0f, front.z)) * distance;
+		break;
+	case CameraMovement::LEFT:
+		// move along 'right' (= cross product of 'up' & 'front') direction
+		m_position += glm::normalize(glm::cross(getFrontVector(), glm::vec3(0.0f, 1.0f, 0.0f))) * distance;
+		break;
+	case CameraMovement::RIGHT:
+		// move along '-right' (= cross product of 'up' & 'front') direction
+		m_position -= glm::normalize(glm::cross(getFrontVector(), glm::vec3(0.0f, 1.0f, 0.0f))) * distance;
+		break;
+	case CameraMovement::UPWARDS:
+		// move along 'up' direction
+		m_position += glm::vec3(0.0f, 1.0f, 0.0f) * distance;
+		break;
+	case CameraMovement::DOWNWARDS:
+		// move along '-up' direction
+		m_position -= glm::vec3(0.0f, 1.0f, 0.0f) * distance;
+		break;
+	default:
+		break;
+	}
 }
 
 // Process mouse movement (drag & move). Update direction of camera.
@@ -74,6 +112,15 @@ float Camera::getFOV() const
 	return m_fov;
 }
 
+glm::vec3 Camera::getFrontVector() const
+{
+	return glm::normalize(glm::vec3(
+		glm::cos(glm::radians(m_polar_angle)) * glm::cos(glm::radians(m_azimuthal_angle)),
+		glm::sin(glm::radians(m_polar_angle)),
+		glm::cos(glm::radians(m_polar_angle)) * glm::sin(glm::radians(m_azimuthal_angle))
+	));
+}
+
 // Calc View matrix using LookAt
 glm::mat4 Camera::getViewMatrix() const
 {
@@ -86,12 +133,7 @@ glm::mat4 Camera::getViewMatrix() const
 void Camera::getViewMatrix(glm::mat4 &dest) const
 {
 	glm::vec3 up(0.0f, 1.0f, 0.0f);
-	glm::vec3 target = glm::vec3(
-		glm::cos(glm::radians(m_polar_angle)) * glm::cos(glm::radians(m_azimuthal_angle)),
-		glm::sin(glm::radians(m_polar_angle)),
-		glm::cos(glm::radians(m_polar_angle)) * glm::sin(glm::radians(m_azimuthal_angle))
-	);
-	target = m_position + glm::normalize(target);
+	glm::vec3 target = m_position + getFrontVector();
 	dest = glm::lookAt(m_position, target, up);
 }
 

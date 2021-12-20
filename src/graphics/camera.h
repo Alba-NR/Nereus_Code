@@ -7,6 +7,15 @@
 
 #include "../main/constants.h"
 
+enum class CameraMovement
+{
+	FORWARDS	= 0,
+	BACKWARDS	= 1,
+	LEFT		= 2,
+	RIGHT		= 3,
+	UPWARDS		= 4,
+	DOWNWARDS	= 5
+};
 
 class Camera
 {
@@ -25,6 +34,7 @@ public:
 	Camera(glm::vec3 position);
 	Camera(glm::vec3 position, float azimuthal_angle, float polar_angle);
 
+	void move(CameraMovement direction, float delta_time);
 	void processMouseMovement(float x_offset, float y_offset);
 	void processMouseScroll(float scroll_amt);
 
@@ -36,6 +46,7 @@ public:
 	float getAzimuthalAngle() const;
 	float getPolarAngle() const;
 	float getFOV() const;
+	glm::vec3 Camera::getFrontVector() const;
 
 	glm::mat4 getViewMatrix() const;
 	void getViewMatrix(glm::mat4 &dest) const;
