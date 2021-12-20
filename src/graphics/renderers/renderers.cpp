@@ -91,7 +91,7 @@ CubeMapTexture &SkyBoxRenderer::getCubeMapTexture()
 
 OceanRenderer::OceanRenderer(ShaderProgram &shader_prog)
     : Renderer(shader_prog), m_cubemap_texture(nullptr), 
-    m_ocean_mesh(NereusConstants::DEFAULT_OCEAN_WIDTH, NereusConstants::DEFAULT_OCEAN_LENGTH)
+    m_ocean_mesh(NereusConstants::DEFAULT_OCEAN_GRID_WIDTH, NereusConstants::DEFAULT_OCEAN_GRID_LENGTH)
 {
     m_ocean_mesh.initialise();
     this->prepare();
@@ -99,7 +99,7 @@ OceanRenderer::OceanRenderer(ShaderProgram &shader_prog)
 
 OceanRenderer::OceanRenderer(ShaderProgram &shader_prog, CubeMapTexture &skybox)
     : Renderer(shader_prog), m_cubemap_texture(skybox),
-    m_ocean_mesh(NereusConstants::DEFAULT_OCEAN_WIDTH, NereusConstants::DEFAULT_OCEAN_LENGTH)
+    m_ocean_mesh(NereusConstants::DEFAULT_OCEAN_GRID_WIDTH, NereusConstants::DEFAULT_OCEAN_GRID_LENGTH)
 {
     m_ocean_mesh.initialise();
     this->prepare();
