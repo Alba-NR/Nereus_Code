@@ -80,10 +80,10 @@ namespace Nereus
         // Ocean
 
         // Create ocean surface shaders
-        std::vector<Shader> shaders;
-        shaders.emplace_back("ocean_wavesim.vert");
-        shaders.emplace_back("ocean_refl.frag");
-        ShaderProgram ocean_shader_prog(shaders);
+        std::vector<Shader> ocean_shaders;
+        ocean_shaders.emplace_back("ocean_wavesim.vert");
+        ocean_shaders.emplace_back("ocean_refl.frag");
+        ShaderProgram ocean_shader_prog(ocean_shaders);
 
         // Create ocean renderer
         OceanRenderer ocean_renderer(ocean_shader_prog, skybox_renderer.getCubeMapTexture());
@@ -94,6 +94,22 @@ namespace Nereus
         int last_ocean_mesh_grid_width = NereusConstants::DEFAULT_OCEAN_GRID_WIDTH;
         int last_ocean_mesh_grid_length = NereusConstants::DEFAULT_OCEAN_GRID_LENGTH;
 
+
+        // ------------------------------
+        // Seabed
+
+        // Create seabed shaders
+        std::vector<Shader> seabed_shaders;
+        seabed_shaders.emplace_back("seabed.vert");
+        seabed_shaders.emplace_back("seabed.frag");
+        ShaderProgram seabed_shader_prog(seabed_shaders);
+
+        // Load & create Perlin noise texture
+        Texture2D perlin_tex = Texture2D("perlin_noise.jpg");
+
+        // Create ocean renderer
+        SeabedRenderer seabed_renderer(seabed_shader_prog, perlin_tex);
+
         
         // ------------------------------
         // Rendering Loop
@@ -102,13 +118,14 @@ namespace Nereus
             // clear window
             m_window.clear();
 
-            // --- render ocean mesh ---
+            // --- update mesh data if changed in UI ---
 
             // update mesh data if the grid resolution has been changed in the UI
             if (last_ocean_mesh_grid_width != m_context.m_ocean_grid_width
                 || last_ocean_mesh_grid_length != m_context.m_ocean_grid_length)
             {
                 ocean_renderer.updateOceanMeshGrid(m_context.m_ocean_grid_width, m_context.m_ocean_grid_length);
+                seabed_renderer.updateSeabedMeshGrid(m_context.m_ocean_grid_width, m_context.m_ocean_grid_length);
                 last_ocean_mesh_grid_width = m_context.m_ocean_grid_width;
                 last_ocean_mesh_grid_length = m_context.m_ocean_grid_length;
             }
@@ -117,15 +134,20 @@ namespace Nereus
             if (last_ocean_width != m_context.m_ocean_width)
             {
                 ocean_renderer.setOceanWidth(m_context.m_ocean_width);
+                seabed_renderer.setSeabedWidth(m_context.m_ocean_width + NereusConstants::SEABED_EXTENSION_FROM_OCEAN);
                 last_ocean_width = m_context.m_ocean_width;
             }
             if (last_ocean_length != m_context.m_ocean_length)
             {
                 ocean_renderer.setOceanLength(m_context.m_ocean_length);
+                seabed_renderer.setSeabedLength(m_context.m_ocean_length + NereusConstants::SEABED_EXTENSION_FROM_OCEAN);
                 last_ocean_length = m_context.m_ocean_length;
             }
 
-            // render ocean
+            // --- render seabed ---
+            seabed_renderer.render(m_context.m_render_camera);
+
+            // --- render ocean ---
             ocean_renderer.render(m_context.m_render_camera);
 
             // --- render skybox ---

@@ -77,4 +77,31 @@ public:
 
 	void setSkyboxTexture(CubeMapTexture &skybox);
 };
+
+
+// ------------------------------------
+// --- Seabed renderer ---
+class SeabedRenderer : public Renderer
+{
+private:
+	GridMesh m_seabed_mesh;
+
+	int m_seabed_width = NereusConstants::DEFAULT_OCEAN_WIDTH + NereusConstants::SEABED_EXTENSION_FROM_OCEAN;
+	int m_seabed_length = NereusConstants::DEFAULT_OCEAN_LENGTH + NereusConstants::SEABED_EXTENSION_FROM_OCEAN;
+
+	Texture2D m_perlin_texture;
+
+	void prepare();
+
+public:
+	SeabedRenderer(ShaderProgram &shader_prog, Texture2D &perlin_tex);
+
+	void render(const Camera &render_cam);
+
+	void updateSeabedMeshGrid(int new_grid_width, int new_grid_length);
+	void setSeabedWidth(int new_seabed_width);
+	void setSeabedLength(int new_seabed_length);
+
+	void setPerlinTexture(Texture2D &perlin_tex);
+};
 #endif

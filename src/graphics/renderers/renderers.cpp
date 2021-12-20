@@ -183,7 +183,7 @@ void OceanRenderer::render(const Camera &render_cam)
 {
     // transformation matrices
     glm::mat4 model_matrix = glm::mat4(1.0f);
-    model_matrix = glm::translate(model_matrix, glm::vec3(-m_ocean_width * 2.0f/4.0f, -10.0f, -m_ocean_length * 2.0f/4.0f));
+    model_matrix = glm::translate(model_matrix, glm::vec3(-m_ocean_width, -10.0f, -m_ocean_length));
     model_matrix = glm::scale(model_matrix, glm::vec3(
         m_ocean_width / (float)m_ocean_mesh.getGridWidth(),
         1.0f,
@@ -228,4 +228,81 @@ void OceanRenderer::setOceanLength(int new_ocean_length)
 void OceanRenderer::setSkyboxTexture(CubeMapTexture &skybox)
 {
     m_cubemap_texture = skybox;
+}
+
+
+// ------------------------------------
+// --- Seabed renderer ---
+
+SeabedRenderer::SeabedRenderer(ShaderProgram &shader_prog, Texture2D &perlin_tex)
+    : Renderer(shader_prog), m_perlin_texture(perlin_tex),
+    m_seabed_mesh(NereusConstants::DEFAULT_OCEAN_GRID_WIDTH, NereusConstants::DEFAULT_OCEAN_GRID_LENGTH)
+{
+    m_seabed_mesh.initialise();
+    this->prepare();
+}
+
+void SeabedRenderer::prepare()
+{
+    // --- bind input mesh data
+    m_seabed_mesh.getVAO().bind();
+    m_shader_prog.bindData(0, m_seabed_mesh.getPositionsVBO(), 3);
+    m_shader_prog.bindData(1, m_seabed_mesh.getTexCoordsVBO(), 2);
+
+    // --- bind cubemap sampler location 
+    m_shader_prog.use();
+    m_shader_prog.setInt("perlin_tex", 0);  // at tex unit 1
+}
+
+void SeabedRenderer::render(const Camera &render_cam)
+{
+    // transformation matrices
+    glm::mat4 model_matrix = glm::mat4(1.0f);
+    model_matrix = glm::translate(model_matrix, glm::vec3(
+        -m_seabed_width + NereusConstants::SEABED_EXTENSION_FROM_OCEAN, 
+        -10.0f - NereusConstants::SEABED_DEPTH_BELOW_OCEAN,
+        -m_seabed_length + NereusConstants::SEABED_EXTENSION_FROM_OCEAN
+    ));
+    model_matrix = glm::scale(model_matrix, glm::vec3(
+        m_seabed_width / (float)m_seabed_mesh.getGridWidth(),
+        1.0f,
+        m_seabed_length / (float)m_seabed_mesh.getGridLength()
+    ));
+
+    glm::mat4 vp_matrix = render_cam.getProjMatrix() * render_cam.getViewMatrix();
+
+    // set matrices (uniforms) in shader
+    m_shader_prog.use();
+    m_shader_prog.setMat4("m_matrix", model_matrix);
+    m_shader_prog.setMat4("vp_matrix", vp_matrix);
+
+    // set other uniforms
+    m_shader_prog.setVec3("wc_camera_pos", render_cam.getPosition());
+
+    // bind perlin noise texture
+    glActiveTexture(GL_TEXTURE0);
+    m_perlin_texture.bind();
+
+    // render mesh
+    m_seabed_mesh.render();
+}
+
+void SeabedRenderer::updateSeabedMeshGrid(int new_grid_width, int new_grid_length)
+{
+    m_seabed_mesh.updateMeshGrid(new_grid_width, new_grid_length);
+}
+
+void SeabedRenderer::setSeabedWidth(int new_seabed_width)
+{
+    m_seabed_width = new_seabed_width;
+}
+
+void SeabedRenderer::setSeabedLength(int new_seabed_length)
+{
+    m_seabed_length = new_seabed_length;
+}
+
+void SeabedRenderer::setPerlinTexture(Texture2D &perlin_tex)
+{
+    m_perlin_texture = perlin_tex;
 }

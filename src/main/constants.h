@@ -28,6 +28,9 @@ namespace NereusConstants
 	const int DEFAULT_OCEAN_LENGTH = 250;
 	const int DEFAULT_OCEAN_GRID_WIDTH = 250;
 	const int DEFAULT_OCEAN_GRID_LENGTH = 250;
+
+	const int SEABED_EXTENSION_FROM_OCEAN = 5;
+	const float SEABED_DEPTH_BELOW_OCEAN = 50.0f;
 }
 
 #endif
