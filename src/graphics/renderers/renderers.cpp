@@ -87,24 +87,15 @@ CubeMapTexture &SkyBoxRenderer::getCubeMapTexture()
 
 
 // ------------------------------------
-// --- Ocean renderer ---
+// --- (base) Ocean renderer ---
 
 OceanRenderer::OceanRenderer(ShaderProgram &shader_prog)
-    : Renderer(shader_prog), m_cubemap_texture(nullptr), 
+    : Renderer(shader_prog),
     m_ocean_mesh(NereusConstants::DEFAULT_OCEAN_GRID_WIDTH, NereusConstants::DEFAULT_OCEAN_GRID_LENGTH)
 {
     m_ocean_mesh.initialise();
     this->prepare();
 }
-
-OceanRenderer::OceanRenderer(ShaderProgram &shader_prog, CubeMapTexture &skybox)
-    : Renderer(shader_prog), m_cubemap_texture(skybox),
-    m_ocean_mesh(NereusConstants::DEFAULT_OCEAN_GRID_WIDTH, NereusConstants::DEFAULT_OCEAN_GRID_LENGTH)
-{
-    m_ocean_mesh.initialise();
-    this->prepare();
-}
-
 
 void OceanRenderer::prepare()
 {
@@ -112,10 +103,6 @@ void OceanRenderer::prepare()
     m_ocean_mesh.getVAO().bind();
     m_shader_prog.bindData(0, m_ocean_mesh.getPositionsVBO(), 3);
     m_shader_prog.bindData(1, m_ocean_mesh.getTexCoordsVBO(), 2);
-
-    // --- bind cubemap sampler location 
-    m_shader_prog.use();
-    m_shader_prog.setInt("env_map", 0);  // at tex unit 0
 
     // --- generate wave simulation parameters
     const int NUM_WAVES = 16; // !!! -- MUST be the SAME as in the VERTEX SHADER -- !!!
@@ -172,7 +159,7 @@ void OceanRenderer::prepare()
 
 
     // --- set parameters arrays in shader
-    //m_shader_prog.use();
+    m_shader_prog.use();
     m_shader_prog.setVec2Array("sim_wavevecs", wavevecs, NUM_WAVES);
     m_shader_prog.setFloatArray("sim_freqs", freqs, NUM_WAVES);
     m_shader_prog.setFloatArray("sim_amplitudes", amplitudes, NUM_WAVES);
@@ -201,10 +188,6 @@ void OceanRenderer::render(const Camera &render_cam)
     m_shader_prog.setFloat("time", glfwGetTime());
     m_shader_prog.setVec3("wc_camera_pos", render_cam.getPosition());
 
-    // bind skybox texture
-    glActiveTexture(GL_TEXTURE0);
-    m_cubemap_texture.bind();
-
     // render mesh
     m_ocean_mesh.render();
 }
@@ -225,7 +208,43 @@ void OceanRenderer::setOceanLength(int new_ocean_length)
     m_ocean_length = new_ocean_length;
 }
 
-void OceanRenderer::setSkyboxTexture(CubeMapTexture &skybox)
+
+// ------------------------------------
+// --- Reflective Ocean renderer ---
+
+ReflectiveOceanRenderer::ReflectiveOceanRenderer(ShaderProgram &shader_prog)
+    : OceanRenderer(shader_prog), m_cubemap_texture(nullptr)
+{
+    this->prepare();
+}
+
+ReflectiveOceanRenderer::ReflectiveOceanRenderer(ShaderProgram &shader_prog, CubeMapTexture &skybox)
+    : OceanRenderer(shader_prog), m_cubemap_texture(skybox)
+{
+    this->prepare();
+}
+
+void ReflectiveOceanRenderer::prepare()
+{
+    // will have called base renderer prepare method before this 
+    // (since it's called from base renderer's constructor which is exec before this class's constructor)
+
+    // --- bind cubemap sampler location 
+    m_shader_prog.use();
+    m_shader_prog.setInt("env_map", 0);  // at tex unit 0
+}
+
+void ReflectiveOceanRenderer::render(const Camera &render_cam)
+{
+    // bind skybox texture
+    glActiveTexture(GL_TEXTURE0);
+    m_cubemap_texture.bind();
+
+    // render using base renderer
+    OceanRenderer::render(render_cam);
+}
+
+void ReflectiveOceanRenderer::setSkyboxTexture(CubeMapTexture &skybox)
 {
     m_cubemap_texture = skybox;
 }

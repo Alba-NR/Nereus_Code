@@ -47,7 +47,7 @@ public:
 
 
 // ------------------------------------
-// --- Ocean renderer ---
+// --- (base) Ocean renderer ---
 class OceanRenderer : public Renderer
 {
 private:
@@ -60,20 +60,32 @@ private:
 	const glm::vec2 m_wind_dir = glm::normalize(glm::vec2(2.0f, 3.0f));
 	const float m_max_angle_deviation = glm::radians(30.0f);
 
+protected:
+	virtual void prepare();
+
+public:
+	OceanRenderer(ShaderProgram &shader_prog);
+
+	virtual void render(const Camera &render_cam);
+
+	void updateOceanMeshGrid(int new_grid_width, int new_grid_length);
+	void setOceanWidth(int new_ocean_width);
+	void setOceanLength(int new_ocean_length);
+};
+
+// --- Reflective Ocean renderer ---
+class ReflectiveOceanRenderer : public OceanRenderer
+{
+private:
 	CubeMapTexture m_cubemap_texture;
 
 	void prepare();
 
 public:
-	OceanRenderer(ShaderProgram &shader_prog);
-	OceanRenderer(ShaderProgram &shader_prog, CubeMapTexture &skybox);
-
+	ReflectiveOceanRenderer(ShaderProgram &shader_prog);
+	ReflectiveOceanRenderer(ShaderProgram &shader_prog, CubeMapTexture &skybox);
 
 	void render(const Camera &render_cam);
-
-	void updateOceanMeshGrid(int new_grid_width, int new_grid_length);
-	void setOceanWidth(int new_ocean_width);
-	void setOceanLength(int new_ocean_length);
 
 	void setSkyboxTexture(CubeMapTexture &skybox);
 };

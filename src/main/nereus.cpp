@@ -85,7 +85,7 @@ namespace Nereus
         ShaderProgram ocean_shader_prog(ocean_shaders);
 
         // Create ocean renderer
-        OceanRenderer ocean_renderer(ocean_shader_prog, skybox_renderer.getCubeMapTexture());
+        ReflectiveOceanRenderer ocean_renderer(ocean_shader_prog, skybox_renderer.getCubeMapTexture());
 
         // Track last ocean size values
         int last_ocean_width = NereusConstants::DEFAULT_OCEAN_WIDTH;
