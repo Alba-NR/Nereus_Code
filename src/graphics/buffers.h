@@ -2,6 +2,8 @@
 #define BUFFERS
 #pragma once
 
+#include "textures.h"
+
 #include <glad/glad.h>
 #include <vector>
 
@@ -56,6 +58,29 @@ class EBO : public Buffer
 {
 public:
 	EBO();
+};
+
+// --- Framebuffer Object ---
+class FBO
+{
+private:
+	GLuint m_id;
+	Texture2D m_colour_attachment;
+	GLuint m_rbo_depth_stencil_attachment;
+
+	void create();
+
+public:
+	FBO();
+	FBO(Texture2D &colour_texture);
+	~FBO();
+
+	void setColourAttachment(Texture2D &colour_texture);
+	Texture2D &getColourAttachment();
+
+	void bind() const;
+	void unbind() const;
+	GLuint getHandle() const;
 };
 
 #endif
