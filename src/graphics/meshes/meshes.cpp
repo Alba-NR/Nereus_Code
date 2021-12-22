@@ -241,3 +241,45 @@ int GridMesh::getGridLength() const
 {
 	return m_grid_length;
 }
+
+
+// ------------------------------------
+// ScreenQuadMesh
+
+ScreenQuadMesh::ScreenQuadMesh()
+{
+}
+
+void ScreenQuadMesh::initPositions(std::vector<float> &pos)
+{
+	pos = {
+		1.0f,  1.0f,		// top right
+		1.0f, -1.0f,		// bottom right
+		-1.0f, -1.0,		// bottom left
+		-1.0f,  1.0f		// top left 
+	};
+}
+
+void ScreenQuadMesh::initNormals(std::vector<float> &normals)
+{
+	// dummy
+	normals = { 0.0f };
+}
+
+void ScreenQuadMesh::initTexCoords(std::vector<float> &texCoords)
+{
+	texCoords = {
+		1.0f,  0.0f,		// top right
+		1.0f,  1.0f,		// bottom right
+		0.0f,  1.0f,		// bottom left
+		0.0f,  0.0f			// top left 
+	};
+}
+
+void ScreenQuadMesh::initIndices(std::vector<int> &indices)
+{
+	indices = {
+		0, 1, 3,
+		1, 2, 3
+	};
+}

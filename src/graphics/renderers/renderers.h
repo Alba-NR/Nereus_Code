@@ -135,4 +135,20 @@ public:
 
 	void setPerlinTexture(Texture2D &perlin_tex);
 };
+
+
+// ------------------------------------
+// --- Screen quad renderer (for visual debugging) ---
+class ScreenQuadRenderer : public Renderer
+{
+private:
+	ScreenQuadMesh m_quad_mesh;
+	Texture2D m_screen_tex;
+	void prepare();
+
+public:
+	ScreenQuadRenderer(ShaderProgram &shader_prog, Texture2D &screen_tex);
+
+	void render(const Camera &render_cam);
+};
 #endif

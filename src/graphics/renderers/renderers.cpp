@@ -367,3 +367,37 @@ void SeabedRenderer::setPerlinTexture(Texture2D &perlin_tex)
 {
     m_perlin_texture = perlin_tex;
 }
+
+
+// ------------------------------------
+// --- Screen Quad renderer (for visual debugging) ---
+
+ScreenQuadRenderer::ScreenQuadRenderer(ShaderProgram &shader_prog, Texture2D &screen_tex)
+    : Renderer(shader_prog), m_quad_mesh(), m_screen_tex(screen_tex)
+{
+    m_quad_mesh.initialise();
+    this->prepare();
+}
+
+void ScreenQuadRenderer::prepare()
+{
+    // bind input mesh data
+    m_quad_mesh.getVAO().bind();
+    m_shader_prog.bindData(0, m_quad_mesh.getPositionsVBO(), 2);
+    m_shader_prog.bindData(1, m_quad_mesh.getTexCoordsVBO(), 2);
+
+    // set texture
+    m_shader_prog.setInt("screen_tex", 0);
+}
+
+void ScreenQuadRenderer::render(const Camera &render_cam)
+{
+    m_shader_prog.use();
+
+    // bind screeen texture
+    glActiveTexture(GL_TEXTURE0);
+    m_screen_tex.bind();
+
+    // render
+    m_quad_mesh.render();
+}

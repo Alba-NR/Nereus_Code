@@ -106,9 +106,24 @@ namespace Nereus
         // Load & create Perlin noise texture
         Texture2D perlin_tex = Texture2D("perlin_noise.jpg");
 
-        // Create ocean renderer
+        // Create seabed renderer
         SeabedRenderer seabed_renderer(seabed_shader_prog, perlin_tex);
 
+
+        // ------------------------------
+        // Screen Quad (for visual debugging)
+
+        // Create screen quad shaders
+        std::vector<Shader> screen_quad_shaders;
+        screen_quad_shaders.emplace_back("screen_quad.vert");
+        screen_quad_shaders.emplace_back("screen_quad.frag");
+        ShaderProgram screen_quad_shader_prog(screen_quad_shaders);
+
+        // Load & create test texture
+        Texture2D test_tex = Texture2D("test.jpg");
+
+        // Create ocean renderer
+        ScreenQuadRenderer screen_quad_renderer(screen_quad_shader_prog, test_tex); //ocean_renderer.getTextureS()
         
         // ------------------------------
         // Rendering Loop
@@ -195,6 +210,8 @@ namespace Nereus
             ocean_renderer.render(m_context.m_render_camera);
             seabed_renderer.render(m_context.m_render_camera);
             skybox_renderer.render(m_context.m_render_camera);
+
+            screen_quad_renderer.render(m_context.m_render_camera);
 
 
             // --- render UI ---

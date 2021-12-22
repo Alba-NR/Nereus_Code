@@ -61,6 +61,7 @@ public:
 	~CubeMapMesh();
 };
 
+
 // --- Grid mesh (for Ocean & Terrain) ---
 class GridMesh : public Mesh
 {
@@ -80,5 +81,19 @@ public:
 
 	int getGridWidth() const;
 	int getGridLength() const;
+};
+
+
+// --- Screen Quad mesh (for visual debugging) ---
+class ScreenQuadMesh : public Mesh
+{
+private:
+	void initPositions(std::vector<float> &pos);
+	void initNormals(std::vector<float> &normals);
+	void initTexCoords(std::vector<float> &texCoords);
+	void initIndices(std::vector<int> &indices);
+
+public:
+	ScreenQuadMesh();
 };
 #endif
