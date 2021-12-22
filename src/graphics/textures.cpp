@@ -1,6 +1,7 @@
 
 #include "textures.h"
 #include "../utils/image_io.h"
+#include "../main/constants.h"
 
 
 // ------------------------------------------
@@ -37,7 +38,6 @@ Texture2D::Texture2D(string filename)
         format = GL_RGB;
         break;
     }
-    bool isRGBA = (m_num_channels == 4);
     glTexImage2D(GL_TEXTURE_2D, 0, format, m_width, m_height, 0, format, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
 
@@ -46,6 +46,32 @@ Texture2D::Texture2D(string filename)
 
     // delete img data
     stbi_image_free(data);
+}
+
+Texture2D::Texture2D()
+    : Texture2D(NereusConstants::DEFAULT_WINDOW_WIDTH, NereusConstants::DEFAULT_WINDOW_HEIGHT)
+{
+}
+
+Texture2D::Texture2D(int width, int height)
+    : m_width(width), m_height(height), m_num_channels(3)
+{
+    // generate OpenGL texture object
+    glGenTextures(1, &m_id);
+
+    // set wrapping & filtering parameters
+    glBindTexture(GL_TEXTURE_2D, m_id);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // create empty texture
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+
+    // unbind texture
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 Texture2D::~Texture2D()
@@ -62,6 +88,16 @@ void Texture2D::bind() const
 GLuint Texture2D::getHandle() const
 {
     return m_id;
+}
+
+int Texture2D::getWidth() const
+{
+    return m_width;
+}
+
+int Texture2D::getHeight() const
+{
+    return m_height;
 }
 
 

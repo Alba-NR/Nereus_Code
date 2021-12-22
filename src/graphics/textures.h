@@ -19,10 +19,15 @@ private:
 
 public:
 	Texture2D(string filename);
+	Texture2D();
+	Texture2D(int width, int height);
 	~Texture2D();
 
 	void bind() const;
 	GLuint getHandle() const;
+
+	int getWidth() const;
+	int getHeight() const;
 };
 
 // --- Cubemap Texture ---
