@@ -5,6 +5,7 @@
 #include "../shaders.h"
 #include "../meshes/meshes.h"
 #include "../textures.h"
+#include "../buffers.h"
 #include "../camera.h"
 #include "../../main/constants.h"
 
@@ -88,6 +89,24 @@ public:
 	void render(const Camera &render_cam);
 
 	void setSkyboxTexture(CubeMapTexture &skybox);
+};
+
+// --- Refractive Ocean renderer ---
+class RefractiveOceanRenderer : public OceanRenderer
+{
+private:
+	Texture2D m_texture_S;
+	FBO m_fbo;
+
+	void prepare();
+
+public:
+	RefractiveOceanRenderer(ShaderProgram &shader_prog);
+
+	void render(const Camera &render_cam);
+
+	void bindFBO();
+	void unbindFBO();
 };
 
 

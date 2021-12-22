@@ -4,7 +4,6 @@
 #include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
 #include <random>
-#include <iostream> // TODO remove
 
 
 // ------------------------------------
@@ -63,7 +62,7 @@ void SkyBoxRenderer::render(const Camera &render_cam)
     glDepthFunc(GL_LEQUAL);
     
     // bind objects
-    //glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE0);
     m_cubemap_texture.bind();
 
     // set shader as active one
@@ -247,6 +246,49 @@ void ReflectiveOceanRenderer::render(const Camera &render_cam)
 void ReflectiveOceanRenderer::setSkyboxTexture(CubeMapTexture &skybox)
 {
     m_cubemap_texture = skybox;
+}
+
+
+// ------------------------------------
+// --- Refractive Ocean renderer ---
+
+RefractiveOceanRenderer::RefractiveOceanRenderer(ShaderProgram &shader_prog)
+    : OceanRenderer(shader_prog), m_texture_S(), m_fbo(m_texture_S)
+{
+    this->prepare();
+}
+
+void RefractiveOceanRenderer::prepare()
+{
+    // will have called base renderer prepare method before this 
+    // (since it's called from base renderer's constructor which is exec before this class's constructor)
+
+    // bind texture S's sampler location 
+    m_shader_prog.use();
+    m_shader_prog.setInt("tex_S", 0);  // at tex unit 0
+
+    // set viewport dimensions
+    m_shader_prog.setVec2("viewport_dimensions", glm::vec2(NereusConstants::DEFAULT_WINDOW_WIDTH, NereusConstants::DEFAULT_WINDOW_HEIGHT));
+}
+
+void RefractiveOceanRenderer::render(const Camera &render_cam)
+{
+    // bind texture S
+    glActiveTexture(GL_TEXTURE0);
+    m_texture_S.bind();
+
+    // render using base renderer
+    OceanRenderer::render(render_cam);
+}
+
+void RefractiveOceanRenderer::bindFBO()
+{
+    m_fbo.bind();
+}
+
+void RefractiveOceanRenderer::unbindFBO()
+{
+    m_fbo.unbind();
 }
 
 

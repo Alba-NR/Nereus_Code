@@ -81,11 +81,11 @@ namespace Nereus
         // Create ocean surface shaders
         std::vector<Shader> ocean_shaders;
         ocean_shaders.emplace_back("ocean_wavesim.vert");
-        ocean_shaders.emplace_back("ocean_refl.frag");
+        ocean_shaders.emplace_back("ocean_refr.frag");
         ShaderProgram ocean_shader_prog(ocean_shaders);
 
         // Create ocean renderer
-        ReflectiveOceanRenderer ocean_renderer(ocean_shader_prog, skybox_renderer.getCubeMapTexture());
+        RefractiveOceanRenderer ocean_renderer(ocean_shader_prog);
 
         // Track last ocean size values
         int last_ocean_width = NereusConstants::DEFAULT_OCEAN_WIDTH;
@@ -170,6 +170,7 @@ namespace Nereus
                 last_ocean_length = m_context.m_ocean_length;
             }
 
+            /*
             // --- render seabed ---
             if (m_context.m_do_render_seabed)
             {
@@ -184,6 +185,17 @@ namespace Nereus
 
             // --- render skybox ---
             skybox_renderer.render(m_context.m_render_camera);
+            */
+
+            ocean_renderer.bindFBO();
+            seabed_renderer.render(m_context.m_render_camera);
+            skybox_renderer.render(m_context.m_render_camera);
+            ocean_renderer.unbindFBO();
+
+            ocean_renderer.render(m_context.m_render_camera);
+            seabed_renderer.render(m_context.m_render_camera);
+            skybox_renderer.render(m_context.m_render_camera);
+
 
             // --- render UI ---
             UI::render();
