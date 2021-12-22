@@ -11,7 +11,7 @@
 Texture2D::Texture2D(string filename)
 {
     // load image from file
-    unsigned char *data = ImageIO::loadImage(filename, m_width, m_height, m_num_channels);
+    unsigned char *data = ImageIO::loadImage(filename, m_width, m_height, m_num_channels, true);
 
     // generate OpenGL texture object
     glGenTextures(1, &m_id);
@@ -58,17 +58,16 @@ Texture2D::Texture2D(int width, int height)
 {
     // generate OpenGL texture object
     glGenTextures(1, &m_id);
-
-    // set wrapping & filtering parameters
     glBindTexture(GL_TEXTURE_2D, m_id);
 
+    // create empty texture
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+
+    // set wrapping & filtering parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    // create empty texture
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
 
     // unbind texture
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -81,7 +80,6 @@ Texture2D::~Texture2D()
 
 void Texture2D::bind() const
 {
-    //glActiveTexture(GL_TEXTURE0); // TODO activate appropriate tex unit
     glBindTexture(GL_TEXTURE_2D, m_id);
 }
 
@@ -117,7 +115,7 @@ CubeMapTexture::CubeMapTexture(const string filenames[6])
     {
         // load image from file
         int width, height, num_channels;
-        unsigned char *data = ImageIO::loadImage(filenames[i], width, height, num_channels);
+        unsigned char *data = ImageIO::loadImage(filenames[i], width, height, num_channels, false);
 
         // bind data to appropriate cubemap texture object's face
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
