@@ -12,7 +12,7 @@ using std::string;
 
 namespace ImageIO
 {
-	unsigned char *loadImage(string filename, int &width, int &height, int &num_channels);
+	unsigned char *loadImage(string filename, int &width, int &height, int &num_channels, bool flip_vertically);
 }
 
 #endif

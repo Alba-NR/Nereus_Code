@@ -5,9 +5,9 @@
 string TEXTURES_FOLDER_PATH = PROJECT_SOURCE_DIR "/resources/textures/";
 
 
-unsigned char *ImageIO::loadImage(string filename, int &width, int &height, int &num_channels)
+unsigned char *ImageIO::loadImage(string filename, int &width, int &height, int &num_channels, bool flip_vertically)
 {
-	stbi_set_flip_vertically_on_load(true);
+	if (flip_vertically) stbi_set_flip_vertically_on_load(true);
 
 	string filepath = TEXTURES_FOLDER_PATH + filename;
 	
