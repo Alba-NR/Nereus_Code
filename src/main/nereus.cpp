@@ -184,12 +184,21 @@ namespace Nereus
                 last_ocean_length = m_context.m_ocean_length;
             }
 
-            /*
-            // --- render seabed ---
+            
+            // --- render to texture S for refraction ---
+            ocean_renderer.bindFBO();
+            m_window.clear();
+
+            // render seabed
             if (m_context.m_do_render_seabed)
             {
                 seabed_renderer.render(m_context.m_render_camera);
             }
+            // render skybox
+            skybox_renderer.render(m_context.m_render_camera);
+
+            // go back to default fbo
+            ocean_renderer.unbindFBO();
 
             // --- render ocean ---
             if (m_context.m_do_render_ocean)
@@ -197,18 +206,17 @@ namespace Nereus
                 ocean_renderer.render(m_context.m_render_camera);
             }
 
+            // --- render seabed ---
+            if (m_context.m_do_render_seabed)
+            {
+                seabed_renderer.render(m_context.m_render_camera);
+            }
+
             // --- render skybox ---
             skybox_renderer.render(m_context.m_render_camera);
-            */
 
-            ocean_renderer.bindFBO();
-            m_window.clear();
-            seabed_renderer.render(m_context.m_render_camera);
-            skybox_renderer.render(m_context.m_render_camera);
-            ocean_renderer.unbindFBO();
-
-            screen_quad_renderer.render(m_context.m_render_camera);
-
+            // --- render texture S for debugging ---
+            //screen_quad_renderer.render(m_context.m_render_camera);
 
             // --- render UI ---
             UI::render();

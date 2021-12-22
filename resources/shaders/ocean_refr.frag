@@ -16,7 +16,7 @@ uniform sampler2D tex_S;
 
 uniform vec2 viewport_dimensions;
 
-const float delta = 0.1;
+const float delta = 0.05;
 
 void main()
 {
@@ -29,8 +29,8 @@ void main()
 	vec2 projected_tex_coords = gl_FragCoord.xy / viewport_dimensions;
 
 	// calc new sample coords
-	vec2 sample_tex_coords = projected_tex_coords + N.xy * delta;
+	vec2 sample_tex_coords = projected_tex_coords + N.xz * delta;
 
 	// set output/final colour
-	frag_colour = vec4(sample_tex_coords, 1,1); //texture(tex_S, projected_tex_coords);
+	frag_colour = texture(tex_S, sample_tex_coords);
 }
