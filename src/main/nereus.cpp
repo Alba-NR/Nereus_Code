@@ -119,11 +119,10 @@ namespace Nereus
         screen_quad_shaders.emplace_back("screen_quad.frag");
         ShaderProgram screen_quad_shader_prog(screen_quad_shaders);
 
-        // Load & create test texture
-        Texture2D test_tex = Texture2D("test.jpg");
+        Texture2D test("test.jpg");
 
         // Create ocean renderer
-        ScreenQuadRenderer screen_quad_renderer(screen_quad_shader_prog, test_tex); //ocean_renderer.getTextureS()
+        ScreenQuadRenderer screen_quad_renderer(screen_quad_shader_prog, ocean_renderer.getTextureS());
         
         // ------------------------------
         // Rendering Loop
@@ -203,13 +202,10 @@ namespace Nereus
             */
 
             ocean_renderer.bindFBO();
+            m_window.clear();
             seabed_renderer.render(m_context.m_render_camera);
             skybox_renderer.render(m_context.m_render_camera);
             ocean_renderer.unbindFBO();
-
-            ocean_renderer.render(m_context.m_render_camera);
-            seabed_renderer.render(m_context.m_render_camera);
-            skybox_renderer.render(m_context.m_render_camera);
 
             screen_quad_renderer.render(m_context.m_render_camera);
 

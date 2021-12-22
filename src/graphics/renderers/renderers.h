@@ -107,6 +107,8 @@ public:
 
 	void bindFBO();
 	void unbindFBO();
+
+	Texture2D &getTextureS();
 };
 
 

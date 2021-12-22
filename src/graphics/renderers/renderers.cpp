@@ -291,6 +291,11 @@ void RefractiveOceanRenderer::unbindFBO()
     m_fbo.unbind();
 }
 
+Texture2D &RefractiveOceanRenderer::getTextureS()
+{
+    return m_texture_S;
+}
+
 
 // ------------------------------------
 // --- Seabed renderer ---
