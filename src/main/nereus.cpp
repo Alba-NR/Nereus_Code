@@ -81,11 +81,11 @@ namespace Nereus
         // Create ocean surface shaders
         std::vector<Shader> ocean_shaders;
         ocean_shaders.emplace_back("ocean_wavesim.vert");
-        ocean_shaders.emplace_back("ocean_refr.frag");
+        ocean_shaders.emplace_back("ocean_fresnel.frag");
         ShaderProgram ocean_shader_prog(ocean_shaders);
 
         // Create ocean renderer
-        RefractiveOceanRenderer ocean_renderer(ocean_shader_prog);
+        FullOceanRenderer ocean_renderer(ocean_shader_prog, skybox_renderer.getCubeMapTexture());
 
         // Track last ocean size values
         int last_ocean_width = NereusConstants::DEFAULT_OCEAN_WIDTH;

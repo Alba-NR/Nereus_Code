@@ -109,6 +109,39 @@ public:
 	void unbindFBO();
 
 	Texture2D &getTextureS();
+
+};
+
+
+// --- Full Ocean renderer (Reflection & Refraction; Fresnel effect) ---
+class FullOceanRenderer : public OceanRenderer
+{
+private:
+	// for reflection
+	CubeMapTexture m_cubemap_texture;
+	// for refraction
+	Texture2D m_texture_S;
+	FBO m_fbo;
+	// for fresnel effect
+	const float m_FRESNEL_F0 = glm::pow((
+		(NereusConstants::WATER_REFRACTIVE_INDEX - NereusConstants::AIR_REFRACTIVE_INDEX)
+		/ (NereusConstants::WATER_REFRACTIVE_INDEX + NereusConstants::AIR_REFRACTIVE_INDEX)
+	), 2);
+
+	void prepare();
+
+public:
+	FullOceanRenderer(ShaderProgram &shader_prog); 
+	FullOceanRenderer(ShaderProgram &shader_prog, CubeMapTexture &skybox);
+
+	void render(const Camera &render_cam);
+
+	void bindFBO();
+	void unbindFBO();
+
+	Texture2D &getTextureS();
+
+	void setSkyboxTexture(CubeMapTexture &skybox);
 };
 
 

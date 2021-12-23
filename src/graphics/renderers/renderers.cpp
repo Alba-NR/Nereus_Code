@@ -268,7 +268,9 @@ void RefractiveOceanRenderer::prepare()
     m_shader_prog.setInt("tex_S", 0);  // at tex unit 0
 
     // set viewport dimensions
-    m_shader_prog.setVec2("viewport_dimensions", glm::vec2(NereusConstants::DEFAULT_WINDOW_WIDTH, NereusConstants::DEFAULT_WINDOW_HEIGHT));
+    m_shader_prog.setVec2("viewport_dimensions", 
+        glm::vec2(NereusConstants::DEFAULT_WINDOW_WIDTH, NereusConstants::DEFAULT_WINDOW_HEIGHT)
+    );
 }
 
 void RefractiveOceanRenderer::render(const Camera &render_cam)
@@ -294,6 +296,83 @@ void RefractiveOceanRenderer::unbindFBO()
 Texture2D &RefractiveOceanRenderer::getTextureS()
 {
     return m_texture_S;
+}
+
+
+// ------------------------------------
+// --- Full Ocean renderer (Reflection & Refraction; Fresnel effect) ---
+
+FullOceanRenderer::FullOceanRenderer(ShaderProgram &shader_prog)
+    : OceanRenderer(shader_prog), m_cubemap_texture(nullptr), m_texture_S(), m_fbo(m_texture_S)
+{
+    this->prepare();
+}
+
+FullOceanRenderer::FullOceanRenderer(ShaderProgram &shader_prog, CubeMapTexture &skybox)
+    : OceanRenderer(shader_prog), m_cubemap_texture(skybox), m_texture_S(), m_fbo(m_texture_S)
+{
+    this->prepare();
+}
+
+void FullOceanRenderer::prepare()
+{
+    // will have called base renderer prepare method before this 
+    // (since it's called from base renderer's constructor which is exec before this class's constructor)
+
+    // --- for reflection ---
+    // set cubemap sampler location 
+    m_shader_prog.use();
+    m_shader_prog.setInt("env_map", 0);  // at tex unit 0
+
+
+    // --- for refraction ---
+    // set texture S's sampler location 
+    m_shader_prog.use();
+    m_shader_prog.setInt("tex_S", 1);  // at tex unit 1
+
+    // set viewport dimensions
+    m_shader_prog.setVec2("viewport_dimensions", 
+        glm::vec2(NereusConstants::DEFAULT_WINDOW_WIDTH, NereusConstants::DEFAULT_WINDOW_HEIGHT)
+    );
+
+    // --- for fresnel effect ---
+    m_shader_prog.setFloat("fresnel_F_0", m_FRESNEL_F0);
+}
+
+void FullOceanRenderer::render(const Camera &render_cam)
+{
+    // --- for reflection ---
+    // bind skybox texture
+    glActiveTexture(GL_TEXTURE0);
+    m_cubemap_texture.bind();
+
+    // --- for refraction ---
+    // bind texture S
+    glActiveTexture(GL_TEXTURE1);
+    m_texture_S.bind();
+
+    // --- render using base renderer ---
+    OceanRenderer::render(render_cam);
+}
+
+void FullOceanRenderer::bindFBO()
+{
+    m_fbo.bind();
+}
+
+void FullOceanRenderer::unbindFBO()
+{
+    m_fbo.unbind();
+}
+
+Texture2D &FullOceanRenderer::getTextureS()
+{
+    return m_texture_S;
+}
+
+void FullOceanRenderer::setSkyboxTexture(CubeMapTexture &skybox)
+{
+    m_cubemap_texture = skybox;
 }
 
 

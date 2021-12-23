@@ -31,6 +31,9 @@ namespace NereusConstants
 
 	const int SEABED_EXTENSION_FROM_OCEAN = 5;
 	const float SEABED_DEPTH_BELOW_OCEAN = 40.0f;
+
+	const float AIR_REFRACTIVE_INDEX = 1.0003f;
+	const float WATER_REFRACTIVE_INDEX = 1.3333f;
 }
 
 #endif
