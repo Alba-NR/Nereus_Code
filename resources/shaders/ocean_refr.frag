@@ -17,6 +17,8 @@ uniform sampler2D tex_S;
 uniform vec2 viewport_dimensions;
 
 const float delta = 0.05;
+const vec4 base_water_colour = vec4(0.21, 0.47, 0.76, 1.0);
+const float base_colour_amount = 0.5;
 
 void main()
 {
@@ -32,5 +34,5 @@ void main()
 	vec2 sample_tex_coords = projected_tex_coords + N.xz * delta;
 
 	// set output/final colour
-	frag_colour = texture(tex_S, sample_tex_coords);
+	frag_colour = base_colour_amount * base_water_colour + (1-base_colour_amount) * texture(tex_S, sample_tex_coords);
 }
