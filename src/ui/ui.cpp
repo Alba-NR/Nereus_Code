@@ -70,7 +70,21 @@ void UI::render()
 	m_app_context->m_ocean_grid_width = max(m_app_context->m_ocean_grid_width, 1);
 	m_app_context->m_ocean_grid_length = max(m_app_context->m_ocean_grid_length, 1);
 	ImGui::PopItemWidth();
-		
+
+	// base colour
+	ImGui::Text("Water Base Colour:");
+	static float water_base_colour[3] = {
+		m_app_context->m_water_base_colour[0],
+		m_app_context->m_water_base_colour[1],
+		m_app_context->m_water_base_colour[2]
+	};
+	ImGui::ColorEdit3("", water_base_colour);
+	m_app_context->m_water_base_colour = glm::vec3(
+		water_base_colour[0],
+		water_base_colour[1],
+		water_base_colour[2]
+	);
+	ImGui::SliderFloat("Amount", &(m_app_context->m_water_base_colour_amt), 0.0f, 1.0f, "%.3f");
 		
 	// end window
 	ImGui::End();

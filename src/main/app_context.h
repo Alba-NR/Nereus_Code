@@ -21,6 +21,9 @@ namespace Nereus
 		bool m_do_render_seabed = true;
 		bool m_do_render_ocean = true;
 
+		glm::vec3 m_water_base_colour = NereusConstants::DEFAULT_WATER_BASE_COLOUR;
+		float m_water_base_colour_amt = NereusConstants::DEFAULT_WATER_BASE_COLOUR_AMOUNT;
+
 		Camera m_render_camera;
 
 		AppContext();

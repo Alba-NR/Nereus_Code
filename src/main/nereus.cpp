@@ -93,6 +93,10 @@ namespace Nereus
         int last_ocean_mesh_grid_width = NereusConstants::DEFAULT_OCEAN_GRID_WIDTH;
         int last_ocean_mesh_grid_length = NereusConstants::DEFAULT_OCEAN_GRID_LENGTH;
 
+        // Track last water base colour params
+        glm::vec3 last_water_base_colour = NereusConstants::DEFAULT_WATER_BASE_COLOUR;
+        float last_water_base_colour_amt = NereusConstants::DEFAULT_WATER_BASE_COLOUR_AMOUNT;
+
 
         // ------------------------------
         // Seabed
@@ -118,8 +122,6 @@ namespace Nereus
         screen_quad_shaders.emplace_back("screen_quad.vert");
         screen_quad_shaders.emplace_back("screen_quad.frag");
         ShaderProgram screen_quad_shader_prog(screen_quad_shaders);
-
-        Texture2D test("test.jpg");
 
         // Create ocean renderer
         ScreenQuadRenderer screen_quad_renderer(screen_quad_shader_prog, ocean_renderer.getTextureS());
@@ -182,6 +184,20 @@ namespace Nereus
                 ocean_renderer.setOceanLength(m_context.m_ocean_length);
                 seabed_renderer.setSeabedLength(m_context.m_ocean_length + NereusConstants::SEABED_EXTENSION_FROM_OCEAN);
                 last_ocean_length = m_context.m_ocean_length;
+            }
+
+
+            // --- update water base colour params if changed in UI ---
+            if (last_water_base_colour != m_context.m_water_base_colour)
+            {
+                ocean_renderer.setWaterBaseColour(m_context.m_water_base_colour);
+                last_water_base_colour = m_context.m_water_base_colour;
+            }
+
+            if (last_water_base_colour_amt != m_context.m_water_base_colour_amt)
+            {
+                ocean_renderer.setWaterBaseColourAmount(m_context.m_water_base_colour_amt);
+                last_water_base_colour_amt = m_context.m_water_base_colour_amt;
             }
 
             

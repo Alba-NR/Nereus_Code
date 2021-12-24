@@ -267,6 +267,10 @@ void RefractiveOceanRenderer::prepare()
     m_shader_prog.use();
     m_shader_prog.setInt("tex_S", 0);  // at tex unit 0
 
+    // set water base colour params to default
+    m_shader_prog.setVec4("water_base_colour", glm::vec4(NereusConstants::DEFAULT_WATER_BASE_COLOUR, 1.0f));
+    m_shader_prog.setFloat("water_base_colour_amt", NereusConstants::DEFAULT_WATER_BASE_COLOUR_AMOUNT);
+
     // set viewport dimensions
     m_shader_prog.setVec2("viewport_dimensions", 
         glm::vec2(NereusConstants::DEFAULT_WINDOW_WIDTH, NereusConstants::DEFAULT_WINDOW_HEIGHT)
@@ -296,6 +300,18 @@ void RefractiveOceanRenderer::unbindFBO()
 Texture2D &RefractiveOceanRenderer::getTextureS()
 {
     return m_texture_S;
+}
+
+void RefractiveOceanRenderer::setWaterBaseColour(glm::vec3 &new_colour)
+{
+    m_shader_prog.use();
+    m_shader_prog.setVec4("water_base_colour", glm::vec4(new_colour, 1.0f));
+}
+
+void RefractiveOceanRenderer::setWaterBaseColourAmount(float new_amt)
+{
+    m_shader_prog.use();
+    m_shader_prog.setFloat("water_base_colour_amt", new_amt);
 }
 
 
@@ -329,6 +345,9 @@ void FullOceanRenderer::prepare()
     // set texture S's sampler location 
     m_shader_prog.use();
     m_shader_prog.setInt("tex_S", 1);  // at tex unit 1
+    // set water base colour params to default
+    m_shader_prog.setVec4("water_base_colour", glm::vec4(NereusConstants::DEFAULT_WATER_BASE_COLOUR, 1.0f));
+    m_shader_prog.setFloat("water_base_colour_amt", NereusConstants::DEFAULT_WATER_BASE_COLOUR_AMOUNT);
 
     // set viewport dimensions
     m_shader_prog.setVec2("viewport_dimensions", 
@@ -373,6 +392,18 @@ Texture2D &FullOceanRenderer::getTextureS()
 void FullOceanRenderer::setSkyboxTexture(CubeMapTexture &skybox)
 {
     m_cubemap_texture = skybox;
+}
+
+void FullOceanRenderer::setWaterBaseColour(glm::vec3 &new_colour)
+{
+    m_shader_prog.use();
+    m_shader_prog.setVec4("water_base_colour", glm::vec4(new_colour, 1.0f));
+}
+
+void FullOceanRenderer::setWaterBaseColourAmount(float new_amt)
+{
+    m_shader_prog.use();
+    m_shader_prog.setFloat("water_base_colour_amt", new_amt);
 }
 
 

@@ -34,6 +34,10 @@ namespace NereusConstants
 
 	const float AIR_REFRACTIVE_INDEX = 1.0003f;
 	const float WATER_REFRACTIVE_INDEX = 1.3333f;
+
+	const glm::vec3 DEFAULT_WATER_BASE_COLOUR = { 0.21f, 0.47f, 0.76f };
+	const float DEFAULT_WATER_BASE_COLOUR_AMOUNT = 0.5f;
+
 }
 
 #endif

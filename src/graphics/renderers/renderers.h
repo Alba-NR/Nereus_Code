@@ -110,6 +110,8 @@ public:
 
 	Texture2D &getTextureS();
 
+	void setWaterBaseColour(glm::vec3 &new_colour);
+	void setWaterBaseColourAmount(float new_amt);
 };
 
 
@@ -142,6 +144,8 @@ public:
 	Texture2D &getTextureS();
 
 	void setSkyboxTexture(CubeMapTexture &skybox);
+	void setWaterBaseColour(glm::vec3 &new_colour);
+	void setWaterBaseColourAmount(float new_amt);
 };
 
 
