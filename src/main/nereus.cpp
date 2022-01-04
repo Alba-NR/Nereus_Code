@@ -63,12 +63,12 @@ namespace Nereus
 
         // Create skybox cubemap texture
         string skybox_images[] = {
-            "sky_skybox/right.jpg",
-            "sky_skybox/left.jpg",
-            "sky_skybox/top.jpg",
-            "sky_skybox/bottom.jpg",
-            "sky_skybox/front.jpg",
-            "sky_skybox/back.jpg"
+            "sunset_skybox_2/right.jpg",
+            "sunset_skybox_2/left.jpg",
+            "sunset_skybox_2/top.jpg",
+            "sunset_skybox_2/bottom.jpg",
+            "sunset_skybox_2/front.jpg",
+            "sunset_skybox_2/back.jpg"
         };
 
         // Create Skybox renderer
