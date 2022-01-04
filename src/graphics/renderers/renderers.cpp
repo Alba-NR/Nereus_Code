@@ -268,7 +268,7 @@ void RefractiveOceanRenderer::prepare()
     m_shader_prog.setInt("tex_S", 0);  // at tex unit 0
 
     // set water base colour params to default
-    m_shader_prog.setVec4("water_base_colour", glm::vec4(NereusConstants::DEFAULT_WATER_BASE_COLOUR, 1.0f));
+    m_shader_prog.setVec3("water_base_colour", NereusConstants::DEFAULT_WATER_BASE_COLOUR);
     m_shader_prog.setFloat("water_base_colour_amt", NereusConstants::DEFAULT_WATER_BASE_COLOUR_AMOUNT);
 
     // set viewport dimensions
@@ -305,7 +305,7 @@ Texture2D &RefractiveOceanRenderer::getTextureS()
 void RefractiveOceanRenderer::setWaterBaseColour(glm::vec3 &new_colour)
 {
     m_shader_prog.use();
-    m_shader_prog.setVec4("water_base_colour", glm::vec4(new_colour, 1.0f));
+    m_shader_prog.setVec3("water_base_colour", new_colour);
 }
 
 void RefractiveOceanRenderer::setWaterBaseColourAmount(float new_amt)
@@ -346,7 +346,7 @@ void FullOceanRenderer::prepare()
     m_shader_prog.use();
     m_shader_prog.setInt("tex_S", 1);  // at tex unit 1
     // set water base colour params to default
-    m_shader_prog.setVec4("water_base_colour", glm::vec4(NereusConstants::DEFAULT_WATER_BASE_COLOUR, 1.0f));
+    m_shader_prog.setVec3("water_base_colour", NereusConstants::DEFAULT_WATER_BASE_COLOUR);
     m_shader_prog.setFloat("water_base_colour_amt", NereusConstants::DEFAULT_WATER_BASE_COLOUR_AMOUNT);
 
     // set viewport dimensions
@@ -397,7 +397,7 @@ void FullOceanRenderer::setSkyboxTexture(CubeMapTexture &skybox)
 void FullOceanRenderer::setWaterBaseColour(glm::vec3 &new_colour)
 {
     m_shader_prog.use();
-    m_shader_prog.setVec4("water_base_colour", glm::vec4(new_colour, 1.0f));
+    m_shader_prog.setVec3("water_base_colour", new_colour);
 }
 
 void FullOceanRenderer::setWaterBaseColourAmount(float new_amt)

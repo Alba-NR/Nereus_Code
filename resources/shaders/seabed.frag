@@ -27,7 +27,7 @@ const DirectionalLight light = DirectionalLight(
 
 // Some material constants
 
-const vec3 diffuse_colour = vec3(0.73, 0.61, 0.42);		// diffuse intensity/colour
+const vec3 diffuse_colour = vec3(0.37, 0.30, 0.21);		// diffuse intensity/colour
 const float K_diff = 0.6;								// diffuse reflection coefficient
 const vec3 specular_colour = vec3(0.84, 0.77, 0.63);	// specular highlights intensity/colour
 const float K_spec = 0.4;								// specular reflection coeff
@@ -35,6 +35,16 @@ const float shininess = 16;								// specular shininess coeff
 const vec3 I_a = vec3(0.84, 0.77, 0.63);				// ambient light intensity/colour
 const float K_a = 0.75;									// ambient light reflection coeff
 
+
+// tonemapping and display encoding combined
+vec3 tonemap(vec3 linear_rgb)
+{
+    // simple tonemapping controlling the brightness only
+    float L_white = 0.7;
+
+    float inverse_gamma = 1.0/2.2;  // for display encoding
+    return pow(linear_rgb/L_white, vec3(inverse_gamma)); 
+}
 
 void main()
 {
@@ -57,5 +67,5 @@ void main()
     I_result += I_a * diffuse_colour * K_a;
 
 	// set output/final colour
-	frag_colour = vec4(I_result, 1.0);
+	frag_colour = vec4(tonemap(I_result), 1.0);
 }

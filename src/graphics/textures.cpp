@@ -25,20 +25,24 @@ Texture2D::Texture2D(string filename)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     // bind data to texture & generate mipmap
-    GLenum format;
+    GLenum img_format;
+    GLenum tex_format;
     switch (m_num_channels)
     {
     case 1:
-        format = GL_RED;
+        img_format = GL_RED;
+        tex_format = GL_RED;
         break;
     case 4:
-        format = GL_RGBA;
+        img_format = GL_RGBA;
+        tex_format = GL_SRGB_ALPHA;
         break;
     default:
-        format = GL_RGB;
+        img_format = GL_RGB;
+        tex_format = GL_SRGB;
         break;
     }
-    glTexImage2D(GL_TEXTURE_2D, 0, format, m_width, m_height, 0, format, GL_UNSIGNED_BYTE, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, tex_format, m_width, m_height, 0, img_format, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
 
     // unbind texture
@@ -61,7 +65,7 @@ Texture2D::Texture2D(int width, int height)
     glBindTexture(GL_TEXTURE_2D, m_id);
 
     // create empty texture
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
 
     // set wrapping & filtering parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -119,7 +123,7 @@ CubeMapTexture::CubeMapTexture(const string filenames[6])
 
         // bind data to appropriate cubemap texture object's face
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-              0, GL_RGB, width, height,
+              0, GL_SRGB, width, height,
               0, GL_RGB, GL_UNSIGNED_BYTE, data);
 
         // delete img data

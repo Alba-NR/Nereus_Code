@@ -17,11 +17,20 @@ uniform sampler2D tex_S;
 uniform vec2 viewport_dimensions;
 uniform float fresnel_F_0;
 
-uniform vec4 water_base_colour;
+uniform vec3 water_base_colour;
 uniform float water_base_colour_amt;
 
 const float delta = 0.05;
 
+// tonemapping and display encoding combined
+vec3 tonemap(vec3 linear_rgb)
+{
+    // simple tonemapping controlling the brightness only
+    float L_white = 0.7;
+
+    float inverse_gamma = 1.0/2.2;  // for display encoding
+    return pow(linear_rgb/L_white, vec3(inverse_gamma)); 
+}
 
 void main()
 {
@@ -36,7 +45,7 @@ void main()
 	// calc reflected vec
     vec3 R_V = reflect(-V, N);
 	// reflected skybox colour
-	vec4 I_refl = texture(env_map, R_V);
+	vec3 I_refl = texture(env_map, R_V).rgb;
 
 	// --- refraction ---
 
@@ -46,7 +55,7 @@ void main()
 	vec2 sample_tex_coords = projected_tex_coords + N.xz * delta;
 
 	// refracted colour
-	vec4 I_refr = water_base_colour_amt * water_base_colour + (1-water_base_colour_amt) * texture(tex_S, sample_tex_coords);
+	vec3 I_refr = water_base_colour_amt * water_base_colour + (1-water_base_colour_amt) * texture(tex_S, sample_tex_coords).rgb;
 
 	// --- fresnel effect ---
 
@@ -54,5 +63,5 @@ void main()
 	float fresnel_coeff = fresnel_F_0 + (1 - fresnel_F_0) * pow(1 -  max(0, dot(-V,N)), 5);
 
 	// set output/final colour
-	frag_colour = fresnel_coeff * I_refl + (1 - fresnel_coeff) * I_refr;
+	frag_colour = vec4(tonemap(fresnel_coeff * I_refl + (1 - fresnel_coeff) * I_refr), 1);
 }
