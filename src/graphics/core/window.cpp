@@ -55,6 +55,11 @@ void Window::createWindow()
 
     // --- enable depth test ---
     glEnable(GL_DEPTH_TEST);
+
+    // --- enable back face culling ---
+    glFrontFace(GL_CCW);
+    glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
 }
 
 Window::~Window()

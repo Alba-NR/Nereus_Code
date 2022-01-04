@@ -212,13 +212,13 @@ void GridMesh::initIndices(std::vector<int> &indices)
 		{
 			// bottom triangle
 			indices.push_back(stride_h * j + i);
-			indices.push_back(stride_h * j + i + 1);
 			indices.push_back(stride_h * (j + 1) + i);
+			indices.push_back(stride_h * j + i + 1);
 
 			// top triangle
 			indices.push_back(stride_h * (j + 1) + i);
-			indices.push_back(stride_h * j + i + 1);
 			indices.push_back(stride_h * (j + 1) + i + 1);
+			indices.push_back(stride_h * j + i + 1);
 		}
 	}
 }
