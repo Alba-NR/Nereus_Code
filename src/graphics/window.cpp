@@ -1,6 +1,6 @@
 
 #include "window.h"
-#include "../../main/app_context.h"
+#include "../main/app_context.h"
 
 Window *Window::s_instance = nullptr;
 

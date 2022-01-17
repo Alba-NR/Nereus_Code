@@ -1,6 +1,6 @@
 
 #include "ui.h"
-#include "../graphics/core/window.h"
+#include "../graphics/window.h"
 #include "../main/constants.h"
 
 Nereus::AppContext *UI::m_app_context = nullptr;

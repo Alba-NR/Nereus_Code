@@ -2,12 +2,12 @@
 #define RENDERERS
 #pragma once
 
-#include "../shaders.h"
-#include "../meshes/meshes.h"
-#include "../textures.h"
-#include "../buffers.h"
-#include "../camera.h"
-#include "../../main/constants.h"
+#include "shaders.h"
+#include "meshes.h"
+#include "textures.h"
+#include "buffers.h"
+#include "camera.h"
+#include "../main/constants.h"
 
 
 // ------------------------------------

@@ -2,7 +2,7 @@
 #define NEREUS_MAIN
 #pragma once
 
-#include "../graphics/core/window.h"
+#include "../graphics/window.h"
 #include "app_context.h"
 #include "../ui/ui.h"
 

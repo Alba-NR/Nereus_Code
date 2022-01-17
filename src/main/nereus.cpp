@@ -2,7 +2,7 @@
 #include "nereus.h"
 #include "constants.h"
 #include "../graphics/shaders.h"
-#include "../graphics/renderers/renderers.h"
+#include "../graphics/renderers.h"
 #include "../graphics/textures.h"
 
 

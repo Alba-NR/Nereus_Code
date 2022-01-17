@@ -11,7 +11,7 @@
 #include <cstdio>
 #include <cstdlib>
 
-#include "../../main/constants.h"
+#include "../main/constants.h"
 
 class Window
 {
