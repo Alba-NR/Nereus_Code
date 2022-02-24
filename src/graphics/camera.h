@@ -39,6 +39,8 @@ public:
 	void processMouseScroll(float scroll_amt);
 
 	void setPosition(const glm::vec3 &new_pos);
+	void setAzimuthalAngle(float new_azimuthal);
+	void setPolarAngle(float new_polar);
 	void setFOV(float new_fov);
 	void setAspectRatio(float new_ar);
 

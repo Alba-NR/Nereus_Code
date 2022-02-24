@@ -40,6 +40,9 @@ void UI::render()
 	// display fps
 	ImGui::Text("Average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
+	// --- render options
+	ImGui::Text("Render Options:");
+
 	// wireframe mode toggle (on/off)
 	static bool wireframe_on = false;
 	ImGui::Checkbox("Wireframe mode", &wireframe_on);
@@ -58,6 +61,31 @@ void UI::render()
 	// render ocean mesh toggle (on/off)
 	ImGui::Checkbox("Render Ocean", &(m_app_context->m_do_render_ocean));
 
+	// --- camera options
+	ImGui::Text("Camera:");
+	// polar angle
+	float polar = m_app_context->m_render_camera.getPolarAngle();
+	ImGui::InputFloat("Polar", &polar);
+	m_app_context->m_render_camera.setPolarAngle(polar);
+	// azimuthal angle
+	float azimuthal = m_app_context->m_render_camera.getAzimuthalAngle();
+	ImGui::InputFloat("Azimuthal", &azimuthal);
+	m_app_context->m_render_camera.setAzimuthalAngle(azimuthal);
+	// position
+	glm::vec3 cam_pos = m_app_context->m_render_camera.getPosition();
+	float cam_pos_a[3] = { cam_pos.x, cam_pos.y, cam_pos.z };
+	ImGui::InputFloat3("Position", cam_pos_a);
+	m_app_context->m_render_camera.setPosition(glm::vec3(
+		cam_pos_a[0],
+		cam_pos_a[1],
+		cam_pos_a[2]
+	));
+	// fov
+	float fov = m_app_context->m_render_camera.getFOV();
+	ImGui::InputFloat("FOV", &fov);
+	m_app_context->m_render_camera.setFOV(fov);
+
+	// --- ocean 
 	// ocean mesh
 	ImGui::Text("Ocean Mesh:");
 	ImGui::PushItemWidth(50);
@@ -74,9 +102,9 @@ void UI::render()
 	// base colour
 	ImGui::Text("Water Base Colour:");
 	static float water_base_colour[3] = {
-		m_app_context->m_water_base_colour[0],
-		m_app_context->m_water_base_colour[1],
-		m_app_context->m_water_base_colour[2]
+		m_app_context->m_water_base_colour.r,
+		m_app_context->m_water_base_colour.g,
+		m_app_context->m_water_base_colour.b
 	};
 	ImGui::ColorEdit3("", water_base_colour);
 	m_app_context->m_water_base_colour = glm::vec3(
@@ -86,7 +114,7 @@ void UI::render()
 	);
 	ImGui::SliderFloat("Amount", &(m_app_context->m_water_base_colour_amt), 0.0f, 1.0f, "%.3f");
 		
-	// end window
+	// --- end window
 	ImGui::End();
 
 	// --- render gui to screen ---

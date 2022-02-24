@@ -82,6 +82,16 @@ void Camera::setPosition(const glm::vec3 &new_pos)
 	m_position = new_pos;
 }
 
+void Camera::setAzimuthalAngle(float new_azimuthal)
+{
+	m_azimuthal_angle = new_azimuthal;
+}
+
+void Camera::setPolarAngle(float new_polar)
+{
+	m_polar_angle = new_polar;
+}
+
 void Camera::setFOV(float new_fov)
 {
 	m_fov = new_fov;
