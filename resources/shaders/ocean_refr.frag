@@ -24,11 +24,9 @@ const float delta = 0.05;
 // tonemapping and display encoding combined
 vec3 tonemap(vec3 linear_rgb)
 {
-    // simple tonemapping controlling the brightness only
-    float L_white = 0.7;
-
-    float inverse_gamma = 1.0/2.2;  // for display encoding
-    return pow(linear_rgb/L_white, vec3(inverse_gamma)); 
+    // no tonemap
+	// display encoding
+    return pow(linear_rgb, vec3(1.0/2.2)); 
 }
 
 void main()
