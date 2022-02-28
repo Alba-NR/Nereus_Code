@@ -38,6 +38,10 @@ namespace NereusConstants
 	const glm::vec3 DEFAULT_WATER_BASE_COLOUR = { 0.02f, 0.13f, 0.25f };
 	const float DEFAULT_WATER_BASE_COLOUR_AMOUNT = 0.65f;
 
+	const float TESSEL_RANGE_DIST_TO_CAM_MIN = 10.0f;
+	const float TESSEL_RANGE_DIST_TO_CAM_MAX = 300.0f;
+	const int LOG_MIN_TESSEL_FACTOR = 0;
+	const int LOG_MAX_TESSEL_FACTOR = 6;
 }
 
 #endif

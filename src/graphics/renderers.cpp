@@ -165,6 +165,12 @@ void OceanRenderer::prepare()
     m_shader_prog.setFloatArray("sim_freqs", freqs, NUM_WAVES);
     m_shader_prog.setFloatArray("sim_amplitudes", amplitudes, NUM_WAVES);
     m_shader_prog.setFloatArray("sim_phases", phases, NUM_WAVES);
+
+    // --- set tessel range values
+    m_shader_prog.setFloat("TESSEL_RANGE_DIST_TO_CAM_MIN", NereusConstants::TESSEL_RANGE_DIST_TO_CAM_MIN);
+    m_shader_prog.setFloat("TESSEL_RANGE_DIST_TO_CAM_MAX", NereusConstants::TESSEL_RANGE_DIST_TO_CAM_MAX);
+    m_shader_prog.setFloat("LOG_MIN_TESSEL_FACTOR", NereusConstants::LOG_MIN_TESSEL_FACTOR);
+    m_shader_prog.setFloat("LOG_MAX_TESSEL_FACTOR", NereusConstants::LOG_MAX_TESSEL_FACTOR);
 }
 
 void OceanRenderer::render(const Camera &render_cam)

@@ -19,12 +19,10 @@ out VS_OUT
 
 uniform vec3 wc_camera_pos;
 
-const float MIN_DIST_TO_CAM = 10; // todo: change to uniforms and set based on constants.h
-const float MAX_DIST_TO_CAM = 300;
-const float DIFF_DIST = 290; // calc manually: max dist - min dist
-const float MIN_TESSEL_FACTOR_LOG = 0;
-const float MAX_TESSEL_FACTOR_LOG = 6;
-const float DIFF_TESEL_LOG = 6;
+uniform float TESSEL_RANGE_DIST_TO_CAM_MIN;
+uniform float TESSEL_RANGE_DIST_TO_CAM_MAX;
+uniform float LOG_MIN_TESSEL_FACTOR;
+uniform float LOG_MAX_TESSEL_FACTOR;
 
 float calcTesselFactor(float dist_to_cam);
 
@@ -52,17 +50,22 @@ void main()
 float calcTesselFactor(float dist_to_cam)
 {
     float tessel_factor = 1.0;
-    if (dist_to_cam <= MIN_DIST_TO_CAM)
+    if (dist_to_cam <= TESSEL_RANGE_DIST_TO_CAM_MIN)
     {
-        tessel_factor = pow(2, MAX_TESSEL_FACTOR_LOG);
+        tessel_factor = pow(2, LOG_MAX_TESSEL_FACTOR);
     }
-    else if (dist_to_cam >= MAX_DIST_TO_CAM)
+    else if (dist_to_cam >= TESSEL_RANGE_DIST_TO_CAM_MAX)
     {
-        tessel_factor = pow(2, MIN_TESSEL_FACTOR_LOG);
+        tessel_factor = pow(2, LOG_MIN_TESSEL_FACTOR);
     }
     else
     {
-        tessel_factor = pow(2, DIFF_TESEL_LOG * (1-(dist_to_cam - MIN_DIST_TO_CAM)/DIFF_DIST) + MIN_TESSEL_FACTOR_LOG);
+        tessel_factor = pow(2, 
+        (LOG_MAX_TESSEL_FACTOR - LOG_MIN_TESSEL_FACTOR) 
+        * (1 - (dist_to_cam - TESSEL_RANGE_DIST_TO_CAM_MIN) 
+                 / (TESSEL_RANGE_DIST_TO_CAM_MAX - TESSEL_RANGE_DIST_TO_CAM_MIN)) 
+        + LOG_MIN_TESSEL_FACTOR
+        );
     }
 
     return tessel_factor;
