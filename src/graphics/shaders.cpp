@@ -25,6 +25,8 @@ void Shader::loadAndCompile()
 	else if (extension == "frag") m_type = GL_FRAGMENT_SHADER;
 	else if (extension == "geom") m_type = GL_GEOMETRY_SHADER;
 	else if (extension == "comp") m_type = GL_COMPUTE_SHADER;
+	else if (extension == "tese") m_type = GL_TESS_EVALUATION_SHADER;
+	else if (extension == "tesc") m_type = GL_TESS_CONTROL_SHADER;
 	else
 	{
 		// TODO raise exception
