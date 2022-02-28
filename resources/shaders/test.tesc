@@ -7,7 +7,6 @@ layout (vertices = 4) out;
 in VS_OUT
 {
 	vec3 wc_pos;
-	vec3 wc_normal;
 	vec2 tex_coords;
 } tcs_in[];
 
@@ -15,7 +14,6 @@ in VS_OUT
 out VS_OUT
 {
 	vec3 wc_pos;
-	vec3 wc_normal;
 	vec2 tex_coords;
 } tcs_out[];
 
@@ -34,7 +32,6 @@ void main()
 {
     // set vertices of the output patch (& their attributes)
     tcs_out[gl_InvocationID].wc_pos = tcs_in[gl_InvocationID].wc_pos;
-    tcs_out[gl_InvocationID].wc_normal = tcs_in[gl_InvocationID].wc_normal;
 	tcs_out[gl_InvocationID].tex_coords = tcs_in[gl_InvocationID].tex_coords;
 
     // calc tessellation levels
