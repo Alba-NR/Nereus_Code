@@ -20,8 +20,8 @@ out VS_OUT
 uniform vec3 wc_camera_pos;
 
 const float MIN_DIST_TO_CAM = 10; // todo: change to uniforms and set based on constants.h
-const float MAX_DIST_TO_CAM = 200;
-const float DIFF_DIST = 190; // calc manually: max dist - min dist
+const float MAX_DIST_TO_CAM = 300;
+const float DIFF_DIST = 290; // calc manually: max dist - min dist
 const float MIN_TESSEL_FACTOR_LOG = 0;
 const float MAX_TESSEL_FACTOR_LOG = 6;
 const float DIFF_TESEL_LOG = 6;
