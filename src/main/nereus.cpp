@@ -169,7 +169,7 @@ namespace Nereus
                 || last_ocean_mesh_grid_length != m_context.m_ocean_grid_length)
             {
                 ocean_renderer.updateOceanMeshGrid(m_context.m_ocean_grid_width, m_context.m_ocean_grid_length);
-                seabed_renderer.updateSeabedMeshGrid(m_context.m_ocean_grid_width, m_context.m_ocean_grid_length);
+                seabed_renderer.updateSeabedMeshGrid(2*m_context.m_ocean_grid_width, 2*m_context.m_ocean_grid_length);
                 last_ocean_mesh_grid_width = m_context.m_ocean_grid_width;
                 last_ocean_mesh_grid_length = m_context.m_ocean_grid_length;
             }
