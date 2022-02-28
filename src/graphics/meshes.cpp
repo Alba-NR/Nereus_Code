@@ -289,6 +289,30 @@ int GridMesh::getGridLength() const
 
 
 // ------------------------------------
+// QuadGridMesh
+QuadGridMesh::QuadGridMesh(int grid_width, int grid_height)
+	: GridMesh(grid_width, grid_height)
+{
+}
+
+void QuadGridMesh::initIndices(std::vector<int> &indices)
+{
+	int stride_h = (m_grid_width + 1);
+
+	for (int j = 0; j < m_grid_length; j++)
+	{
+		for (int i = 0; i < m_grid_width; i++)
+		{
+			indices.push_back(stride_h * j + i);
+			indices.push_back(stride_h * (j + 1) + i);
+			indices.push_back(stride_h * j + i + 1);
+			indices.push_back(stride_h * (j + 1) + i + 1);
+			
+		}
+	}
+}
+
+// ------------------------------------
 // ScreenQuadMesh
 
 ScreenQuadMesh::ScreenQuadMesh()

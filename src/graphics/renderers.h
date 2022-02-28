@@ -52,7 +52,7 @@ public:
 class OceanRenderer : public Renderer
 {
 private:
-	GridMesh m_ocean_mesh;
+	QuadGridMesh m_ocean_mesh;
 
 	int m_ocean_width = NereusConstants::DEFAULT_OCEAN_WIDTH;
 	int m_ocean_length = NereusConstants::DEFAULT_OCEAN_LENGTH;

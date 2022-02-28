@@ -79,13 +79,14 @@ public:
 class GridMesh : public Mesh
 {
 private:
-	int m_grid_width;
-	int m_grid_length;
-
 	void initPositions(std::vector<float> &pos);
 	void initNormals(std::vector<float> &normals);
 	void initTexCoords(std::vector<float> &texCoords);
-	void initIndices(std::vector<int> &indices);
+	virtual void initIndices(std::vector<int> &indices);
+
+protected:
+	int m_grid_width;
+	int m_grid_length;
 
 public:
 	GridMesh(int grid_width, int grid_length);
@@ -94,6 +95,16 @@ public:
 
 	int getGridWidth() const;
 	int getGridLength() const;
+};
+
+// --- Quad Grid mesh (for Ocean) ---
+class QuadGridMesh : public GridMesh
+{
+private:
+	void initIndices(std::vector<int> &indices);
+
+public:
+	QuadGridMesh(int grid_width, int grid_length);
 };
 
 
