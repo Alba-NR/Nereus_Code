@@ -15,6 +15,7 @@ private:
 	VBO m_texCoordsVBO;
 	EBO m_ebo;
 	int m_vertexCount;
+	GLenum m_draw_mode = GL_TRIANGLES;
 
 	void Mesh::loadDataToGPU(const std::vector<float> &positions, 
 							const std::vector<float> &normals, 
@@ -40,6 +41,8 @@ public:
 	VBO &getPositionsVBO();
 	VBO &getNormalsVBO();
 	VBO &getTexCoordsVBO();
+
+	void setDrawMode(GLenum new_mode);
 };
 
 

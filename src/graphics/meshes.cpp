@@ -62,7 +62,7 @@ Mesh::~Mesh()
 void Mesh::render()
 {
 	m_vao.bind();
-	glDrawElements(GL_TRIANGLES, m_vertexCount, GL_UNSIGNED_INT, 0);
+	glDrawElements(m_draw_mode, m_vertexCount, GL_UNSIGNED_INT, 0);
 	m_vao.unbind();
 }
 
@@ -87,6 +87,11 @@ VBO &Mesh::getNormalsVBO()
 VBO &Mesh::getTexCoordsVBO()
 {
 	return m_texCoordsVBO;
+}
+
+void Mesh::setDrawMode(GLenum new_mode)
+{
+	m_draw_mode = new_mode;
 }
 
 
