@@ -82,6 +82,8 @@ namespace Nereus
         std::vector<Shader> ocean_shaders;
         ocean_shaders.emplace_back("ocean_wavesim.vert");
         ocean_shaders.emplace_back("ocean_fresnel.frag");
+        ocean_shaders.emplace_back("test.tesc");
+        ocean_shaders.emplace_back("test.tese");
         ShaderProgram ocean_shader_prog(ocean_shaders);
 
         // Create ocean renderer

@@ -12,7 +12,7 @@ out VS_OUT
 
 // transformation matrices & time
 uniform mat4 m_matrix;
-uniform mat4 vp_matrix;
+//uniform mat4 vp_matrix;
 uniform float time;
 
 // wave simulation parameters
@@ -54,7 +54,7 @@ void main()
 	vec3 wc_pos_displaced_dz = vec3(horiz_change_dz.x, heightmap_dz(wc_pos.xz), 1-horiz_change_dz.y);
 	
 	// outputs
-	gl_Position = vp_matrix * wc_pos_displaced;
+	//gl_Position = vp_matrix * wc_pos_displaced;
 	vs_out.wc_normal = cross(wc_pos_displaced_dx, wc_pos_displaced_dz);
 	vs_out.tex_coords = tex_coords;
 }

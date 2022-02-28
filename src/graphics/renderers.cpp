@@ -93,6 +93,8 @@ OceanRenderer::OceanRenderer(ShaderProgram &shader_prog)
     m_ocean_mesh(NereusConstants::DEFAULT_OCEAN_GRID_WIDTH, NereusConstants::DEFAULT_OCEAN_GRID_LENGTH)
 {
     m_ocean_mesh.initialise();
+    m_ocean_mesh.setDrawMode(GL_PATCHES);
+    glPatchParameteri(GL_PATCH_VERTICES, 3); // patches are triangles
     this->prepare();
 }
 
