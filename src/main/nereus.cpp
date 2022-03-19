@@ -235,7 +235,10 @@ namespace Nereus
             //screen_quad_renderer.render(m_context.m_render_camera);
 
             // --- render UI ---
-            UI::render();
+            if (m_context.m_do_render_ui)
+            {
+                UI::render();
+            }
 
             // --- draw on screen ---
             // flip front & back buffers; and draw
