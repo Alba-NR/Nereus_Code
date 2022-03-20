@@ -25,6 +25,8 @@ namespace Nereus
 		bool m_do_render_ocean = true;
 		bool m_do_render_ui = true;
 
+		int m_illumin_model = 0; // 0: Fresnel, 1: Reflection, 2: Refraction, 3: Phong
+
 		glm::vec3 m_water_base_colour = NereusConstants::DEFAULT_WATER_BASE_COLOUR;
 		float m_water_base_colour_amt = NereusConstants::DEFAULT_WATER_BASE_COLOUR_AMOUNT;
 

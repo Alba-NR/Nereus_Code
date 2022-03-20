@@ -82,14 +82,36 @@ namespace Nereus
         std::shared_ptr<GridMesh> ocean_mesh_ptr = std::make_shared<GridMesh>(NereusConstants::DEFAULT_OCEAN_GRID_WIDTH, NereusConstants::DEFAULT_OCEAN_GRID_LENGTH);
         ocean_mesh_ptr->initialise();
 
+        // --- Fresnel
         // Create ocean surface shaders
-        std::vector<Shader> ocean_shaders;
-        ocean_shaders.emplace_back("ocean_wavesim.vert");
-        ocean_shaders.emplace_back("ocean_fresnel.frag");
-        ShaderProgram ocean_shader_prog(ocean_shaders);
-
+        std::vector<Shader> ocean_shaders_fresnel;
+        ocean_shaders_fresnel.emplace_back("ocean_wavesim.vert");
+        ocean_shaders_fresnel.emplace_back("ocean_fresnel.frag");
+        ShaderProgram ocean_shader_prog_fresnel(ocean_shaders_fresnel);
         // Create ocean renderer
-        FullOceanRenderer ocean_renderer(ocean_shader_prog, ocean_mesh_ptr, skybox_renderer.getCubeMapTexture());
+        FullOceanRenderer ocean_renderer_fresnel(ocean_shader_prog_fresnel, ocean_mesh_ptr, skybox_renderer.getCubeMapTexture());
+
+        // --- Reflection
+        std::vector<Shader> ocean_shaders_refl;
+        ocean_shaders_refl.emplace_back("ocean_wavesim.vert");
+        ocean_shaders_refl.emplace_back("ocean_refl.frag");
+        ShaderProgram ocean_shader_prog_refl(ocean_shaders_refl);
+        ReflectiveOceanRenderer ocean_renderer_refl(ocean_shader_prog_refl, ocean_mesh_ptr, skybox_renderer.getCubeMapTexture());
+
+        // --- Refraction
+        std::vector<Shader> ocean_shaders_refr;
+        ocean_shaders_refr.emplace_back("ocean_wavesim.vert");
+        ocean_shaders_refr.emplace_back("ocean_refr.frag");
+        ShaderProgram ocean_shader_prog_refr(ocean_shaders_refr);
+        RefractiveOceanRenderer ocean_renderer_refr(ocean_shader_prog_refr, ocean_mesh_ptr);
+
+        // --- Phong
+        std::vector<Shader> ocean_shaders_phong;
+        ocean_shaders_phong.emplace_back("ocean_wavesim.vert");
+        ocean_shaders_phong.emplace_back("ocean_phong.frag");
+        ShaderProgram ocean_shader_prog_phong(ocean_shaders_phong);
+        OceanRenderer ocean_renderer_phong(ocean_shader_prog_phong, ocean_mesh_ptr);
+
 
         // --- Other params
         // Track last ocean size values
@@ -163,7 +185,7 @@ namespace Nereus
             if (last_ocean_mesh_grid_width != m_context.m_ocean_grid_width
                 || last_ocean_mesh_grid_length != m_context.m_ocean_grid_length)
             {
-                ocean_renderer.updateOceanMeshGrid(m_context.m_ocean_grid_width, m_context.m_ocean_grid_length);
+                ocean_renderer_fresnel.updateOceanMeshGrid(m_context.m_ocean_grid_width, m_context.m_ocean_grid_length);
                 last_ocean_mesh_grid_width = m_context.m_ocean_grid_width;
                 last_ocean_mesh_grid_length = m_context.m_ocean_grid_length;
             }
@@ -179,13 +201,19 @@ namespace Nereus
             // update ocean size info if the size has been changed in the UI
             if (last_ocean_width != m_context.m_ocean_width)
             {
-                ocean_renderer.setOceanWidth(m_context.m_ocean_width);
+                ocean_renderer_fresnel.setOceanWidth(m_context.m_ocean_width);
+                ocean_renderer_refl.setOceanWidth(m_context.m_ocean_width);
+                ocean_renderer_refr.setOceanWidth(m_context.m_ocean_width);
+                ocean_renderer_phong.setOceanWidth(m_context.m_ocean_width);
                 seabed_renderer.setSeabedWidth(m_context.m_ocean_width + NereusConstants::SEABED_EXTENSION_FROM_OCEAN);
                 last_ocean_width = m_context.m_ocean_width;
             }
             if (last_ocean_length != m_context.m_ocean_length)
             {
-                ocean_renderer.setOceanLength(m_context.m_ocean_length);
+                ocean_renderer_fresnel.setOceanLength(m_context.m_ocean_length);
+                ocean_renderer_refl.setOceanLength(m_context.m_ocean_length);
+                ocean_renderer_refr.setOceanLength(m_context.m_ocean_length);
+                ocean_renderer_phong.setOceanLength(m_context.m_ocean_length);
                 seabed_renderer.setSeabedLength(m_context.m_ocean_length + NereusConstants::SEABED_EXTENSION_FROM_OCEAN);
                 last_ocean_length = m_context.m_ocean_length;
             }
@@ -194,36 +222,70 @@ namespace Nereus
             // --- update water base colour params if changed in UI ---
             if (last_water_base_colour != m_context.m_water_base_colour)
             {
-                ocean_renderer.setWaterBaseColour(m_context.m_water_base_colour);
+                ocean_renderer_fresnel.setWaterBaseColour(m_context.m_water_base_colour);
+                ocean_renderer_refr.setWaterBaseColour(m_context.m_water_base_colour);
                 last_water_base_colour = m_context.m_water_base_colour;
             }
 
             if (last_water_base_colour_amt != m_context.m_water_base_colour_amt)
             {
-                ocean_renderer.setWaterBaseColourAmount(m_context.m_water_base_colour_amt);
+                ocean_renderer_fresnel.setWaterBaseColourAmount(m_context.m_water_base_colour_amt);
+                ocean_renderer_refr.setWaterBaseColourAmount(m_context.m_water_base_colour_amt);
                 last_water_base_colour_amt = m_context.m_water_base_colour_amt;
             }
 
             
             // --- render to texture S for refraction ---
-            ocean_renderer.bindFBO();
-            m_window.clear();
-
-            // render seabed
-            if (m_context.m_do_render_seabed)
+            if (m_context.m_illumin_model % 2 == 0)
             {
-                seabed_renderer.render(m_context.m_render_camera);
-            }
-            // render skybox
-            skybox_renderer.render(m_context.m_render_camera);
+                if (m_context.m_illumin_model == 0)
+                {
+                    ocean_renderer_fresnel.bindFBO();
+                } else
+                {
+                    ocean_renderer_refr.bindFBO();
+                }
 
-            // go back to default fbo
-            ocean_renderer.unbindFBO();
+                m_window.clear();
+
+                // render seabed
+                if (m_context.m_do_render_seabed)
+                {
+                    seabed_renderer.render(m_context.m_render_camera);
+                }
+                // render skybox
+                skybox_renderer.render(m_context.m_render_camera);
+
+                // go back to default fbo
+                if (m_context.m_illumin_model == 0)
+                {
+                    ocean_renderer_fresnel.unbindFBO();
+                }
+                else
+                {
+                    ocean_renderer_refr.unbindFBO();
+                }
+            }
+            
 
             // --- render ocean ---
             if (m_context.m_do_render_ocean)
             {
-                ocean_renderer.render(m_context.m_render_camera);
+                switch (m_context.m_illumin_model)
+                {
+                case 0:
+                    ocean_renderer_fresnel.render(m_context.m_render_camera);
+                    break;
+                case 1:
+                    ocean_renderer_refl.render(m_context.m_render_camera);
+                    break;
+                case 2:
+                    ocean_renderer_refr.render(m_context.m_render_camera);
+                    break;
+                default:
+                    ocean_renderer_phong.render(m_context.m_render_camera);
+                    break;
+                }
             }
 
             // --- render seabed ---

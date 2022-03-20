@@ -109,6 +109,10 @@ void UI::render()
 	m_app_context->m_ocean_grid_length = max(m_app_context->m_ocean_grid_length, 1);
 	ImGui::PopItemWidth();
 
+	// illumination model
+	ImGui::Text("Illumination Model:");
+	ImGui::Combo("", &(m_app_context->m_illumin_model), "Fresnel\0Reflection\0Refraction\0Phong\0");
+
 	// base colour
 	ImGui::Text("Water Base Colour:");
 	static float water_base_colour[3] = {
