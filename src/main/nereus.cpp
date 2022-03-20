@@ -62,17 +62,29 @@ namespace Nereus
         ShaderProgram skybox_shader_prog(skybox_shaders);
 
         // Create skybox cubemap texture
-        string skybox_images[] = {
-            "sunset_skybox_1/right.jpg",
-            "sunset_skybox_1/left.jpg",
-            "sunset_skybox_1/top.jpg",
-            "sunset_skybox_1/bottom.jpg",
-            "sunset_skybox_1/front.jpg",
-            "sunset_skybox_1/back.jpg"
-        };
+        string folder_names[] = { "sky_skybox_1", "sky_skybox_2", "sunset_skybox_1", "sunset_skybox_2", "sunset_skybox_3" };
+        std::shared_ptr<CubeMapTexture> env_maps[] = {nullptr, nullptr, nullptr, nullptr, nullptr };
+        int i = 0;
+        for (int i = 0; i < 5; i++)
+        {
+            string folder_name = folder_names[i];
+            string env_map_imgs[] = {
+                folder_name + "/right.jpg",
+                folder_name + "/left.jpg",
+                folder_name + "/top.jpg",
+                folder_name + "/bottom.jpg",
+                folder_name + "/front.jpg",
+                folder_name + "/back.jpg"
+            };
+
+            env_maps[i] = std::make_shared<CubeMapTexture>(env_map_imgs);
+        }
+
+        // Track last env map used
+        int last_env_map = NereusConstants::DEFAULT_ENV_MAP;
 
         // Create Skybox renderer
-        SkyBoxRenderer skybox_renderer(skybox_shader_prog, skybox_images);
+        SkyBoxRenderer skybox_renderer(skybox_shader_prog, *env_maps[last_env_map]);
 
 
         // ------------------------------
@@ -234,7 +246,17 @@ namespace Nereus
                 last_water_base_colour_amt = m_context.m_water_base_colour_amt;
             }
 
+
+            // --- update env map used if changed in UI
+            if (last_env_map != m_context.m_env_map)
+            {
+                skybox_renderer.setCubeMapTexture(*env_maps[m_context.m_env_map]);
+                ocean_renderer_fresnel.setSkyboxTexture(*env_maps[m_context.m_env_map]);
+                ocean_renderer_refl.setSkyboxTexture(*env_maps[m_context.m_env_map]);
+                last_env_map = m_context.m_env_map;
+            }
             
+
             // --- render to texture S for refraction ---
             if (m_context.m_illumin_model % 2 == 0)
             {
@@ -296,7 +318,6 @@ namespace Nereus
 
             // --- render skybox ---
             skybox_renderer.render(m_context.m_render_camera);
-
 
             // --- render UI ---
             if (m_context.m_do_render_ui)

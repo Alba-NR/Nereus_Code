@@ -111,7 +111,11 @@ void UI::render()
 
 	// illumination model
 	ImGui::Text("Illumination Model:");
-	ImGui::Combo("", &(m_app_context->m_illumin_model), "Fresnel\0Reflection\0Refraction\0Phong\0");
+	ImGui::Combo("Model", &(m_app_context->m_illumin_model), "Fresnel\0Reflection\0Refraction\0Phong\0");
+
+	// --- skybox
+	ImGui::Text("Environment Map:");
+	ImGui::Combo("Env.Map", &(m_app_context->m_env_map), "sky_skybox_1\0sky_skybox_2\0sunset_skybox_1\0sunset_skybox_2\0sunset_skybox_3");
 
 	// base colour
 	ImGui::Text("Water Base Colour:");
