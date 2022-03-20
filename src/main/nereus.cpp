@@ -122,18 +122,6 @@ namespace Nereus
         int last_seabed_mesh_grid_width = NereusConstants::DEFAULT_SEABED_GRID_WIDTH;
         int last_seabed_mesh_grid_length = NereusConstants::DEFAULT_SEABED_GRID_LENGTH;
 
-
-        // ------------------------------
-        // Screen Quad (for visual debugging)
-
-        // Create screen quad shaders
-        std::vector<Shader> screen_quad_shaders;
-        screen_quad_shaders.emplace_back("screen_quad.vert");
-        screen_quad_shaders.emplace_back("screen_quad.frag");
-        ShaderProgram screen_quad_shader_prog(screen_quad_shaders);
-
-        // Create ocean renderer
-        ScreenQuadRenderer screen_quad_renderer(screen_quad_shader_prog, ocean_renderer.getTextureS());
         
         // ------------------------------
         // Rendering Loop
@@ -247,8 +235,6 @@ namespace Nereus
             // --- render skybox ---
             skybox_renderer.render(m_context.m_render_camera);
 
-            // --- render texture S for debugging ---
-            //screen_quad_renderer.render(m_context.m_render_camera);
 
             // --- render UI ---
             if (m_context.m_do_render_ui)
