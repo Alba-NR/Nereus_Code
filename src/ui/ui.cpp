@@ -85,6 +85,16 @@ void UI::render()
 	ImGui::InputFloat("FOV", &fov);
 	m_app_context->m_render_camera.setFOV(fov);
 
+	// --- seabed 
+	// seabed mesh
+	ImGui::Text("Seabed Mesh:");
+	ImGui::PushItemWidth(50);
+	ImGui::InputInt("Seabed Grid Width", &(m_app_context->m_seabed_grid_width), 0);
+	ImGui::InputInt("Seabed Grid Length", &(m_app_context->m_seabed_grid_length), 0);
+	m_app_context->m_seabed_grid_width = max(m_app_context->m_seabed_grid_width, 1);
+	m_app_context->m_seabed_grid_length = max(m_app_context->m_seabed_grid_length, 1);
+	ImGui::PopItemWidth();
+
 	// --- ocean 
 	// ocean mesh
 	ImGui::Text("Ocean Mesh:");

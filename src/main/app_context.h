@@ -18,6 +18,9 @@ namespace Nereus
 		int m_ocean_grid_width = NereusConstants::DEFAULT_OCEAN_GRID_WIDTH;
 		int m_ocean_grid_length = NereusConstants::DEFAULT_OCEAN_GRID_LENGTH;
 
+		int m_seabed_grid_width = NereusConstants::DEFAULT_OCEAN_GRID_WIDTH;
+		int m_seabed_grid_length = NereusConstants::DEFAULT_OCEAN_GRID_LENGTH;
+
 		bool m_do_render_seabed = true;
 		bool m_do_render_ocean = true;
 		bool m_do_render_ui = true;

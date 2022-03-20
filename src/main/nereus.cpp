@@ -113,6 +113,10 @@ namespace Nereus
         // Create seabed renderer
         SeabedRenderer seabed_renderer(seabed_shader_prog, perlin_tex);
 
+        // Track last SEABED size values
+        int last_seabed_mesh_grid_width = NereusConstants::DEFAULT_SEABED_GRID_WIDTH;
+        int last_seabed_mesh_grid_length = NereusConstants::DEFAULT_SEABED_GRID_LENGTH;
+
 
         // ------------------------------
         // Screen Quad (for visual debugging)
@@ -167,9 +171,16 @@ namespace Nereus
                 || last_ocean_mesh_grid_length != m_context.m_ocean_grid_length)
             {
                 ocean_renderer.updateOceanMeshGrid(m_context.m_ocean_grid_width, m_context.m_ocean_grid_length);
-                seabed_renderer.updateSeabedMeshGrid(m_context.m_ocean_grid_width, m_context.m_ocean_grid_length);
                 last_ocean_mesh_grid_width = m_context.m_ocean_grid_width;
                 last_ocean_mesh_grid_length = m_context.m_ocean_grid_length;
+            }
+
+            if (last_seabed_mesh_grid_width != m_context.m_seabed_grid_width
+                || last_seabed_mesh_grid_length != m_context.m_seabed_grid_length)
+            {
+                seabed_renderer.updateSeabedMeshGrid(m_context.m_seabed_grid_width, m_context.m_seabed_grid_length);
+                last_seabed_mesh_grid_width = m_context.m_seabed_grid_width;
+                last_seabed_mesh_grid_length = m_context.m_seabed_grid_length;
             }
 
             // update ocean size info if the size has been changed in the UI
