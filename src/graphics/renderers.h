@@ -9,6 +9,8 @@
 #include "camera.h"
 #include "../main/constants.h"
 
+#include <memory>
+
 
 // ------------------------------------
 // --- Renderer interface ---
@@ -52,7 +54,7 @@ public:
 class OceanRenderer : public Renderer
 {
 private:
-	GridMesh m_ocean_mesh;
+	std::shared_ptr<GridMesh> m_ocean_mesh_ptr;
 
 	int m_ocean_width = NereusConstants::DEFAULT_OCEAN_WIDTH;
 	int m_ocean_length = NereusConstants::DEFAULT_OCEAN_LENGTH;
@@ -65,7 +67,7 @@ protected:
 	virtual void prepare();
 
 public:
-	OceanRenderer(ShaderProgram &shader_prog);
+	OceanRenderer(ShaderProgram &shader_prog, std::shared_ptr<GridMesh> ocean_mesh_ptr);
 
 	virtual void render(const Camera &render_cam);
 
@@ -83,8 +85,8 @@ private:
 	void prepare();
 
 public:
-	ReflectiveOceanRenderer(ShaderProgram &shader_prog);
-	ReflectiveOceanRenderer(ShaderProgram &shader_prog, CubeMapTexture &skybox);
+	ReflectiveOceanRenderer(ShaderProgram &shader_prog, std::shared_ptr<GridMesh> ocean_mesh_ptr);
+	ReflectiveOceanRenderer(ShaderProgram &shader_prog, std::shared_ptr<GridMesh> ocean_mesh_ptr, CubeMapTexture &skybox);
 
 	void render(const Camera &render_cam);
 
@@ -101,7 +103,7 @@ private:
 	void prepare();
 
 public:
-	RefractiveOceanRenderer(ShaderProgram &shader_prog);
+	RefractiveOceanRenderer(ShaderProgram &shader_prog, std::shared_ptr<GridMesh> ocean_mesh_ptr);
 
 	void render(const Camera &render_cam);
 
@@ -133,8 +135,8 @@ private:
 	void prepare();
 
 public:
-	FullOceanRenderer(ShaderProgram &shader_prog); 
-	FullOceanRenderer(ShaderProgram &shader_prog, CubeMapTexture &skybox);
+	FullOceanRenderer(ShaderProgram &shader_prog, std::shared_ptr<GridMesh> ocean_mesh_ptr);
+	FullOceanRenderer(ShaderProgram &shader_prog, std::shared_ptr<GridMesh> ocean_mesh_ptr, CubeMapTexture &skybox);
 
 	void render(const Camera &render_cam);
 

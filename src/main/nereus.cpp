@@ -78,6 +78,10 @@ namespace Nereus
         // ------------------------------
         // Ocean
 
+        // --- Create Mesh
+        std::shared_ptr<GridMesh> ocean_mesh_ptr = std::make_shared<GridMesh>(NereusConstants::DEFAULT_OCEAN_GRID_WIDTH, NereusConstants::DEFAULT_OCEAN_GRID_LENGTH);
+        ocean_mesh_ptr->initialise();
+
         // Create ocean surface shaders
         std::vector<Shader> ocean_shaders;
         ocean_shaders.emplace_back("ocean_wavesim.vert");
@@ -85,8 +89,9 @@ namespace Nereus
         ShaderProgram ocean_shader_prog(ocean_shaders);
 
         // Create ocean renderer
-        FullOceanRenderer ocean_renderer(ocean_shader_prog, skybox_renderer.getCubeMapTexture());
+        FullOceanRenderer ocean_renderer(ocean_shader_prog, ocean_mesh_ptr, skybox_renderer.getCubeMapTexture());
 
+        // --- Other params
         // Track last ocean size values
         int last_ocean_width = NereusConstants::DEFAULT_OCEAN_WIDTH;
         int last_ocean_length = NereusConstants::DEFAULT_OCEAN_LENGTH;

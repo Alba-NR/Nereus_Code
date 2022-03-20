@@ -88,20 +88,18 @@ CubeMapTexture &SkyBoxRenderer::getCubeMapTexture()
 // ------------------------------------
 // --- (base) Ocean renderer ---
 
-OceanRenderer::OceanRenderer(ShaderProgram &shader_prog)
-    : Renderer(shader_prog),
-    m_ocean_mesh(NereusConstants::DEFAULT_OCEAN_GRID_WIDTH, NereusConstants::DEFAULT_OCEAN_GRID_LENGTH)
+OceanRenderer::OceanRenderer(ShaderProgram &shader_prog, std::shared_ptr<GridMesh> ocean_mesh_ptr)
+    : Renderer(shader_prog), m_ocean_mesh_ptr(ocean_mesh_ptr)
 {
-    m_ocean_mesh.initialise();
     this->prepare();
 }
 
 void OceanRenderer::prepare()
 {
     // --- bind input mesh data
-    m_ocean_mesh.getVAO().bind();
-    m_shader_prog.bindData(0, m_ocean_mesh.getPositionsVBO(), 3);
-    m_shader_prog.bindData(1, m_ocean_mesh.getTexCoordsVBO(), 2);
+    m_ocean_mesh_ptr->getVAO().bind();
+    m_shader_prog.bindData(0, m_ocean_mesh_ptr->getPositionsVBO(), 3);
+    m_shader_prog.bindData(1, m_ocean_mesh_ptr->getTexCoordsVBO(), 2);
 
     // --- generate wave simulation parameters
     const int NUM_WAVES = 16; // !!! -- MUST be the SAME as in the VERTEX SHADER -- !!!
@@ -171,9 +169,9 @@ void OceanRenderer::render(const Camera &render_cam)
     glm::mat4 model_matrix = glm::mat4(1.0f);
     model_matrix = glm::translate(model_matrix, glm::vec3(-m_ocean_width, -10.0f, -m_ocean_length));
     model_matrix = glm::scale(model_matrix, glm::vec3(
-        m_ocean_width / (float)m_ocean_mesh.getGridWidth(),
+        m_ocean_width / (float)m_ocean_mesh_ptr->getGridWidth(),
         1.0f,
-        m_ocean_length / (float)m_ocean_mesh.getGridLength()
+        m_ocean_length / (float)m_ocean_mesh_ptr->getGridLength()
     ));
 
     glm::mat4 vp_matrix = render_cam.getProjMatrix() * render_cam.getViewMatrix();
@@ -188,12 +186,12 @@ void OceanRenderer::render(const Camera &render_cam)
     m_shader_prog.setVec3("wc_camera_pos", render_cam.getPosition());
 
     // render mesh
-    m_ocean_mesh.render();
+    m_ocean_mesh_ptr->render();
 }
 
 void OceanRenderer::updateOceanMeshGrid(int new_grid_width, int new_grid_length)
 {
-    m_ocean_mesh.updateMeshGrid(new_grid_width, new_grid_length);
+    m_ocean_mesh_ptr->updateMeshGrid(new_grid_width, new_grid_length);
 }
 
 
@@ -211,14 +209,14 @@ void OceanRenderer::setOceanLength(int new_ocean_length)
 // ------------------------------------
 // --- Reflective Ocean renderer ---
 
-ReflectiveOceanRenderer::ReflectiveOceanRenderer(ShaderProgram &shader_prog)
-    : OceanRenderer(shader_prog), m_cubemap_texture(nullptr)
+ReflectiveOceanRenderer::ReflectiveOceanRenderer(ShaderProgram &shader_prog, std::shared_ptr<GridMesh> ocean_mesh_ptr)
+    : OceanRenderer(shader_prog, ocean_mesh_ptr), m_cubemap_texture(nullptr)
 {
     this->prepare();
 }
 
-ReflectiveOceanRenderer::ReflectiveOceanRenderer(ShaderProgram &shader_prog, CubeMapTexture &skybox)
-    : OceanRenderer(shader_prog), m_cubemap_texture(skybox)
+ReflectiveOceanRenderer::ReflectiveOceanRenderer(ShaderProgram &shader_prog, std::shared_ptr<GridMesh> ocean_mesh_ptr, CubeMapTexture &skybox)
+    : OceanRenderer(shader_prog, ocean_mesh_ptr), m_cubemap_texture(skybox)
 {
     this->prepare();
 }
@@ -252,8 +250,8 @@ void ReflectiveOceanRenderer::setSkyboxTexture(CubeMapTexture &skybox)
 // ------------------------------------
 // --- Refractive Ocean renderer ---
 
-RefractiveOceanRenderer::RefractiveOceanRenderer(ShaderProgram &shader_prog)
-    : OceanRenderer(shader_prog), m_texture_S(), m_fbo(m_texture_S)
+RefractiveOceanRenderer::RefractiveOceanRenderer(ShaderProgram &shader_prog, std::shared_ptr<GridMesh> ocean_mesh_ptr)
+    : OceanRenderer(shader_prog, ocean_mesh_ptr), m_texture_S(), m_fbo(m_texture_S)
 {
     this->prepare();
 }
@@ -318,14 +316,14 @@ void RefractiveOceanRenderer::setWaterBaseColourAmount(float new_amt)
 // ------------------------------------
 // --- Full Ocean renderer (Reflection & Refraction; Fresnel effect) ---
 
-FullOceanRenderer::FullOceanRenderer(ShaderProgram &shader_prog)
-    : OceanRenderer(shader_prog), m_cubemap_texture(nullptr), m_texture_S(), m_fbo(m_texture_S)
+FullOceanRenderer::FullOceanRenderer(ShaderProgram &shader_prog, std::shared_ptr<GridMesh> ocean_mesh_ptr)
+    : OceanRenderer(shader_prog, ocean_mesh_ptr), m_cubemap_texture(nullptr), m_texture_S(), m_fbo(m_texture_S)
 {
     this->prepare();
 }
 
-FullOceanRenderer::FullOceanRenderer(ShaderProgram &shader_prog, CubeMapTexture &skybox)
-    : OceanRenderer(shader_prog), m_cubemap_texture(skybox), m_texture_S(), m_fbo(m_texture_S)
+FullOceanRenderer::FullOceanRenderer(ShaderProgram &shader_prog, std::shared_ptr<GridMesh> ocean_mesh_ptr, CubeMapTexture &skybox)
+    : OceanRenderer(shader_prog, ocean_mesh_ptr), m_cubemap_texture(skybox), m_texture_S(), m_fbo(m_texture_S)
 {
     this->prepare();
 }
