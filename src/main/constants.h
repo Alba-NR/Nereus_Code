@@ -15,9 +15,9 @@ namespace NereusConstants
 
 	const float CAMERA_DISTANCE_FROM_ORIGIN = 50.0f;
 	const glm::vec3 CAMERA_POSITION = glm::vec3(
-		CAMERA_DISTANCE_FROM_ORIGIN * glm::cos(glm::radians(60.0f)) * glm::cos(glm::radians(30.0f)), // x
-		CAMERA_DISTANCE_FROM_ORIGIN * glm::cos(glm::radians(60.0f)) * glm::sin(glm::radians(30.0f)), // z
-		CAMERA_DISTANCE_FROM_ORIGIN * glm::sin(glm::radians(60.0f)) // y
+		CAMERA_DISTANCE_FROM_ORIGIN * glm::sin(glm::radians(45.0f)) * glm::cos(glm::radians(45.0f)), // x
+		CAMERA_DISTANCE_FROM_ORIGIN * glm::cos(glm::radians(45.0f)), // y
+		CAMERA_DISTANCE_FROM_ORIGIN * glm::sin(glm::radians(45.0f)) * glm::sin(glm::radians(45.0f)) // z
 	);
 	const float DEFAULT_CAMERA_SPEED = 3.0f;
 	const float DEFAULT_CAMERA_SENSITIVITY = 0.1f;
