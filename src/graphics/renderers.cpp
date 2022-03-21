@@ -414,7 +414,7 @@ void FullOceanRenderer::setWaterBaseColourAmount(float new_amt)
 
 SeabedRenderer::SeabedRenderer(ShaderProgram &shader_prog, Texture2D &perlin_tex)
     : Renderer(shader_prog), m_perlin_texture(perlin_tex),
-    m_seabed_mesh(NereusConstants::DEFAULT_OCEAN_GRID_WIDTH, NereusConstants::DEFAULT_OCEAN_GRID_LENGTH)
+    m_seabed_mesh(NereusConstants::DEFAULT_SEABED_GRID_WIDTH, NereusConstants::DEFAULT_SEABED_GRID_LENGTH)
 {
     m_seabed_mesh.initialise();
     this->prepare();
