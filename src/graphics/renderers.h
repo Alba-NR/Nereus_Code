@@ -9,6 +9,8 @@
 #include "camera.h"
 #include "../main/constants.h"
 
+#include <memory>
+
 
 // ------------------------------------
 // --- Renderer interface ---
@@ -52,7 +54,7 @@ public:
 class OceanRenderer : public Renderer
 {
 private:
-	QuadGridMesh m_ocean_mesh;
+	std::shared_ptr<QuadGridMesh> m_ocean_mesh_ptr;
 
 	int m_ocean_width = NereusConstants::DEFAULT_OCEAN_WIDTH;
 	int m_ocean_length = NereusConstants::DEFAULT_OCEAN_LENGTH;
@@ -65,13 +67,15 @@ protected:
 	virtual void prepare();
 
 public:
-	OceanRenderer(ShaderProgram &shader_prog);
+	OceanRenderer(ShaderProgram &shader_prog, std::shared_ptr<QuadGridMesh> ocean_mesh_ptr);
 
 	virtual void render(const Camera &render_cam);
 
 	void updateOceanMeshGrid(int new_grid_width, int new_grid_length);
 	void setOceanWidth(int new_ocean_width);
 	void setOceanLength(int new_ocean_length);
+
+	void setWaterBaseColour(glm::vec3 &new_colour);
 };
 
 // --- Reflective Ocean renderer ---
@@ -83,12 +87,13 @@ private:
 	void prepare();
 
 public:
-	ReflectiveOceanRenderer(ShaderProgram &shader_prog);
-	ReflectiveOceanRenderer(ShaderProgram &shader_prog, CubeMapTexture &skybox);
+	ReflectiveOceanRenderer(ShaderProgram &shader_prog, std::shared_ptr<QuadGridMesh> ocean_mesh_ptr);
+	ReflectiveOceanRenderer(ShaderProgram &shader_prog, std::shared_ptr<QuadGridMesh> ocean_mesh_ptr, CubeMapTexture &skybox);
 
 	void render(const Camera &render_cam);
 
 	void setSkyboxTexture(CubeMapTexture &skybox);
+	void setWaterBaseColourAmount(float new_amt);
 };
 
 // --- Refractive Ocean renderer ---
@@ -101,7 +106,7 @@ private:
 	void prepare();
 
 public:
-	RefractiveOceanRenderer(ShaderProgram &shader_prog);
+	RefractiveOceanRenderer(ShaderProgram &shader_prog, std::shared_ptr<QuadGridMesh> ocean_mesh_ptr);
 
 	void render(const Camera &render_cam);
 
@@ -110,7 +115,6 @@ public:
 
 	Texture2D &getTextureS();
 
-	void setWaterBaseColour(glm::vec3 &new_colour);
 	void setWaterBaseColourAmount(float new_amt);
 };
 
@@ -133,8 +137,8 @@ private:
 	void prepare();
 
 public:
-	FullOceanRenderer(ShaderProgram &shader_prog); 
-	FullOceanRenderer(ShaderProgram &shader_prog, CubeMapTexture &skybox);
+	FullOceanRenderer(ShaderProgram &shader_prog, std::shared_ptr<QuadGridMesh> ocean_mesh_ptr);
+	FullOceanRenderer(ShaderProgram &shader_prog, std::shared_ptr<QuadGridMesh> ocean_mesh_ptr, CubeMapTexture &skybox);
 
 	void render(const Camera &render_cam);
 
@@ -144,7 +148,6 @@ public:
 	Texture2D &getTextureS();
 
 	void setSkyboxTexture(CubeMapTexture &skybox);
-	void setWaterBaseColour(glm::vec3 &new_colour);
 	void setWaterBaseColourAmount(float new_amt);
 };
 

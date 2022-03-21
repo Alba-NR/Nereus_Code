@@ -62,33 +62,79 @@ namespace Nereus
         ShaderProgram skybox_shader_prog(skybox_shaders);
 
         // Create skybox cubemap texture
-        string skybox_images[] = {
-            "sunset_skybox_1/right.jpg",
-            "sunset_skybox_1/left.jpg",
-            "sunset_skybox_1/top.jpg",
-            "sunset_skybox_1/bottom.jpg",
-            "sunset_skybox_1/front.jpg",
-            "sunset_skybox_1/back.jpg"
-        };
+        string folder_names[] = { "sky_skybox_1", "sky_skybox_2", "sunset_skybox_1", "sunset_skybox_2", "sunset_skybox_3" };
+        std::shared_ptr<CubeMapTexture> env_maps[] = {nullptr, nullptr, nullptr, nullptr, nullptr };
+        int i = 0;
+        for (int i = 0; i < 5; i++)
+        {
+            string folder_name = folder_names[i];
+            string env_map_imgs[] = {
+                folder_name + "/right.jpg",
+                folder_name + "/left.jpg",
+                folder_name + "/top.jpg",
+                folder_name + "/bottom.jpg",
+                folder_name + "/front.jpg",
+                folder_name + "/back.jpg"
+            };
+
+            env_maps[i] = std::make_shared<CubeMapTexture>(env_map_imgs);
+        }
+
+        // Track last env map used
+        int last_env_map = NereusConstants::DEFAULT_ENV_MAP;
 
         // Create Skybox renderer
-        SkyBoxRenderer skybox_renderer(skybox_shader_prog, skybox_images);
+        SkyBoxRenderer skybox_renderer(skybox_shader_prog, *env_maps[last_env_map]);
 
 
         // ------------------------------
         // Ocean
 
+        // --- Create Mesh
+        std::shared_ptr<QuadGridMesh> ocean_mesh_ptr = std::make_shared<QuadGridMesh>(NereusConstants::DEFAULT_OCEAN_GRID_WIDTH, NereusConstants::DEFAULT_OCEAN_GRID_LENGTH);
+        ocean_mesh_ptr->initialise();
+        ocean_mesh_ptr->setDrawMode(GL_PATCHES);
+
+        // --- Fresnel
         // Create ocean surface shaders
-        std::vector<Shader> ocean_shaders;
-        ocean_shaders.emplace_back("ocean_wavesim.vert");
-        ocean_shaders.emplace_back("ocean_fresnel.frag");
-        ocean_shaders.emplace_back("ocean.tesc");
-        ocean_shaders.emplace_back("ocean.tese");
-        ShaderProgram ocean_shader_prog(ocean_shaders);
-
+        std::vector<Shader> ocean_shaders_fresnel;
+        ocean_shaders_fresnel.emplace_back("ocean_wavesim.vert");
+        ocean_shaders_fresnel.emplace_back("ocean_fresnel.frag");
+        ocean_shaders_fresnel.emplace_back("ocean.tesc");
+        ocean_shaders_fresnel.emplace_back("ocean.tese");
+        ShaderProgram ocean_shader_prog_fresnel(ocean_shaders_fresnel);
         // Create ocean renderer
-        FullOceanRenderer ocean_renderer(ocean_shader_prog, skybox_renderer.getCubeMapTexture());
+        FullOceanRenderer ocean_renderer_fresnel(ocean_shader_prog_fresnel, ocean_mesh_ptr, skybox_renderer.getCubeMapTexture());
 
+        // --- Reflection
+        std::vector<Shader> ocean_shaders_refl;
+        ocean_shaders_refl.emplace_back("ocean_wavesim.vert");
+        ocean_shaders_refl.emplace_back("ocean_refl.frag");
+        ocean_shaders_refl.emplace_back("ocean.tesc");
+        ocean_shaders_refl.emplace_back("ocean.tese");
+        ShaderProgram ocean_shader_prog_refl(ocean_shaders_refl);
+        ReflectiveOceanRenderer ocean_renderer_refl(ocean_shader_prog_refl, ocean_mesh_ptr, skybox_renderer.getCubeMapTexture());
+
+        // --- Refraction
+        std::vector<Shader> ocean_shaders_refr;
+        ocean_shaders_refr.emplace_back("ocean_wavesim.vert");
+        ocean_shaders_refr.emplace_back("ocean_refr.frag");
+        ocean_shaders_refr.emplace_back("ocean.tesc");
+        ocean_shaders_refr.emplace_back("ocean.tese");
+        ShaderProgram ocean_shader_prog_refr(ocean_shaders_refr);
+        RefractiveOceanRenderer ocean_renderer_refr(ocean_shader_prog_refr, ocean_mesh_ptr);
+
+        // --- Phong
+        std::vector<Shader> ocean_shaders_phong;
+        ocean_shaders_phong.emplace_back("ocean_wavesim.vert");
+        ocean_shaders_phong.emplace_back("ocean_phong.frag");
+        ocean_shaders_phong.emplace_back("ocean.tesc");
+        ocean_shaders_phong.emplace_back("ocean.tese");
+        ShaderProgram ocean_shader_prog_phong(ocean_shaders_phong);
+        OceanRenderer ocean_renderer_phong(ocean_shader_prog_phong, ocean_mesh_ptr);
+
+
+        // --- Other params
         // Track last ocean size values
         int last_ocean_width = NereusConstants::DEFAULT_OCEAN_WIDTH;
         int last_ocean_length = NereusConstants::DEFAULT_OCEAN_LENGTH;
@@ -115,18 +161,10 @@ namespace Nereus
         // Create seabed renderer
         SeabedRenderer seabed_renderer(seabed_shader_prog, perlin_tex);
 
+        // Track last SEABED size values
+        int last_seabed_mesh_grid_width = NereusConstants::DEFAULT_SEABED_GRID_WIDTH;
+        int last_seabed_mesh_grid_length = NereusConstants::DEFAULT_SEABED_GRID_LENGTH;
 
-        // ------------------------------
-        // Screen Quad (for visual debugging)
-
-        // Create screen quad shaders
-        std::vector<Shader> screen_quad_shaders;
-        screen_quad_shaders.emplace_back("screen_quad.vert");
-        screen_quad_shaders.emplace_back("screen_quad.frag");
-        ShaderProgram screen_quad_shader_prog(screen_quad_shaders);
-
-        // Create ocean renderer
-        ScreenQuadRenderer screen_quad_renderer(screen_quad_shader_prog, ocean_renderer.getTextureS());
         
         // ------------------------------
         // Rendering Loop
@@ -168,22 +206,35 @@ namespace Nereus
             if (last_ocean_mesh_grid_width != m_context.m_ocean_grid_width
                 || last_ocean_mesh_grid_length != m_context.m_ocean_grid_length)
             {
-                ocean_renderer.updateOceanMeshGrid(m_context.m_ocean_grid_width, m_context.m_ocean_grid_length);
-                seabed_renderer.updateSeabedMeshGrid(2*m_context.m_ocean_grid_width, 2*m_context.m_ocean_grid_length);
+                ocean_renderer_fresnel.updateOceanMeshGrid(m_context.m_ocean_grid_width, m_context.m_ocean_grid_length);
                 last_ocean_mesh_grid_width = m_context.m_ocean_grid_width;
                 last_ocean_mesh_grid_length = m_context.m_ocean_grid_length;
+            }
+
+            if (last_seabed_mesh_grid_width != m_context.m_seabed_grid_width
+                || last_seabed_mesh_grid_length != m_context.m_seabed_grid_length)
+            {
+                seabed_renderer.updateSeabedMeshGrid(m_context.m_seabed_grid_width, m_context.m_seabed_grid_length);
+                last_seabed_mesh_grid_width = m_context.m_seabed_grid_width;
+                last_seabed_mesh_grid_length = m_context.m_seabed_grid_length;
             }
 
             // update ocean size info if the size has been changed in the UI
             if (last_ocean_width != m_context.m_ocean_width)
             {
-                ocean_renderer.setOceanWidth(m_context.m_ocean_width);
+                ocean_renderer_fresnel.setOceanWidth(m_context.m_ocean_width);
+                ocean_renderer_refl.setOceanWidth(m_context.m_ocean_width);
+                ocean_renderer_refr.setOceanWidth(m_context.m_ocean_width);
+                ocean_renderer_phong.setOceanWidth(m_context.m_ocean_width);
                 seabed_renderer.setSeabedWidth(m_context.m_ocean_width + NereusConstants::SEABED_EXTENSION_FROM_OCEAN);
                 last_ocean_width = m_context.m_ocean_width;
             }
             if (last_ocean_length != m_context.m_ocean_length)
             {
-                ocean_renderer.setOceanLength(m_context.m_ocean_length);
+                ocean_renderer_fresnel.setOceanLength(m_context.m_ocean_length);
+                ocean_renderer_refl.setOceanLength(m_context.m_ocean_length);
+                ocean_renderer_refr.setOceanLength(m_context.m_ocean_length);
+                ocean_renderer_phong.setOceanLength(m_context.m_ocean_length);
                 seabed_renderer.setSeabedLength(m_context.m_ocean_length + NereusConstants::SEABED_EXTENSION_FROM_OCEAN);
                 last_ocean_length = m_context.m_ocean_length;
             }
@@ -192,36 +243,83 @@ namespace Nereus
             // --- update water base colour params if changed in UI ---
             if (last_water_base_colour != m_context.m_water_base_colour)
             {
-                ocean_renderer.setWaterBaseColour(m_context.m_water_base_colour);
+                ocean_renderer_fresnel.setWaterBaseColour(m_context.m_water_base_colour);
+                ocean_renderer_refl.setWaterBaseColour(m_context.m_water_base_colour);
+                ocean_renderer_refr.setWaterBaseColour(m_context.m_water_base_colour);
+                ocean_renderer_phong.setWaterBaseColour(m_context.m_water_base_colour);
                 last_water_base_colour = m_context.m_water_base_colour;
             }
 
             if (last_water_base_colour_amt != m_context.m_water_base_colour_amt)
             {
-                ocean_renderer.setWaterBaseColourAmount(m_context.m_water_base_colour_amt);
+                ocean_renderer_fresnel.setWaterBaseColourAmount(m_context.m_water_base_colour_amt);
+                ocean_renderer_refl.setWaterBaseColourAmount(m_context.m_water_base_colour_amt);
+                ocean_renderer_refr.setWaterBaseColourAmount(m_context.m_water_base_colour_amt);
                 last_water_base_colour_amt = m_context.m_water_base_colour_amt;
             }
 
-            
-            // --- render to texture S for refraction ---
-            ocean_renderer.bindFBO();
-            m_window.clear();
 
-            // render seabed
-            if (m_context.m_do_render_seabed)
+            // --- update env map used if changed in UI
+            if (last_env_map != m_context.m_env_map)
             {
-                seabed_renderer.render(m_context.m_render_camera);
+                skybox_renderer.setCubeMapTexture(*env_maps[m_context.m_env_map]);
+                ocean_renderer_fresnel.setSkyboxTexture(*env_maps[m_context.m_env_map]);
+                ocean_renderer_refl.setSkyboxTexture(*env_maps[m_context.m_env_map]);
+                last_env_map = m_context.m_env_map;
             }
-            // render skybox
-            skybox_renderer.render(m_context.m_render_camera);
+            
 
-            // go back to default fbo
-            ocean_renderer.unbindFBO();
+            // --- render to texture S for refraction ---
+            if (m_context.m_illumin_model % 2 == 0)
+            {
+                if (m_context.m_illumin_model == 0)
+                {
+                    ocean_renderer_fresnel.bindFBO();
+                } else
+                {
+                    ocean_renderer_refr.bindFBO();
+                }
+
+                m_window.clear();
+
+                // render seabed
+                if (m_context.m_do_render_seabed)
+                {
+                    seabed_renderer.render(m_context.m_render_camera);
+                }
+                // render skybox
+                skybox_renderer.render(m_context.m_render_camera);
+
+                // go back to default fbo
+                if (m_context.m_illumin_model == 0)
+                {
+                    ocean_renderer_fresnel.unbindFBO();
+                }
+                else
+                {
+                    ocean_renderer_refr.unbindFBO();
+                }
+            }
+            
 
             // --- render ocean ---
             if (m_context.m_do_render_ocean)
             {
-                ocean_renderer.render(m_context.m_render_camera);
+                switch (m_context.m_illumin_model)
+                {
+                case 0:
+                    ocean_renderer_fresnel.render(m_context.m_render_camera);
+                    break;
+                case 1:
+                    ocean_renderer_refl.render(m_context.m_render_camera);
+                    break;
+                case 2:
+                    ocean_renderer_refr.render(m_context.m_render_camera);
+                    break;
+                default:
+                    ocean_renderer_phong.render(m_context.m_render_camera);
+                    break;
+                }
             }
 
             // --- render seabed ---
@@ -233,11 +331,11 @@ namespace Nereus
             // --- render skybox ---
             skybox_renderer.render(m_context.m_render_camera);
 
-            // --- render texture S for debugging ---
-            //screen_quad_renderer.render(m_context.m_render_camera);
-
             // --- render UI ---
-            UI::render();
+            if (m_context.m_do_render_ui)
+            {
+                UI::render();
+            }
 
             // --- draw on screen ---
             // flip front & back buffers; and draw

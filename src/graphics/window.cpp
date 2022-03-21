@@ -113,10 +113,20 @@ void Window::setCallbacks()
         m_window,
         [](GLFWwindow *window, int key, int scancode, int action, int mods) 
         {
+            Nereus::AppContext *context = reinterpret_cast<Nereus::AppContext *>(glfwGetWindowUserPointer(window));
+
             // ESC released --> close window 
             if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
+            {
                 glfwSetWindowShouldClose(window, true);
+            }
 
+            // U pressed --> toggle on/off rendering the UI
+            if (key == GLFW_KEY_U && action == GLFW_RELEASE)
+            {
+                context->m_do_render_ui = !(context->m_do_render_ui);
+            }
+               
             // AWSD, left shift & left ctrl pressed --> move camera position
             // in main render loop (as has to be done when press & held)
         }
