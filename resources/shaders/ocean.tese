@@ -42,12 +42,12 @@ void main()
 {
 	// --- interpolate tex coords
     vec2 t0 = mix(tes_in[0].tex_coords, tes_in[1].tex_coords, gl_TessCoord.x);
-	vec2 t1 = mix(tes_in[2].tex_coords, tes_in[3].tex_coords, gl_TessCoord.x);
+	vec2 t1 = mix(tes_in[3].tex_coords, tes_in[2].tex_coords, gl_TessCoord.x);
 	tes_out.tex_coords = mix(t0, t1, gl_TessCoord.y);
 
 	// --- world coords position & wave simularion
 	vec3 p0 = mix(tes_in[0].wc_pos, tes_in[1].wc_pos, gl_TessCoord.x);
-	vec3 p1 = mix(tes_in[2].wc_pos, tes_in[3].wc_pos, gl_TessCoord.x);
+	vec3 p1 = mix(tes_in[3].wc_pos, tes_in[2].wc_pos, gl_TessCoord.x);
     vec3 wc_pos = mix(p0, p1, gl_TessCoord.y);
 
 	// calc displaced position
