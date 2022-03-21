@@ -163,11 +163,14 @@ private:
 	int m_seabed_length = NereusConstants::DEFAULT_OCEAN_LENGTH + NereusConstants::SEABED_EXTENSION_FROM_OCEAN;
 
 	Texture2D m_perlin_texture;
+	bool m_use_seabed_texture;
+	Texture2D m_seabed_texture;
 
 	void prepare();
 
 public:
 	SeabedRenderer(ShaderProgram &shader_prog, Texture2D &perlin_tex);
+	SeabedRenderer(ShaderProgram &shader_prog, Texture2D &perlin_tex, Texture2D &seabed_tex);
 
 	void render(const Camera &render_cam);
 
@@ -176,6 +179,7 @@ public:
 	void setSeabedLength(int new_seabed_length);
 
 	void setPerlinTexture(Texture2D &perlin_tex);
+	void setSeabedTexture(Texture2D &seabed_tex);
 };
 
 

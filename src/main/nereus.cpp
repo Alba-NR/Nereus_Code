@@ -149,8 +149,11 @@ namespace Nereus
         // Load & create Perlin noise texture
         Texture2D perlin_tex = Texture2D("perlin_noise.jpg");
 
+        // Load & create Seabed texture
+        Texture2D seabed_tex = Texture2D("sand_seabed_2.jpg");
+
         // Create seabed renderer
-        SeabedRenderer seabed_renderer(seabed_shader_prog, perlin_tex);
+        SeabedRenderer seabed_renderer(seabed_shader_prog, perlin_tex, seabed_tex);
 
         // Track last SEABED size values
         int last_seabed_mesh_grid_width = NereusConstants::DEFAULT_SEABED_GRID_WIDTH;

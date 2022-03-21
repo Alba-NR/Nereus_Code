@@ -413,7 +413,17 @@ void FullOceanRenderer::setWaterBaseColourAmount(float new_amt)
 // --- Seabed renderer ---
 
 SeabedRenderer::SeabedRenderer(ShaderProgram &shader_prog, Texture2D &perlin_tex)
-    : Renderer(shader_prog), m_perlin_texture(perlin_tex),
+    : Renderer(shader_prog), m_perlin_texture(perlin_tex), 
+    m_seabed_texture(), m_use_seabed_texture(false),
+    m_seabed_mesh(NereusConstants::DEFAULT_SEABED_GRID_WIDTH, NereusConstants::DEFAULT_SEABED_GRID_LENGTH)
+{
+    m_seabed_mesh.initialise();
+    this->prepare();
+}
+
+SeabedRenderer::SeabedRenderer(ShaderProgram &shader_prog, Texture2D &perlin_tex, Texture2D &seabed_tex)
+    : Renderer(shader_prog), m_perlin_texture(perlin_tex), 
+    m_seabed_texture(seabed_tex), m_use_seabed_texture(true),
     m_seabed_mesh(NereusConstants::DEFAULT_SEABED_GRID_WIDTH, NereusConstants::DEFAULT_SEABED_GRID_LENGTH)
 {
     m_seabed_mesh.initialise();
@@ -427,9 +437,17 @@ void SeabedRenderer::prepare()
     m_shader_prog.bindData(0, m_seabed_mesh.getPositionsVBO(), 3);
     m_shader_prog.bindData(1, m_seabed_mesh.getTexCoordsVBO(), 2);
 
-    // --- bind cubemap sampler location 
+    // --- bind textures 
     m_shader_prog.use();
     m_shader_prog.setInt("perlin_tex", 0);  // at tex unit 1
+    m_shader_prog.setInt("use_seabed_tex", 0);
+
+    if (m_use_seabed_texture)
+    {
+        m_shader_prog.setInt("seabed_tex", 1);  // at tex unit 2
+        m_shader_prog.setInt("use_seabed_tex", 1);
+    }
+    
 }
 
 void SeabedRenderer::render(const Camera &render_cam)
@@ -461,6 +479,13 @@ void SeabedRenderer::render(const Camera &render_cam)
     glActiveTexture(GL_TEXTURE0);
     m_perlin_texture.bind();
 
+    // bind seabed texture
+    if (m_use_seabed_texture)
+    {
+        glActiveTexture(GL_TEXTURE1);
+        m_seabed_texture.bind();
+    }
+
     // render mesh
     m_seabed_mesh.render();
 }
@@ -483,6 +508,16 @@ void SeabedRenderer::setSeabedLength(int new_seabed_length)
 void SeabedRenderer::setPerlinTexture(Texture2D &perlin_tex)
 {
     m_perlin_texture = perlin_tex;
+}
+
+void SeabedRenderer::setSeabedTexture(Texture2D &seabed_tex)
+{
+    m_seabed_texture = seabed_tex;
+    if (m_use_seabed_texture != true)
+    {
+        m_use_seabed_texture = true;
+        m_shader_prog.setInt("use_seabed_tex", 1);
+    }
 }
 
 

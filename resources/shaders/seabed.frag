@@ -35,6 +35,8 @@ const float shininess = 16;								// specular shininess coeff
 const vec3 I_a = vec3(0.84, 0.77, 0.63);				// ambient light intensity/colour
 const float K_a = 0.75;									// ambient light reflection coeff
 
+uniform int use_seabed_tex;
+uniform sampler2D seabed_tex;
 
 // tonemapping and display encoding combined
 vec3 tonemap(vec3 linear_rgb)
@@ -56,7 +58,12 @@ void main()
 
 
     // diffuse & specular shading
-    vec3 I_diffuse = light.colour * diffuse_colour * K_diff * max(dot(N, L), 0.0);
+	vec3 diff_col = diffuse_colour;
+	if (use_seabed_tex == 1)
+	{
+		diff_col = texture(seabed_tex, fs_in.tex_coords).rgb;
+	}
+    vec3 I_diffuse = light.colour * diff_col * K_diff * max(dot(N, L), 0.0);
     vec3 I_specular = light.colour * specular_colour * K_spec * pow(max(dot(V, R), 0.0), shininess);
 
 	I_result = (I_diffuse + I_specular) * light.strength;
