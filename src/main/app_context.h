@@ -18,8 +18,8 @@ namespace Nereus
 		int m_ocean_grid_width = NereusConstants::DEFAULT_OCEAN_GRID_WIDTH;
 		int m_ocean_grid_length = NereusConstants::DEFAULT_OCEAN_GRID_LENGTH;
 
-		int m_seabed_grid_width = NereusConstants::DEFAULT_OCEAN_GRID_WIDTH;
-		int m_seabed_grid_length = NereusConstants::DEFAULT_OCEAN_GRID_LENGTH;
+		int m_seabed_grid_width = NereusConstants::DEFAULT_SEABED_GRID_WIDTH;
+		int m_seabed_grid_length = NereusConstants::DEFAULT_SEABED_GRID_LENGTH;
 
 		bool m_do_render_seabed = true;
 		bool m_do_render_ocean = true;
@@ -31,6 +31,7 @@ namespace Nereus
 		float m_water_base_colour_amt = NereusConstants::DEFAULT_WATER_BASE_COLOUR_AMOUNT;
 
 		int m_env_map = NereusConstants::DEFAULT_ENV_MAP; // 0: sky_skybox_1, 1: sky_skybox_2, 3: sunset_skybox_1, 4: sunset_skybox_2, 5: sunset_skybox_3
+		int m_seabed_tex = 0; // 0: none, 1: sand_seabed_1, 2: sand_seabed_2, 3: pretrified_seabed
 
 		Camera m_render_camera;
 

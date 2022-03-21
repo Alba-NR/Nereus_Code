@@ -64,7 +64,6 @@ namespace Nereus
         // Create skybox cubemap texture
         string folder_names[] = { "sky_skybox_1", "sky_skybox_2", "sunset_skybox_1", "sunset_skybox_2", "sunset_skybox_3" };
         std::shared_ptr<CubeMapTexture> env_maps[] = {nullptr, nullptr, nullptr, nullptr, nullptr };
-        int i = 0;
         for (int i = 0; i < 5; i++)
         {
             string folder_name = folder_names[i];
@@ -158,12 +157,24 @@ namespace Nereus
         // Load & create Perlin noise texture
         Texture2D perlin_tex = Texture2D("perlin_noise.jpg");
 
+        // Load & create Seabed textures
+        string seabed_imgs_names[] = { "sand_seabed_1.jpg", "sand_seabed_2.jpg", "petrified_seabed.jpg" };
+        std::shared_ptr<Texture2D> seabed_textures[] = { nullptr, nullptr, nullptr };
+        for (int i = 0; i < 3; i++)
+        {
+            seabed_textures[i] = std::make_shared<Texture2D>(seabed_imgs_names[i]);
+        }
+
+
         // Create seabed renderer
         SeabedRenderer seabed_renderer(seabed_shader_prog, perlin_tex);
 
         // Track last SEABED size values
         int last_seabed_mesh_grid_width = NereusConstants::DEFAULT_SEABED_GRID_WIDTH;
         int last_seabed_mesh_grid_length = NereusConstants::DEFAULT_SEABED_GRID_LENGTH;
+
+        // Track last seabed texture used
+        int last_seabed_tex = 0; // none
 
         
         // ------------------------------
@@ -266,6 +277,20 @@ namespace Nereus
                 ocean_renderer_fresnel.setSkyboxTexture(*env_maps[m_context.m_env_map]);
                 ocean_renderer_refl.setSkyboxTexture(*env_maps[m_context.m_env_map]);
                 last_env_map = m_context.m_env_map;
+            }
+
+            // --- update seabed texture used if changed in UI
+            if (last_seabed_tex != m_context.m_seabed_tex)
+            {
+                if (m_context.m_seabed_tex == 0)
+                {
+                    seabed_renderer.removeSeabedTexture();
+                }
+                else
+                {
+                    seabed_renderer.setSeabedTexture(*seabed_textures[m_context.m_seabed_tex-1]);
+                }
+                last_seabed_tex = m_context.m_seabed_tex;
             }
             
 

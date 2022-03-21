@@ -95,6 +95,10 @@ void UI::render()
 	m_app_context->m_seabed_grid_length = max(m_app_context->m_seabed_grid_length, 1);
 	ImGui::PopItemWidth();
 
+	// seabed texture
+	ImGui::Text("Seabed Texture:");
+	ImGui::Combo("Tex", &(m_app_context->m_seabed_tex), "none\0sand_seabed_1\0sand_seabed_2\0pretrified_seabed");
+
 	// --- ocean 
 	// ocean mesh
 	ImGui::Text("Ocean Mesh:");
@@ -113,10 +117,6 @@ void UI::render()
 	ImGui::Text("Illumination Model:");
 	ImGui::Combo("Model", &(m_app_context->m_illumin_model), "Fresnel\0Reflection\0Refraction\0Phong\0");
 
-	// --- skybox
-	ImGui::Text("Environment Map:");
-	ImGui::Combo("Env.Map", &(m_app_context->m_env_map), "sky_skybox_1\0sky_skybox_2\0sunset_skybox_1\0sunset_skybox_2\0sunset_skybox_3");
-
 	// base colour
 	ImGui::Text("Water Base Colour:");
 	static float water_base_colour[3] = {
@@ -131,6 +131,10 @@ void UI::render()
 		water_base_colour[2]
 	);
 	ImGui::SliderFloat("Amount", &(m_app_context->m_water_base_colour_amt), 0.0f, 1.0f, "%.3f");
+
+	// --- skybox
+	ImGui::Text("Environment Map:");
+	ImGui::Combo("Env.Map", &(m_app_context->m_env_map), "sky_skybox_1\0sky_skybox_2\0sunset_skybox_1\0sunset_skybox_2\0sunset_skybox_3");
 		
 	// --- end window
 	ImGui::End();
