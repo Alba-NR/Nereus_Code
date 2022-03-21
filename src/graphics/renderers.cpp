@@ -440,11 +440,11 @@ void SeabedRenderer::prepare()
     // --- bind textures 
     m_shader_prog.use();
     m_shader_prog.setInt("perlin_tex", 0);  // at tex unit 1
+    m_shader_prog.setInt("seabed_tex", 1);  // at tex unit 2
     m_shader_prog.setInt("use_seabed_tex", 0);
 
     if (m_use_seabed_texture)
     {
-        m_shader_prog.setInt("seabed_tex", 1);  // at tex unit 2
         m_shader_prog.setInt("use_seabed_tex", 1);
     }
     
@@ -516,8 +516,16 @@ void SeabedRenderer::setSeabedTexture(Texture2D &seabed_tex)
     if (m_use_seabed_texture != true)
     {
         m_use_seabed_texture = true;
+        m_shader_prog.use();
         m_shader_prog.setInt("use_seabed_tex", 1);
     }
+}
+
+void SeabedRenderer::removeSeabedTexture()
+{
+    m_use_seabed_texture = false;
+    m_shader_prog.use();
+    m_shader_prog.setInt("use_seabed_tex", 0);
 }
 
 

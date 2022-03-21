@@ -180,6 +180,7 @@ public:
 
 	void setPerlinTexture(Texture2D &perlin_tex);
 	void setSeabedTexture(Texture2D &seabed_tex);
+	void removeSeabedTexture();
 };
 
 
