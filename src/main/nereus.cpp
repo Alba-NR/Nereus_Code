@@ -235,13 +235,16 @@ namespace Nereus
             if (last_water_base_colour != m_context.m_water_base_colour)
             {
                 ocean_renderer_fresnel.setWaterBaseColour(m_context.m_water_base_colour);
+                ocean_renderer_refl.setWaterBaseColour(m_context.m_water_base_colour);
                 ocean_renderer_refr.setWaterBaseColour(m_context.m_water_base_colour);
+                ocean_renderer_phong.setWaterBaseColour(m_context.m_water_base_colour);
                 last_water_base_colour = m_context.m_water_base_colour;
             }
 
             if (last_water_base_colour_amt != m_context.m_water_base_colour_amt)
             {
                 ocean_renderer_fresnel.setWaterBaseColourAmount(m_context.m_water_base_colour_amt);
+                ocean_renderer_refl.setWaterBaseColourAmount(m_context.m_water_base_colour_amt);
                 ocean_renderer_refr.setWaterBaseColourAmount(m_context.m_water_base_colour_amt);
                 last_water_base_colour_amt = m_context.m_water_base_colour_amt;
             }

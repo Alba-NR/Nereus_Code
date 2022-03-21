@@ -74,6 +74,8 @@ public:
 	void updateOceanMeshGrid(int new_grid_width, int new_grid_length);
 	void setOceanWidth(int new_ocean_width);
 	void setOceanLength(int new_ocean_length);
+
+	void setWaterBaseColour(glm::vec3 &new_colour);
 };
 
 // --- Reflective Ocean renderer ---
@@ -91,6 +93,7 @@ public:
 	void render(const Camera &render_cam);
 
 	void setSkyboxTexture(CubeMapTexture &skybox);
+	void setWaterBaseColourAmount(float new_amt);
 };
 
 // --- Refractive Ocean renderer ---
@@ -112,7 +115,6 @@ public:
 
 	Texture2D &getTextureS();
 
-	void setWaterBaseColour(glm::vec3 &new_colour);
 	void setWaterBaseColourAmount(float new_amt);
 };
 
@@ -146,7 +148,6 @@ public:
 	Texture2D &getTextureS();
 
 	void setSkyboxTexture(CubeMapTexture &skybox);
-	void setWaterBaseColour(glm::vec3 &new_colour);
 	void setWaterBaseColourAmount(float new_amt);
 };
 

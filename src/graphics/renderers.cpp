@@ -161,6 +161,9 @@ void OceanRenderer::prepare()
     m_shader_prog.setFloatArray("sim_freqs", freqs, NUM_WAVES);
     m_shader_prog.setFloatArray("sim_amplitudes", amplitudes, NUM_WAVES);
     m_shader_prog.setFloatArray("sim_phases", phases, NUM_WAVES);
+
+    // --- set water base colour params to default
+    m_shader_prog.setVec3("water_base_colour", NereusConstants::DEFAULT_WATER_BASE_COLOUR);
 }
 
 void OceanRenderer::render(const Camera &render_cam)
@@ -205,6 +208,12 @@ void OceanRenderer::setOceanLength(int new_ocean_length)
     m_ocean_length = new_ocean_length;
 }
 
+void OceanRenderer::setWaterBaseColour(glm::vec3 &new_colour)
+{
+    m_shader_prog.use();
+    m_shader_prog.setVec3("water_base_colour", new_colour);
+}
+
 
 // ------------------------------------
 // --- Reflective Ocean renderer ---
@@ -229,6 +238,9 @@ void ReflectiveOceanRenderer::prepare()
     // --- bind cubemap sampler location 
     m_shader_prog.use();
     m_shader_prog.setInt("env_map", 0);  // at tex unit 0
+
+    // set water base colour params to default
+    m_shader_prog.setFloat("water_base_colour_amt", NereusConstants::DEFAULT_WATER_BASE_COLOUR_AMOUNT);
 }
 
 void ReflectiveOceanRenderer::render(const Camera &render_cam)
@@ -244,6 +256,12 @@ void ReflectiveOceanRenderer::render(const Camera &render_cam)
 void ReflectiveOceanRenderer::setSkyboxTexture(CubeMapTexture &skybox)
 {
     m_cubemap_texture = skybox;
+}
+
+void ReflectiveOceanRenderer::setWaterBaseColourAmount(float new_amt)
+{
+    m_shader_prog.use();
+    m_shader_prog.setFloat("water_base_colour_amt", new_amt);
 }
 
 
@@ -266,7 +284,6 @@ void RefractiveOceanRenderer::prepare()
     m_shader_prog.setInt("tex_S", 0);  // at tex unit 0
 
     // set water base colour params to default
-    m_shader_prog.setVec3("water_base_colour", NereusConstants::DEFAULT_WATER_BASE_COLOUR);
     m_shader_prog.setFloat("water_base_colour_amt", NereusConstants::DEFAULT_WATER_BASE_COLOUR_AMOUNT);
 
     // set viewport dimensions
@@ -298,12 +315,6 @@ void RefractiveOceanRenderer::unbindFBO()
 Texture2D &RefractiveOceanRenderer::getTextureS()
 {
     return m_texture_S;
-}
-
-void RefractiveOceanRenderer::setWaterBaseColour(glm::vec3 &new_colour)
-{
-    m_shader_prog.use();
-    m_shader_prog.setVec3("water_base_colour", new_colour);
 }
 
 void RefractiveOceanRenderer::setWaterBaseColourAmount(float new_amt)
@@ -344,7 +355,6 @@ void FullOceanRenderer::prepare()
     m_shader_prog.use();
     m_shader_prog.setInt("tex_S", 1);  // at tex unit 1
     // set water base colour params to default
-    m_shader_prog.setVec3("water_base_colour", NereusConstants::DEFAULT_WATER_BASE_COLOUR);
     m_shader_prog.setFloat("water_base_colour_amt", NereusConstants::DEFAULT_WATER_BASE_COLOUR_AMOUNT);
 
     // set viewport dimensions
@@ -390,12 +400,6 @@ Texture2D &FullOceanRenderer::getTextureS()
 void FullOceanRenderer::setSkyboxTexture(CubeMapTexture &skybox)
 {
     m_cubemap_texture = skybox;
-}
-
-void FullOceanRenderer::setWaterBaseColour(glm::vec3 &new_colour)
-{
-    m_shader_prog.use();
-    m_shader_prog.setVec3("water_base_colour", new_colour);
 }
 
 void FullOceanRenderer::setWaterBaseColourAmount(float new_amt)

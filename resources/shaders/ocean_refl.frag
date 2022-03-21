@@ -12,6 +12,9 @@ out vec4 frag_colour;
 uniform vec3 wc_camera_pos;
 uniform samplerCube env_map;
 
+uniform vec3 water_base_colour;
+uniform float water_base_colour_amt;
+
 
 // tonemapping and display encoding combined
 vec3 tonemap(vec3 linear_rgb)
@@ -32,6 +35,7 @@ void main()
 
 	// reflected skybox colour
 	vec3 I_refl = texture(env_map, R_V).rgb;
+	I_refl = water_base_colour_amt * water_base_colour + (1-water_base_colour_amt) * I_refl;
 
 	// set output/final colour
 	frag_colour = vec4(tonemap(I_refl), 1.0);
