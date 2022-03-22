@@ -39,10 +39,10 @@ void main()
     float dist_to_cam_2 = distance(tcs_in[2].wc_pos, wc_camera_pos);
     float dist_to_cam_3 = distance(tcs_in[3].wc_pos, wc_camera_pos);
     
-    gl_TessLevelOuter[0] = calcTesselFactor((dist_to_cam_0 + dist_to_cam_1) / 2.0);  // edge 0-1
-    gl_TessLevelOuter[1] = calcTesselFactor((dist_to_cam_0 + dist_to_cam_3) / 2.0);  // edge 0-3
-    gl_TessLevelOuter[2] = calcTesselFactor((dist_to_cam_2 + dist_to_cam_3) / 2.0);  // edge 2-3
-    gl_TessLevelOuter[3] = calcTesselFactor((dist_to_cam_1 + dist_to_cam_2) / 2.0);  // edge 1-2
+    gl_TessLevelOuter[0] = calcTesselFactor((dist_to_cam_0 + dist_to_cam_3) / 2.0);  // edge 0-3
+    gl_TessLevelOuter[1] = calcTesselFactor((dist_to_cam_0 + dist_to_cam_1) / 2.0);  // edge 0-1
+    gl_TessLevelOuter[2] = calcTesselFactor((dist_to_cam_2 + dist_to_cam_1) / 2.0);  // edge 1-2
+    gl_TessLevelOuter[3] = calcTesselFactor((dist_to_cam_3 + dist_to_cam_2) / 2.0);  // edge 2-3
     gl_TessLevelInner[0] = (gl_TessLevelOuter[1] + gl_TessLevelOuter[3]) / 2.0;  // horiz
     gl_TessLevelInner[1] = (gl_TessLevelOuter[0] + gl_TessLevelOuter[2]) / 2.0;  // vert
 }
