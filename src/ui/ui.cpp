@@ -40,6 +40,10 @@ void UI::render()
 	// display fps
 	ImGui::Text("Average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
+	// display number of primitives rendered
+	ImGui::Text("Ocean primitives: %i", m_app_context->m_num_ocean_primitives);
+	ImGui::Text("Seabed primitives: %i", m_app_context->m_num_seabed_primitives);
+
 	// --- render options
 	ImGui::Text("Render Options:");
 
