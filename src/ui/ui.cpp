@@ -43,6 +43,7 @@ void UI::render()
 	// display number of primitives rendered
 	ImGui::Text("Ocean primitives: %i", m_app_context->m_num_ocean_primitives);
 	ImGui::Text("Seabed primitives: %i", m_app_context->m_num_seabed_primitives);
+	ImGui::Separator();
 
 	// --- render options
 	ImGui::Text("Render Options:");
@@ -64,6 +65,8 @@ void UI::render()
 
 	// render ocean mesh toggle (on/off)
 	ImGui::Checkbox("Render Ocean", &(m_app_context->m_do_render_ocean));
+
+	ImGui::Separator();
 
 	// --- camera options
 	ImGui::Text("Camera:");
@@ -89,6 +92,8 @@ void UI::render()
 	ImGui::InputFloat("FOV", &fov);
 	m_app_context->m_render_camera.setFOV(fov);
 
+	ImGui::Separator();
+
 	// --- seabed 
 	// seabed mesh
 	ImGui::Text("Seabed Mesh:");
@@ -102,6 +107,8 @@ void UI::render()
 	// seabed texture
 	ImGui::Text("Seabed Texture:");
 	ImGui::Combo("Tex", &(m_app_context->m_seabed_tex), "none\0sand_seabed_1\0sand_seabed_2\0pretrified_seabed");
+
+	ImGui::Separator();
 
 	// --- ocean 
 	// ocean mesh
