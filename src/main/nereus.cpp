@@ -218,7 +218,6 @@ namespace Nereus
                 || last_ocean_mesh_grid_length != m_context.m_ocean_grid_length)
             {
                 ocean_renderer_fresnel.updateOceanMeshGrid(m_context.m_ocean_grid_width, m_context.m_ocean_grid_length);
-                m_context.m_num_ocean_primitives = 2 * m_context.m_ocean_grid_width * m_context.m_ocean_grid_length;
                 last_ocean_mesh_grid_width = m_context.m_ocean_grid_width;
                 last_ocean_mesh_grid_length = m_context.m_ocean_grid_length;
             }
@@ -332,6 +331,15 @@ namespace Nereus
             // --- render ocean ---
             if (m_context.m_do_render_ocean)
             {
+                // start number of primitives query
+                GLuint query;
+                if (m_context.m_query_num_ocean_primitives)
+                {
+                    glCreateQueries(GL_PRIMITIVES_GENERATED, 1, &query);
+                    glBeginQuery(GL_PRIMITIVES_GENERATED, query);
+                }
+                
+                // render call
                 switch (m_context.m_illumin_model)
                 {
                 case 0:
@@ -346,6 +354,13 @@ namespace Nereus
                 default:
                     ocean_renderer_phong.render(m_context.m_render_camera);
                     break;
+                }
+
+                // end number of primitives query
+                if (m_context.m_query_num_ocean_primitives)
+                {
+                    glEndQuery(GL_PRIMITIVES_GENERATED);
+                    glGetQueryObjectuiv(query, GL_QUERY_RESULT, &m_context.m_num_ocean_primitives);
                 }
             }
 

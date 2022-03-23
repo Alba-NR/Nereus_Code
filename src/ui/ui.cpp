@@ -40,6 +40,8 @@ void UI::render()
 	// display fps
 	ImGui::Text("Average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
+	// query number of ocean primitives toggle (on/off)
+	ImGui::Checkbox("Query ocean primitives (overhead)", &(m_app_context->m_query_num_ocean_primitives));
 	// display number of primitives rendered
 	ImGui::Text("Ocean primitives: %i", m_app_context->m_num_ocean_primitives);
 	ImGui::Text("Seabed primitives: %i", m_app_context->m_num_seabed_primitives);
