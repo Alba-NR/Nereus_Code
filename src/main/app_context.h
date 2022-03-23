@@ -33,6 +33,9 @@ namespace Nereus
 		int m_env_map = NereusConstants::DEFAULT_ENV_MAP; // 0: sky_skybox_1, 1: sky_skybox_2, 3: sunset_skybox_1, 4: sunset_skybox_2, 5: sunset_skybox_3
 		int m_seabed_tex = 0; // 0: none, 1: sand_seabed_1, 2: sand_seabed_2, 3: pretrified_seabed
 
+		unsigned int m_num_ocean_primitives = 2 * NereusConstants::DEFAULT_OCEAN_GRID_WIDTH * NereusConstants::DEFAULT_OCEAN_GRID_LENGTH;
+		unsigned int m_num_seabed_primitives = 2 * NereusConstants::DEFAULT_SEABED_GRID_WIDTH * NereusConstants::DEFAULT_SEABED_GRID_LENGTH;
+
 		Camera m_render_camera;
 
 		AppContext();

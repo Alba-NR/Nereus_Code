@@ -218,6 +218,7 @@ namespace Nereus
                 || last_ocean_mesh_grid_length != m_context.m_ocean_grid_length)
             {
                 ocean_renderer_fresnel.updateOceanMeshGrid(m_context.m_ocean_grid_width, m_context.m_ocean_grid_length);
+                m_context.m_num_ocean_primitives = 2 * m_context.m_ocean_grid_width * m_context.m_ocean_grid_length;
                 last_ocean_mesh_grid_width = m_context.m_ocean_grid_width;
                 last_ocean_mesh_grid_length = m_context.m_ocean_grid_length;
             }
@@ -226,6 +227,7 @@ namespace Nereus
                 || last_seabed_mesh_grid_length != m_context.m_seabed_grid_length)
             {
                 seabed_renderer.updateSeabedMeshGrid(m_context.m_seabed_grid_width, m_context.m_seabed_grid_length);
+                m_context.m_num_seabed_primitives = 2 * m_context.m_seabed_grid_width * m_context.m_seabed_grid_length;
                 last_seabed_mesh_grid_width = m_context.m_seabed_grid_width;
                 last_seabed_mesh_grid_length = m_context.m_seabed_grid_length;
             }
