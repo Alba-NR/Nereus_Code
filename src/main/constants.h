@@ -44,7 +44,7 @@ namespace NereusConstants
     
 	const float TESSEL_RANGE_DIST_TO_CAM_MIN = 10.0f;
 	const float TESSEL_RANGE_DIST_TO_CAM_MAX = 300.0f;
-	const int LOG_MIN_TESSEL_FACTOR = 0;
+	const int LOG_MIN_TESSEL_FACTOR = 2;
 	const int LOG_MAX_TESSEL_FACTOR = 6;
 }
 
