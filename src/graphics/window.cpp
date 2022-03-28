@@ -129,6 +129,15 @@ void Window::setCallbacks()
                
             // AWSD, left shift & left ctrl pressed --> move camera position
             // in main render loop (as has to be done when press & held)
+
+            // T pressed --> run timing analysis for perf eval
+            if (key == GLFW_KEY_T && action == GLFW_RELEASE)
+            {
+                if (!context->m_run_timing_eval)
+                {
+                    context->m_run_timing_eval = true;
+                }
+            }
         }
     );
 

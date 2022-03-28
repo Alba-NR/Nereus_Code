@@ -9,6 +9,7 @@
 // System Headers
 #include <glm/glm.hpp>
 #include <vector>
+#include <iostream>
 
 int main()
 {
@@ -167,12 +168,51 @@ namespace Nereus
         // Track last seabed texture used
         int last_seabed_tex = 0; // none
 
+        // ------------------------------
+        // Timing
+
+        double delta_time; // time different between frames (in ms)
+        double last_frame_time = 0.0; // time counter value of last frame (in ms)
+
+        int frame_count = -1;
+        double delta_time_average = 0.0;
         
         // ------------------------------
         // Rendering Loop
         while (!m_window.shouldClose())
         {
-            // clear window
+            // --- per-frame timing logic (for eval)
+            if (m_context.m_run_timing_eval)
+            {
+                if (frame_count == -1) 
+                {
+                    last_frame_time = glfwGetTime() * 1000;
+                    frame_count = 0;
+                }
+                else
+                {
+                    double currrent_frame_time = glfwGetTime() * 1000;
+                    delta_time = currrent_frame_time - last_frame_time;
+                    last_frame_time = currrent_frame_time;
+
+                    if (frame_count < 100)
+                    {
+                        delta_time_average += delta_time;
+                        frame_count++;
+                    }
+                    else if (frame_count == 100)
+                    {
+                        // print to console and reset state
+                        std::cout << "Average time per frame, for the last 100 frames: " << std::endl;
+                        std::cout << delta_time_average / 100 << std::endl;
+                        frame_count = -1;
+                        delta_time_average = 0;
+                        m_context.m_run_timing_eval = false;
+                    }
+                }
+            }
+
+            // --- clear window
             m_window.clear();
 
             // --- process keyboard input to change camera pos ---
