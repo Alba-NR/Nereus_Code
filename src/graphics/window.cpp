@@ -1,6 +1,7 @@
 
 #include "window.h"
 #include "../main/app_context.h"
+#include "../utils/image_io.h"
 
 Window *Window::s_instance = nullptr;
 
@@ -60,6 +61,17 @@ void Window::createWindow()
     glFrontFace(GL_CCW);
     glCullFace(GL_BACK);
     glEnable(GL_CULL_FACE);
+
+    // --- set window icon ---
+   
+    GLFWimage images[1];
+    int num_channels;
+    // load image from file
+    images[0].pixels = ImageIO::loadImage("nereus_logo/Nereus_Icon_Small_Sticker_Plain.png", images[0].width, images[0].height, num_channels, false);
+    // set icon
+    glfwSetWindowIcon(m_window, 1, images);
+    // free img data
+    stbi_image_free(images[0].pixels);
 }
 
 Window::~Window()

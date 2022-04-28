@@ -1,7 +1,3 @@
-[submodule "libs/vendor/assimp"]
-    path = libs/vendor/assimp
-    url = https://github.com/assimp/assimp.git
-    branch = master
 [submodule "libs/vendor/glfw"]
     path = libs/vendor/glfw
     url = https://github.com/glfw/glfw.git
