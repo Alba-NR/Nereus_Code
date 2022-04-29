@@ -1,3 +1,4 @@
+#define STB_IMAGE_IMPLEMENTATION
 #include "image_io.h"
 
 #include <iostream>
