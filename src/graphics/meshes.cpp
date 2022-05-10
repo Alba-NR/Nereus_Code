@@ -52,7 +52,7 @@ void Mesh::loadDataToGPU(const std::vector<float> &positions,
 	m_ebo.setData<int>(indices);
 }
 
-// Destructor (will automatically call destructor of member vars?) TODO check
+// Destructor (will automatically call destructor of member vars?)
 Mesh::~Mesh()
 {
 

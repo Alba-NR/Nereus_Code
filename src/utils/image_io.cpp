@@ -14,11 +14,12 @@ unsigned char *ImageIO::loadImage(string filename, int &width, int &height, int 
 	
 	unsigned char *img_data = stbi_load(filepath.c_str(), &width, &height, &num_channels, 0);
 
-	// TODO chck if img_data == NULL & throw exception? (could not load file ok)
+	// check if could not load file ok (img_data == NULL)
 	if (img_data == NULL)
 	{
-		std::cout << stbi_failure_reason() << std::endl;
-		// TODO throw exception
+		std::cout << "ERROR::IMAGE_IO::COULD_NOT_OPEN_FILE" << std::endl
+			<< "File '" << filename << "' not found" << std::endl
+			<< "STBI failure reason: " << stbi_failure_reason() << std::endl;
 	}
 
 	return img_data;

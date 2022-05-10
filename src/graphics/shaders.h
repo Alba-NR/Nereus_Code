@@ -28,6 +28,7 @@ public:
 	Shader(string filename);
 	~Shader();
 	GLuint getHandle() const;
+	string getFilename() const;
 };
 
 class ShaderProgram
@@ -35,6 +36,7 @@ class ShaderProgram
 private:
 	std::vector<Shader> m_shaders;
 	GLuint m_id;
+	string m_str_name;
 
 	void createProgram();
 

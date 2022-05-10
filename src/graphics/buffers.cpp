@@ -1,5 +1,7 @@
 #include "buffers.h"
 
+#include <iostream>
+
 // --- Vertex Array Object abstraction class ---
 VAO::VAO()
 {
@@ -108,8 +110,8 @@ void FBO::create()
 	// --- check if fbo is complete ---
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
-		fprintf(stderr, "FBO is not complete");
-		// TODO raise exception
+		std::cout << "ERROR::FBO::INCOMPLETE_FBO" << std::endl
+			<< "FBO with handle " << m_id << " is incomplete " << std::endl;
 	}
 
 	// --- unbind framebuffer ---

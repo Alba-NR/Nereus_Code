@@ -1,5 +1,4 @@
 #include "shaders.h"
-#include <exception> // TODO remove
 #include <iostream>
 
 using std::string;
@@ -18,8 +17,22 @@ Shader::Shader(string filename) : m_filename(filename)
 // Load the shader source code from the file, set the shader type and compile the shader
 void Shader::loadAndCompile()
 {
+	// Attempt to read shader file
+	std::ifstream in_file_stream(SHADERS_FOLDER_PATH + m_filename);
+	if (!in_file_stream)
+	{
+		std::cout << "ERROR::SHADER::COULD_NOT_OPEN_FILE" << std::endl
+			<< "File '" << m_filename << "' not found" << std::endl;
+		return;
+	}
+	std::stringstream in_string_stream;
+	in_string_stream << in_file_stream.rdbuf();
+	in_file_stream.close();
+	string shader_source_str = in_string_stream.str();
+	const char *shader_source_c_str = shader_source_str.c_str();
+
 	// Determine shader type based on file extension
-	string extension = (m_filename).substr((m_filename).size() - 4);
+	string extension = m_filename.substr(m_filename.size() - 4);
 
 	if (extension == "vert") m_type = GL_VERTEX_SHADER;
 	else if (extension == "frag") m_type = GL_FRAGMENT_SHADER;
@@ -29,41 +42,30 @@ void Shader::loadAndCompile()
 	else if (extension == "tesc") m_type = GL_TESS_CONTROL_SHADER;
 	else
 	{
-		// TODO raise exception
+		std::cout << "ERROR::SHADER::UNSUPPORTED_EXTENSION" << std::endl
+			<< "Extension '" << extension << "' in '" << m_filename << "' not supported" << std::endl;
+		return;
 	}
 
-	try {
-		// Attempt to read shader file
-		std::ifstream in_file_stream(SHADERS_FOLDER_PATH + m_filename);
-		std::stringstream in_string_stream;
-		in_string_stream << in_file_stream.rdbuf();
-		in_file_stream.close();
-		string shader_source_str = in_string_stream.str();
-		const char *shader_source_c_str = shader_source_str.c_str();
+	// Create OpenGL shader object
+	m_id = glCreateShader(m_type);
 
-		// Create OpenGL shader object
-		m_id = glCreateShader(m_type);
+	// Specify shader code
+	glShaderSource(m_id, 1, &shader_source_c_str, nullptr);
 
-		// Specify shader code
-		glShaderSource(m_id, 1, &shader_source_c_str, nullptr);
+	// Compile shader
+	glCompileShader(m_id);
 
-		// Compile shader
-		glCompileShader(m_id);
-
-		// TODO check for compilat errors
-		int success;
-		char infoLog[512];
-		glGetShaderiv(m_id, GL_COMPILE_STATUS, &success);
-		if (!success)
-		{
-			glGetShaderInfoLog(m_id, 512, NULL, infoLog);
-			std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
-		}
-
-	} // TODO catch exception if can't open file
-	catch (std::runtime_error e) // TODO appropriate except
+	// check for compilation errors
+	int success;
+	char infoLog[512];
+	glGetShaderiv(m_id, GL_COMPILE_STATUS, &success);
+	if (!success)
 	{
-
+		glGetShaderInfoLog(m_id, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::COMPILATION_FAILED" << std::endl
+			<< "Shader: '" << m_filename << "'" << std::endl
+			<< infoLog << std::endl;
 	}
 }
 
@@ -77,12 +79,28 @@ GLuint Shader::getHandle() const
 	return m_id;
 }
 
+string Shader::getFilename() const
+{
+	return m_filename;
+}
+
 
 // ------------------------------------------
 // --- ShaderProgram Class ---
 
 ShaderProgram::ShaderProgram(const std::vector<Shader> &shaders) : m_shaders(shaders)
 {
+	// Create string name representation for this program
+	std::stringstream stream;
+	bool first = true;
+	for (const Shader &shader : m_shaders)
+	{
+		stream << (first ? "" : " & ") << "'" << shader.getFilename() << "'";
+		first = false;
+	}
+	m_str_name = stream.str();
+
+	// Create the program OpenGL object
 	ShaderProgram::createProgram();
 }
 
@@ -101,13 +119,16 @@ void ShaderProgram::createProgram()
 	// Link program
 	glLinkProgram(m_id);
 
-	// TODO check for link errors
+	// check for link errors
 	int success;
 	char infoLog[512];
 	glGetProgramiv(m_id, GL_LINK_STATUS, &success);
 	if (!success) {
 		glGetProgramInfoLog(m_id, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+
+		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED" << std::endl 
+			<< "Program: " << m_str_name << std::endl
+			<< infoLog << std::endl;
 	}
 }
 

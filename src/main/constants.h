@@ -40,7 +40,7 @@ namespace NereusConstants
 	const glm::vec3 DEFAULT_WATER_BASE_COLOUR = { 0.02f, 0.13f, 0.25f };
 	const float DEFAULT_WATER_BASE_COLOUR_AMOUNT = 0.65f;
 
-	const int DEFAULT_ENV_MAP = 3;  // 0: sky_skybox_1, 1: sky_skybox_2, 3: sunset_skybox_1, 4: sunset_skybox_2, 5: sunset_skybox_3
+	const int DEFAULT_ENV_MAP = 0;  // 0: sky_skybox_1, 1: sky_skybox_2, 3: sunset_skybox_1, 4: sunset_skybox_2, 5: sunset_skybox_3
     
 	const float TESSEL_RANGE_DIST_TO_CAM_MIN = 10.0f;
 	const float TESSEL_RANGE_DIST_TO_CAM_MAX = 300.0f;
