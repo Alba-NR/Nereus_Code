@@ -3,6 +3,8 @@
 #include "../main/app_context.h"
 #include "../utils/image_io.h"
 
+#include <iostream>
+
 Window *Window::s_instance = nullptr;
 
 Window &Window::getInstance()
@@ -41,8 +43,9 @@ void Window::createWindow()
     if(m_window == nullptr)
     {
         glfwTerminate();
-        fprintf(stderr, "Failed to Create GLFW Window");
-        // TODO raise exception
+        std::cout << "ERROR::WINDOW::WINDOW_CREATION_FAILURE" << std::endl
+            << "Failed to create GLFW window. Terminating GLFW." << std::endl;
+        return;
     }
 
     // make the OpenGL context current & load OpenGL functions
@@ -175,7 +178,7 @@ void Window::setCallbacks()
     );
 }
 
-// TODO doc
+// Sets the GLFW window's window user pointer to the given pointer
 void Window::setWindowUserPointer(void *ptr)
 {
     glfwSetWindowUserPointer(m_window, ptr);
